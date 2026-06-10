@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>J√©r√©my Hamon ‚Äî Freelance ¬∑ Strat√©gie, Innovation & Transformation</title>
+  <title>Jérémy Hamon — Freelance · Stratégie, Innovation & Transformation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -35,19 +35,19 @@
 <body>
   <div id="root"></div>
   <script>/* Analyse IA du matching (optionnelle).
-   Laisser vide => seul le score local par mots-cl√©s est propos√©.
+   Laisser vide => seul le score local par mots-clés est proposé.
 
-   ‚ö† ATTENTION : ce fichier est embarqu√© dans le HTML final. Toute personne qui
-   re√ßoit le fichier peut lire l'URL et la cl√©. Utilisez de pr√©f√©rence :
-   - soit un webhook/proxy √† vous (provider 'custom') qui garde la cl√© c√¥t√© serveur,
-   - soit une cl√© API restreinte avec un plafond de d√©pense faible.
+   ⚠ ATTENTION : ce fichier est embarqué dans le HTML final. Toute personne qui
+   reçoit le fichier peut lire l'URL et la clé. Utilisez de préférence :
+   - soit un webhook/proxy à vous (provider 'custom') qui garde la clé côté serveur,
+   - soit une clé API restreinte avec un plafond de dépense faible.
 
-   provider 'anthropic' : appel direct √† l'API Claude depuis le navigateur.
-     -> remplir `key` (la cl√© sk-ant-‚Ä¶). `url` peut rester vide.
+   provider 'anthropic' : appel direct à l'API Claude depuis le navigateur.
+     -> remplir `key` (la clé sk-ant-…). `url` peut rester vide.
    provider 'custom' : POST JSON {besoin, profil, lang} vers votre `url`
-     (n8n, Make, Cloudflare Worker, etc.). R√©ponse attendue : {"analyse": "‚Ä¶"}
-     (ou {"text": "‚Ä¶"} ou du texte brut). `key`, si renseign√©e, est envoy√©e
-     en en-t√™te Authorization: Bearer.
+     (n8n, Make, Cloudflare Worker, etc.). Réponse attendue : {"analyse": "…"}
+     (ou {"text": "…"} ou du texte brut). `key`, si renseignée, est envoyée
+     en en-tête Authorization: Bearer.
 */
 window.MATCH_API = {
   provider: 'custom',
@@ -55,28 +55,28 @@ window.MATCH_API = {
   key: '',
   model: '',
 
-  /* Prompts personnalis√©s (optionnels).
-     Laisser '' => prompt par d√©faut (sobre, structur√© : ad√©quation / forces / points d'attention / angle).
-     Placeholders remplac√©s automatiquement :
+  /* Prompts personnalisés (optionnels).
+     Laisser '' => prompt par défaut (sobre, structuré : adéquation / forces / points d'attention / angle).
+     Placeholders remplacés automatiquement :
        {besoin}  -> le texte saisi par le visiteur
-       {profil}  -> le r√©sum√© de votre profil (titre, comp√©tences, parcours, missions)
-     Astuce : utilisez des template literals avec backticks pour √©crire sur plusieurs lignes. */
+       {profil}  -> le résumé de votre profil (titre, compétences, parcours, missions)
+     Astuce : utilisez des template literals avec backticks pour écrire sur plusieurs lignes. */
   promptFr: '',
   promptEn: '',
 };
 
-/* Donn√©es du profil de J√©r√©my Hamon ‚Äî extraites du dossier de candidature. */
+/* Données du profil de Jérémy Hamon — extraites du dossier de candidature. */
 window.PROFILE = {
   identite: {
-    nom: 'J√©r√©my Hamon',
+    nom: 'Jérémy Hamon',
     age: 35,
     experience: 10,
-    titre: 'Facilitateur d‚Äôinnovation & de transformation strat√©gique',
+    titre: 'Facilitateur d’innovation & de transformation stratégique',
     accroche: 'Innover sans perdre le cap, transformer sans perdre le sens.',
-    pitch: 'J‚Äôaccompagne les d√©cideurs et leurs √©quipes dans leurs processus d‚Äôinnovation et de transformation strat√©gique. J‚Äôinterviens l√† o√π il faut clarifier, relier et faire avancer.',
-    formation: 'Audencia Business School (Master in Management) ‚Äî √©change √† Korea University, S√©oul',
-    langues: ['Fran√ßais ‚Äî natif', 'Anglais ‚Äî courant (TOEIC 980/990)'],
-    engagement: 'Engag√© dans la r√©serve militaire',
+    pitch: 'J’accompagne les décideurs et leurs équipes dans leurs processus d’innovation et de transformation stratégique. J’interviens là où il faut clarifier, relier et faire avancer.',
+    formation: 'Audencia Business School (Master in Management) — échange à Korea University, Séoul',
+    langues: ['Français — natif', 'Anglais — courant (TOEIC 980/990)'],
+    engagement: 'Engagé dans la réserve militaire',
     contact: {
       email: 'hamon.jeremy@live.fr',
       linkedin: 'https://www.linkedin.com/in/jeremyhamon/',
@@ -84,97 +84,97 @@ window.PROFILE = {
     },
   },
 
-  /* Les 7 postures ‚Äî ¬´ une √©quipe √† moi seul ¬ª */
+  /* Les 7 postures — « une équipe à moi seul » */
   postures: [
-    { icone: 'üõ∞Ô∏è', nom: 'Veilleur', desc: 'Je capte et relie des signaux externes pour √©largir les perspectives et challenger les certitudes.' },
-    { icone: 'üîé', nom: 'Investigateur', desc: 'Je croise les intelligences internes et les insights externes pour √©clairer les enjeux.' },
-    { icone: '‚ôüÔ∏è', nom: 'Strat√®ge', desc: 'Je transforme l‚Äôanalyse en vision, puis en trajectoire coh√©rente et op√©rationnelle.' },
-    { icone: 'ü•ä', nom: 'Sparring partner', desc: 'J‚Äôaccompagne les dirigeants dans leurs r√©flexions cl√©s, en apportant structure, recul et action.' },
-    { icone: 'üîó', nom: 'Connecteur', desc: 'Je fais le lien entre les mondes : technologie et m√©tier, startup et institution, personnes et id√©es.' },
-    { icone: 'üß©', nom: 'Facilitateur', desc: 'Je fluidifie les dynamiques collectives pour des mises en ≈ìuvre simples et efficaces.' },
-    { icone: 'üéº', nom: 'Orchestrateur', desc: 'Je structure et am√©liore les organisations pour permettre l‚Äôautonomie et le passage √† l‚Äôaction.' },
+    { icone: '🛰️', nom: 'Veilleur', desc: 'Je capte et relie des signaux externes pour élargir les perspectives et challenger les certitudes.' },
+    { icone: '🔎', nom: 'Investigateur', desc: 'Je croise les intelligences internes et les insights externes pour éclairer les enjeux.' },
+    { icone: '♟️', nom: 'Stratège', desc: 'Je transforme l’analyse en vision, puis en trajectoire cohérente et opérationnelle.' },
+    { icone: '🥊', nom: 'Sparring partner', desc: 'J’accompagne les dirigeants dans leurs réflexions clés, en apportant structure, recul et action.' },
+    { icone: '🔗', nom: 'Connecteur', desc: 'Je fais le lien entre les mondes : technologie et métier, startup et institution, personnes et idées.' },
+    { icone: '🧩', nom: 'Facilitateur', desc: 'Je fluidifie les dynamiques collectives pour des mises en œuvre simples et efficaces.' },
+    { icone: '🎼', nom: 'Orchestrateur', desc: 'Je structure et améliore les organisations pour permettre l’autonomie et le passage à l’action.' },
   ],
 
   /* Ce que j'apporte */
   apports: [
-    'Une approche cadr√©e, structur√©e, it√©rative, pragmatique et orient√©e r√©sultats',
-    'Un accompagnement sur mesure, ancr√© dans la r√©alit√© de l‚Äôorganisation et des individus',
-    'De l‚Äôinterface entre dirigeants et op√©rationnels, entre m√©tiers et technologie',
+    'Une approche cadrée, structurée, itérative, pragmatique et orientée résultats',
+    'Un accompagnement sur mesure, ancré dans la réalité de l’organisation et des individus',
+    'De l’interface entre dirigeants et opérationnels, entre métiers et technologie',
     'Des livrables clairs et simples',
-    'Un r√©el engagement dans le passage √† l‚Äôaction et la mont√©e en comp√©tences',
-    'De l‚Äôenthousiasme',
+    'Un réel engagement dans le passage à l’action et la montée en compétences',
+    'De l’enthousiasme',
   ],
 
-  /* Parcours ‚Äî storytelling chronologique */
+  /* Parcours — storytelling chronologique */
   timeline: [
-    { annee: '2012‚Äì2016', titre: 'Audencia Business School', lieu: 'Nantes ¬∑ S√©oul', role: 'Master in Management', desc: 'Majeure strat√©gie & finance d‚Äôentreprise. Semestre d‚Äô√©change √† Korea University.', type: 'formation' },
-    { annee: '2014', titre: 'Mantra Investment Partners & APAX', lieu: 'Paris', role: 'Analyste junior ‚Äî investissements', desc: 'Premiers pas dans l‚Äôanalyse financi√®re et l‚Äô√©valuation d‚Äôopportunit√©s.', type: 'exp' },
-    { annee: '2016', titre: 'Ind√©fi & Humans Matter', lieu: 'Paris', role: 'Consultant junior ‚Äî strat√©gie', desc: 'Conseil en strat√©gie et approche centr√©e sur l‚Äôhumain.', type: 'exp' },
-    { annee: '2017‚Äì2021', titre: 'Lagard√®re Travel Retail', lieu: '+35 pays ¬∑ 5 Md‚Ç¨ de CA', role: 'Chief of Staff & chef de projet ‚Äî Strat√©gie & Innovation', desc: 'Aupr√®s de la VP Strat√©gie & Innovation : cr√©ation et d√©ploiement de la strat√©gie d‚Äôinnovation du groupe dans +10 pays, animation de l‚Äô√©cosyst√®me open-innovation (Plug & Play), projets retail innovants (robotique, IA, CRM) et analyses strat√©giques pour le COMEX.', type: 'exp' },
-    { annee: '2021‚Äì2023', titre: 'K√©a & Partners / Ylios', lieu: 'Paris', role: 'Consultant senior en strat√©gie', desc: '√âquipe industrie : r√©silience climatique d‚Äôun distributeur d‚Äô√©lectricit√© (HEDNO), maturit√© du march√© des SMR, encadrement de consultants juniors.', type: 'exp' },
-    { annee: 'Depuis 2023', titre: 'Consultant ind√©pendant', lieu: 'AXA, AP-HP, start-ups', role: 'Chief of Staff / Directeur de projet ‚Äî Strat√©gie, Innovation & IA', desc: 'Accompagnement de directions sur des enjeux strat√©giques et op√©rationnels, pilotage de projets en environnements complexes, production de livrables ex√©cutifs et coordination d‚Äô√©quipes transverses.', type: 'exp' },
-    { annee: 'Depuis 2026', titre: 'R√©serve op√©rationnelle', lieu: '12e r√©giment de cuirassiers', role: 'R√©serviste', desc: 'Engagement militaire en parall√®le de mon activit√© professionnelle.', type: 'engagement' },
+    { annee: '2012–2016', titre: 'Audencia Business School', lieu: 'Nantes · Séoul', role: 'Master in Management', desc: 'Majeure stratégie & finance d’entreprise. Semestre d’échange à Korea University.', type: 'formation' },
+    { annee: '2014', titre: 'Mantra Investment Partners & APAX', lieu: 'Paris', role: 'Analyste junior — investissements', desc: 'Premiers pas dans l’analyse financière et l’évaluation d’opportunités.', type: 'exp' },
+    { annee: '2016', titre: 'Indéfi & Humans Matter', lieu: 'Paris', role: 'Consultant junior — stratégie', desc: 'Conseil en stratégie et approche centrée sur l’humain.', type: 'exp' },
+    { annee: '2017–2021', titre: 'Lagardère Travel Retail', lieu: '+35 pays · 5 Md€ de CA', role: 'Chief of Staff & chef de projet — Stratégie & Innovation', desc: 'Auprès de la VP Stratégie & Innovation : création et déploiement de la stratégie d’innovation du groupe dans +10 pays, animation de l’écosystème open-innovation (Plug & Play), projets retail innovants (robotique, IA, CRM) et analyses stratégiques pour le COMEX.', type: 'exp' },
+    { annee: '2021–2023', titre: 'Kéa & Partners / Ylios', lieu: 'Paris', role: 'Consultant senior en stratégie', desc: 'Équipe industrie : résilience climatique d’un distributeur d’électricité (HEDNO), maturité du marché des SMR, encadrement de consultants juniors.', type: 'exp' },
+    { annee: 'Depuis 2023', titre: 'Consultant indépendant', lieu: 'AXA, AP-HP, start-ups', role: 'Chief of Staff / Directeur de projet — Stratégie, Innovation & IA', desc: 'Accompagnement de directions sur des enjeux stratégiques et opérationnels, pilotage de projets en environnements complexes, production de livrables exécutifs et coordination d’équipes transverses.', type: 'exp' },
+    { annee: 'Depuis 2026', titre: 'Réserve opérationnelle', lieu: '12e régiment de cuirassiers', role: 'Réserviste', desc: 'Engagement militaire en parallèle de mon activité professionnelle.', type: 'engagement' },
   ],
 
   expertises: [
-    { nom: 'Strat√©gie & transformation', icone: '‚ôüÔ∏è' },
-    { nom: 'Innovation & IA', icone: 'üí°' },
-    { nom: 'Gouvernance & pilotage', icone: 'üß≠' },
-    { nom: 'Facilitation', icone: 'üß©' },
+    { nom: 'Stratégie & transformation', icone: '♟️' },
+    { nom: 'Innovation & IA', icone: '💡' },
+    { nom: 'Gouvernance & pilotage', icone: '🧭' },
+    { nom: 'Facilitation', icone: '🧩' },
   ],
 
-  secteurs: ['Assurance', 'Sant√©', 'Retail & Restauration', '√ânergie', 'Mobilit√©', 'B√¢timent', 'Technologies'],
+  secteurs: ['Assurance', 'Santé', 'Retail & Restauration', 'Énergie', 'Mobilité', 'Bâtiment', 'Technologies'],
 
   outils: ['Microsoft 365', 'ChatGPT', 'Claude', 'Miro', 'FigJam', 'Lovable'],
 
-  qualites: ['Curieux', 'Cr√©atif', 'Structur√©', 'Analytique', 'F√©d√©rateur', 'Innovant', 'Autonome', 'Sens de l‚Äôint√©r√™t g√©n√©ral'],
+  qualites: ['Curieux', 'Créatif', 'Structuré', 'Analytique', 'Fédérateur', 'Innovant', 'Autonome', 'Sens de l’intérêt général'],
 
   convictions: [
-    'Le progr√®s est une conviction ; la technologie en est un levier, pas une finalit√©.',
-    'Toujours commencer par le ¬´ pourquoi ¬ª et construire une vision holistique partag√©e.',
-    'L‚Äôefficacit√© d‚Äôun syst√®me d√©pend de la coh√©rence entre ses √©l√©ments.',
-    'Cr√©er des liens entre les sous-syst√®mes am√©liore l‚Äôefficacit√© globale.',
-    'La simplicit√© est la cl√© de l‚Äôefficacit√©.',
-    'L‚Äôusage prime sur l‚Äôoutil.',
-    'L‚Äôhumain est le principal levier d‚Äôam√©lioration d‚Äôun syst√®me.',
-    'Une transformation r√©ussie : quand le syst√®me n‚Äôa plus besoin du transformateur.',
+    'Le progrès est une conviction ; la technologie en est un levier, pas une finalité.',
+    'Toujours commencer par le « pourquoi » et construire une vision holistique partagée.',
+    'L’efficacité d’un système dépend de la cohérence entre ses éléments.',
+    'Créer des liens entre les sous-systèmes améliore l’efficacité globale.',
+    'La simplicité est la clé de l’efficacité.',
+    'L’usage prime sur l’outil.',
+    'L’humain est le principal levier d’amélioration d’un système.',
+    'Une transformation réussie : quand le système n’a plus besoin du transformateur.',
   ],
 
-  /* R√©alisations ‚Äî tagu√©es pour le filtrage et le matching */
+  /* Réalisations — taguées pour le filtrage et le matching */
   missions: [
-    { titre: 'Construction de sc√©narios extr√©mis√©s d‚Äô√©volution de l‚Äôindustrie', client: 'Lagard√®re Travel Retail', domaine: 'Strat√©gie', secteur: 'Retail & Restauration', mode: 'CDI', duree: '1 semaine', tags: ['sc√©narios', 'prospective', 'atelier', 'strat√©gie', 'retail'] },
-    { titre: 'Impacts de l‚Äôinflation et des taux de cr√©dit sur le mod√®le d‚Äôaffaires', client: 'Promoteur immobilier (Top 5 FR)', domaine: 'Strat√©gie', secteur: 'Immobilier', mode: 'Freelance', duree: '3 mois', tags: ['mod√©lisation √©conomique', 'sc√©narios', 'business model', 'immobilier', 'finance'] },
-    { titre: 'Strat√©gie de r√©silience climatique', client: 'HEDNO (distribution √©lectrique)', domaine: 'Strat√©gie', secteur: '√ânergie', mode: 'CDI', duree: '2 mois', tags: ['r√©silience climatique', 'rse', '√©nergie', 'benchmark', 'feuille de route'] },
-    { titre: 'Impacts du Covid sur le chiffre d‚Äôaffaires', client: 'Lagard√®re Travel Retail', domaine: 'Strat√©gie', secteur: 'Retail & Restauration', mode: 'CDI', duree: '2 mois', tags: ['sc√©narios', 'analyse financi√®re', 'crise', 'retail'] },
-    { titre: 'Diagnostic strat√©gique d‚Äôune activit√© (100 M‚Ç¨ de CA)', client: 'AXA France', domaine: 'Strat√©gie', secteur: 'Assurance', mode: 'Freelance', duree: '1 mois', tags: ['diagnostic', 'business model', 'mod√©lisation', 'assurance'] },
-    { titre: 'Design & impl√©mentation de la veille concurrentielle pour le COMEX', client: 'Lagard√®re Travel Retail', domaine: 'Strat√©gie', secteur: 'Retail & Restauration', mode: 'CDI', duree: 'r√©current', tags: ['veille', 'intelligence √©conomique', 'comex', 'benchmark'] },
-    { titre: 'Diagnostic flash de l‚Äôoffre bus', client: 'Groupe RATP', domaine: 'Strat√©gie', secteur: 'Mobilit√©', mode: 'CDI', duree: '2 mois', tags: ['mobilit√©', 'positionnement', 'optimisation', 'innovation'] },
-    { titre: 'Proposition de valeur & business model d‚Äôun partenariat assureur √ó GAFAM', client: 'AXA', domaine: 'Strat√©gie', secteur: 'Assurance', mode: 'Freelance', duree: '3 mois', tags: ['partenariat', 'business model', 'n√©gociation', 'assurance', 'tech'] },
-    { titre: '√âtude d‚Äôopportunit√©s de d√©veloppement en Asie du Sud-Est', client: 'Lagard√®re Travel Retail', domaine: 'Go-to-market', secteur: 'Retail & Restauration', mode: 'CDI', duree: '1 mois', tags: ['expansion', 'international', 'benchmark', 'market entry'] },
-    { titre: 'Soutien commercial d‚Äôune entreprise Health Tech europ√©enne', client: 'AXA', domaine: 'Go-to-market', secteur: 'Sant√©', mode: 'Freelance', duree: '3,5 mois', tags: ['go-to-market', 'segmentation', 'proposition de valeur', 'sant√©', 'healthtech'] },
-    { titre: 'Accompagnement de 8 responsables de compte cl√© (+40 M‚Ç¨) √† d√©finir leur strat√©gie', client: 'Leader mondial de la chimie', domaine: 'Go-to-market', secteur: 'Industrie', mode: 'Freelance', duree: '3 mois', tags: ['compte cl√©', 'kam', 'feuille de route', 'formation', 'industrie'] },
-    { titre: 'Due diligences (construction, automobile, sant√©)', client: 'Private Equity', domaine: 'M&A', secteur: 'Finance', mode: 'Freelance', duree: '5 √ó 1 mois', tags: ['due diligence', 'm&a', 'private equity', 'analyse'] },
-    { titre: 'Documentation du march√© des petits r√©acteurs modulaires (SMR)', client: 'Confidentiel', domaine: 'M&A', secteur: '√ânergie', mode: 'CDI', duree: '1 mois', tags: ['nucl√©aire', '√©nergie', 'cartographie march√©', 'veille'] },
-    { titre: 'Qualification d‚Äôopportunit√©s de partenariats & acquisitions', client: 'Lagard√®re Travel Retail', domaine: 'M&A', secteur: 'Retail & Restauration', mode: 'CDI', duree: 'r√©current', tags: ['m&a', 'partenariats', 'veille', 'benchmark'] },
-    { titre: 'Strat√©gie RH d‚Äôun d√©partement IT (2000 employ√©s)', client: 'Banque', domaine: 'Organisation', secteur: 'Finance', mode: 'Freelance', duree: '3 mois', tags: ['rh', 'organisation', 'climat social', 'plan d‚Äôaction', 'it'] },
-    { titre: 'Organisation transitoire pour transfert d‚Äôeffectifs IT', client: 'ProBTP', domaine: 'Organisation', secteur: 'Assurance', mode: 'CDI', duree: '3 mois', tags: ['organisation', 'conduite du changement', 'it', 'comp√©tences'] },
-    { titre: 'Identification & codification des meilleures pratiques op√©rationnelles', client: 'Lagard√®re Travel Retail', domaine: 'Op√©rations', secteur: 'Retail & Restauration', mode: 'CDI', duree: '3 mois', tags: ['excellence op√©rationnelle', 'best practices', 'force de vente', 'retail'] },
-    { titre: 'Offre de prise de rendez-vous en ligne dans un groupe hospitalier', client: 'AP-HP', domaine: 'Op√©rations', secteur: 'Sant√©', mode: 'CDD', duree: '7 mois', tags: ['sant√©', 'produit', 'doctolib', 'pilotage', 'partenaire'] },
-    { titre: 'Cadrage du mod√®le de delivery IT & opportunit√©s IA', client: 'AXA', domaine: 'Op√©rations', secteur: 'Assurance', mode: 'Freelance', duree: '6 mois', tags: ['ia', 'delivery it', 'vision cible', 'cas d‚Äôusage', 'hackathon'] },
-    { titre: 'Structuration & it√©ration de l‚Äôapproche innovation du groupe', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: '3,5 ans', tags: ['strat√©gie innovation', 'okr', 'vision', 'open innovation', 'co-construction'] },
-    { titre: 'Challenge innovation europ√©en (400 participants, 7 √©quipes)', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: '6 mois', tags: ['id√©ation', 'prototypage', 'animation', 'coaching', '√©v√©nement'] },
-    { titre: 'Animation du partenariat open-innovation Plug & Play Retail Europe', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: '3 ans', tags: ['open innovation', 'startups', '√©cosyst√®me', 'partenariat', 'sourcing'] },
-    { titre: 'Cadrage de th√©matiques d‚Äôinnovation & cas d‚Äôusage (robotique, IA, CRM)', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: 'r√©current', tags: ['ia', 'robotique', 'crm', 'cas d‚Äôusage', 'acculturation'] },
-    { titre: 'Solutions num√©riques de traduction pour un groupe hospitalier', client: 'AP-HP', domaine: 'Innovation', secteur: 'Sant√©', mode: 'CDD', duree: '7 mois', tags: ['sant√©', 'exp√©rimentation', 'benchmark', 'num√©rique', 'patients'] },
-    { titre: 'Vision & strat√©gie digitale groupe', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: '1 mois', tags: ['strat√©gie digitale', 'cha√Æne de valeur', 'use cases', 'co-construction'] },
-    { titre: 'Gestion des connaissances pour les cas d‚Äôusage IA', client: 'AXA', domaine: 'Innovation', secteur: 'Assurance', mode: 'Freelance', duree: '3 mois', tags: ['ia', 'knowledge management', 'gouvernance', 'processus', 'assurance'] },
-    { titre: 'Conception & prototypage d‚Äôune plateforme de pr√©vention financi√®re', client: 'AXA', domaine: 'Innovation', secteur: 'Assurance', mode: 'Freelance', duree: '6 mois', tags: ['prototypage', 'ux', 'produit', 'tests utilisateurs', 'assurance'] },
-    { titre: 'Solution de cartographie des risques sant√© collective', client: 'AXA', domaine: 'Innovation', secteur: 'Assurance', mode: 'Freelance', duree: '6 mois', tags: ['sant√©', 'data', 'ia', 'prototypage', 'risques'] },
+    { titre: 'Construction de scénarios extrémisés d’évolution de l’industrie', client: 'Lagardère Travel Retail', domaine: 'Stratégie', secteur: 'Retail & Restauration', mode: 'CDI', duree: '1 semaine', tags: ['scénarios', 'prospective', 'atelier', 'stratégie', 'retail'] },
+    { titre: 'Impacts de l’inflation et des taux de crédit sur le modèle d’affaires', client: 'Promoteur immobilier (Top 5 FR)', domaine: 'Stratégie', secteur: 'Immobilier', mode: 'Freelance', duree: '3 mois', tags: ['modélisation économique', 'scénarios', 'business model', 'immobilier', 'finance'] },
+    { titre: 'Stratégie de résilience climatique', client: 'HEDNO (distribution électrique)', domaine: 'Stratégie', secteur: 'Énergie', mode: 'CDI', duree: '2 mois', tags: ['résilience climatique', 'rse', 'énergie', 'benchmark', 'feuille de route'] },
+    { titre: 'Impacts du Covid sur le chiffre d’affaires', client: 'Lagardère Travel Retail', domaine: 'Stratégie', secteur: 'Retail & Restauration', mode: 'CDI', duree: '2 mois', tags: ['scénarios', 'analyse financière', 'crise', 'retail'] },
+    { titre: 'Diagnostic stratégique d’une activité (100 M€ de CA)', client: 'AXA France', domaine: 'Stratégie', secteur: 'Assurance', mode: 'Freelance', duree: '1 mois', tags: ['diagnostic', 'business model', 'modélisation', 'assurance'] },
+    { titre: 'Design & implémentation de la veille concurrentielle pour le COMEX', client: 'Lagardère Travel Retail', domaine: 'Stratégie', secteur: 'Retail & Restauration', mode: 'CDI', duree: 'récurrent', tags: ['veille', 'intelligence économique', 'comex', 'benchmark'] },
+    { titre: 'Diagnostic flash de l’offre bus', client: 'Groupe RATP', domaine: 'Stratégie', secteur: 'Mobilité', mode: 'CDI', duree: '2 mois', tags: ['mobilité', 'positionnement', 'optimisation', 'innovation'] },
+    { titre: 'Proposition de valeur & business model d’un partenariat assureur × GAFAM', client: 'AXA', domaine: 'Stratégie', secteur: 'Assurance', mode: 'Freelance', duree: '3 mois', tags: ['partenariat', 'business model', 'négociation', 'assurance', 'tech'] },
+    { titre: 'Étude d’opportunités de développement en Asie du Sud-Est', client: 'Lagardère Travel Retail', domaine: 'Go-to-market', secteur: 'Retail & Restauration', mode: 'CDI', duree: '1 mois', tags: ['expansion', 'international', 'benchmark', 'market entry'] },
+    { titre: 'Soutien commercial d’une entreprise Health Tech européenne', client: 'AXA', domaine: 'Go-to-market', secteur: 'Santé', mode: 'Freelance', duree: '3,5 mois', tags: ['go-to-market', 'segmentation', 'proposition de valeur', 'santé', 'healthtech'] },
+    { titre: 'Accompagnement de 8 responsables de compte clé (+40 M€) à définir leur stratégie', client: 'Leader mondial de la chimie', domaine: 'Go-to-market', secteur: 'Industrie', mode: 'Freelance', duree: '3 mois', tags: ['compte clé', 'kam', 'feuille de route', 'formation', 'industrie'] },
+    { titre: 'Due diligences (construction, automobile, santé)', client: 'Private Equity', domaine: 'M&A', secteur: 'Finance', mode: 'Freelance', duree: '5 × 1 mois', tags: ['due diligence', 'm&a', 'private equity', 'analyse'] },
+    { titre: 'Documentation du marché des petits réacteurs modulaires (SMR)', client: 'Confidentiel', domaine: 'M&A', secteur: 'Énergie', mode: 'CDI', duree: '1 mois', tags: ['nucléaire', 'énergie', 'cartographie marché', 'veille'] },
+    { titre: 'Qualification d’opportunités de partenariats & acquisitions', client: 'Lagardère Travel Retail', domaine: 'M&A', secteur: 'Retail & Restauration', mode: 'CDI', duree: 'récurrent', tags: ['m&a', 'partenariats', 'veille', 'benchmark'] },
+    { titre: 'Stratégie RH d’un département IT (2000 employés)', client: 'Banque', domaine: 'Organisation', secteur: 'Finance', mode: 'Freelance', duree: '3 mois', tags: ['rh', 'organisation', 'climat social', 'plan d’action', 'it'] },
+    { titre: 'Organisation transitoire pour transfert d’effectifs IT', client: 'ProBTP', domaine: 'Organisation', secteur: 'Assurance', mode: 'CDI', duree: '3 mois', tags: ['organisation', 'conduite du changement', 'it', 'compétences'] },
+    { titre: 'Identification & codification des meilleures pratiques opérationnelles', client: 'Lagardère Travel Retail', domaine: 'Opérations', secteur: 'Retail & Restauration', mode: 'CDI', duree: '3 mois', tags: ['excellence opérationnelle', 'best practices', 'force de vente', 'retail'] },
+    { titre: 'Offre de prise de rendez-vous en ligne dans un groupe hospitalier', client: 'AP-HP', domaine: 'Opérations', secteur: 'Santé', mode: 'CDD', duree: '7 mois', tags: ['santé', 'produit', 'doctolib', 'pilotage', 'partenaire'] },
+    { titre: 'Cadrage du modèle de delivery IT & opportunités IA', client: 'AXA', domaine: 'Opérations', secteur: 'Assurance', mode: 'Freelance', duree: '6 mois', tags: ['ia', 'delivery it', 'vision cible', 'cas d’usage', 'hackathon'] },
+    { titre: 'Structuration & itération de l’approche innovation du groupe', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: '3,5 ans', tags: ['stratégie innovation', 'okr', 'vision', 'open innovation', 'co-construction'] },
+    { titre: 'Challenge innovation européen (400 participants, 7 équipes)', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: '6 mois', tags: ['idéation', 'prototypage', 'animation', 'coaching', 'événement'] },
+    { titre: 'Animation du partenariat open-innovation Plug & Play Retail Europe', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: '3 ans', tags: ['open innovation', 'startups', 'écosystème', 'partenariat', 'sourcing'] },
+    { titre: 'Cadrage de thématiques d’innovation & cas d’usage (robotique, IA, CRM)', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: 'récurrent', tags: ['ia', 'robotique', 'crm', 'cas d’usage', 'acculturation'] },
+    { titre: 'Solutions numériques de traduction pour un groupe hospitalier', client: 'AP-HP', domaine: 'Innovation', secteur: 'Santé', mode: 'CDD', duree: '7 mois', tags: ['santé', 'expérimentation', 'benchmark', 'numérique', 'patients'] },
+    { titre: 'Vision & stratégie digitale groupe', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Restauration', mode: 'CDI', duree: '1 mois', tags: ['stratégie digitale', 'chaîne de valeur', 'use cases', 'co-construction'] },
+    { titre: 'Gestion des connaissances pour les cas d’usage IA', client: 'AXA', domaine: 'Innovation', secteur: 'Assurance', mode: 'Freelance', duree: '3 mois', tags: ['ia', 'knowledge management', 'gouvernance', 'processus', 'assurance'] },
+    { titre: 'Conception & prototypage d’une plateforme de prévention financière', client: 'AXA', domaine: 'Innovation', secteur: 'Assurance', mode: 'Freelance', duree: '6 mois', tags: ['prototypage', 'ux', 'produit', 'tests utilisateurs', 'assurance'] },
+    { titre: 'Solution de cartographie des risques santé collective', client: 'AXA', domaine: 'Innovation', secteur: 'Assurance', mode: 'Freelance', duree: '6 mois', tags: ['santé', 'data', 'ia', 'prototypage', 'risques'] },
   ],
 
-  /* Mod√®le de matching : comp√©tences pond√©r√©es + synonymes (sans accents, minuscules) */
+  /* Modèle de matching : compétences pondérées + synonymes (sans accents, minuscules) */
   competences: [
-    { label: 'Strat√©gie', poids: 5, syn: ['strategie', 'strategique', 'strategy', 'vision', 'cap', 'orientation', 'plan strategique'] },
+    { label: 'Stratégie', poids: 5, syn: ['strategie', 'strategique', 'strategy', 'vision', 'cap', 'orientation', 'plan strategique'] },
     { label: 'Innovation', poids: 5, syn: ['innovation', 'innover', 'open innovation', 'ideation', 'prototype', 'prototypage', 'r&d', 'nouvelles offres', 'disruptif'] },
     { label: 'Intelligence artificielle', poids: 5, syn: ['ia', 'intelligence artificielle', 'ai', 'genai', 'gen ai', 'llm', 'chatgpt', 'claude', 'machine learning', 'data'] },
     { label: 'Transformation', poids: 5, syn: ['transformation', 'transformer', 'conduite du changement', 'change', 'change management', 'pivot', 'modernisation'] },
@@ -185,21 +185,21 @@ window.PROFILE = {
     { label: 'Go-to-market', poids: 3, syn: ['go-to-market', 'gtm', 'lancement', 'market entry', 'segmentation', 'proposition de valeur', 'positionnement', 'commercial', 'developpement'] },
     { label: 'M&A / Due diligence', poids: 3, syn: ['m&a', 'fusion', 'acquisition', 'due diligence', 'private equity', 'investissement', 'deal'] },
     { label: 'Organisation & RH', poids: 3, syn: ['organisation', 'operating model', 'rh', 'ressources humaines', 'reorganisation', 'gouvernance', 'target operating model', 'tom'] },
-    { label: 'Excellence op√©rationnelle', poids: 3, syn: ['operations', 'operationnel', 'excellence operationnelle', 'process', 'processus', 'optimisation', 'efficacite', 'productivite'] },
+    { label: 'Excellence opérationnelle', poids: 3, syn: ['operations', 'operationnel', 'excellence operationnelle', 'process', 'processus', 'optimisation', 'efficacite', 'productivite'] },
     { label: 'Veille & analyse', poids: 3, syn: ['veille', 'benchmark', 'analyse', 'etude', 'intelligence economique', 'market research', 'diagnostic', 'cartographie'] },
     { label: 'Business model', poids: 3, syn: ['business model', 'modele economique', 'modele d affaires', 'monetisation', 'revenue model', 'p&l', 'rentabilite'] },
     { label: 'Produit & UX', poids: 2, syn: ['produit', 'product', 'ux', 'design', 'tests utilisateurs', 'mvp', 'plateforme'] },
     { label: 'Direction & COMEX', poids: 3, syn: ['comex', 'codir', 'direction generale', 'dirigeant', 'executive', 'c-level', 'board'] },
   ],
 
-  /* Secteurs pour matching (bonus si pr√©sents dans la demande) */
+  /* Secteurs pour matching (bonus si présents dans la demande) */
   secteursMatch: [
     { label: 'Assurance', syn: ['assurance', 'assureur', 'insurance', 'mutuelle', 'axa'] },
-    { label: 'Sant√©', syn: ['sante', 'health', 'hopital', 'hospitalier', 'healthtech', 'medical', 'ap-hp', 'pharma'] },
+    { label: 'Santé', syn: ['sante', 'health', 'hopital', 'hospitalier', 'healthtech', 'medical', 'ap-hp', 'pharma'] },
     { label: 'Retail & Restauration', syn: ['retail', 'distribution', 'commerce', 'restauration', 'magasin', 'travel retail'] },
-    { label: '√ânergie', syn: ['energie', 'energy', 'electricite', 'nucleaire', 'utilities', 'climat'] },
-    { label: 'Mobilit√©', syn: ['mobilite', 'transport', 'mobility', 'ratp', 'bus'] },
-    { label: 'B√¢timent', syn: ['batiment', 'construction', 'immobilier', 'btp', 'real estate'] },
+    { label: 'Énergie', syn: ['energie', 'energy', 'electricite', 'nucleaire', 'utilities', 'climat'] },
+    { label: 'Mobilité', syn: ['mobilite', 'transport', 'mobility', 'ratp', 'bus'] },
+    { label: 'Bâtiment', syn: ['batiment', 'construction', 'immobilier', 'btp', 'real estate'] },
     { label: 'Technologies', syn: ['tech', 'technologie', 'digital', 'numerique', 'logiciel', 'saas', 'startup', 'plateforme'] },
   ],
 };
@@ -207,14 +207,14 @@ window.PROFILE = {
 /* English version of the profile data. Same structure as window.PROFILE. */
 window.PROFILE_EN = {
   identite: {
-    nom: 'J√©r√©my Hamon',
+    nom: 'Jérémy Hamon',
     age: 35,
     experience: 10,
     titre: 'Facilitator of innovation & strategic transformation',
     accroche: 'Innovate without losing course, transform without losing meaning.',
     pitch: 'I support leaders and their teams through innovation and strategic transformation. I step in where things need to be clarified, connected and moved forward.',
-    formation: 'Audencia Business School (Master in Management) ‚Äî exchange at Korea University, Seoul',
-    langues: ['French ‚Äî native', 'English ‚Äî fluent (TOEIC 980/990)'],
+    formation: 'Audencia Business School (Master in Management) — exchange at Korea University, Seoul',
+    langues: ['French — native', 'English — fluent (TOEIC 980/990)'],
     engagement: 'Engaged in the military reserve',
     contact: {
       email: 'hamon.jeremy@live.fr',
@@ -224,24 +224,24 @@ window.PROFILE_EN = {
   },
 
   postures: [
-    { icone: 'üõ∞Ô∏è', nom: 'Scout', desc: 'I pick up and connect outside signals to widen perspectives and challenge certainties.' },
-    { icone: 'üîé', nom: 'Investigator', desc: 'I cross internal knowledge with external insights to shed light on the issues at stake.' },
-    { icone: '‚ôüÔ∏è', nom: 'Strategist', desc: 'I turn analysis into vision, then into a coherent, actionable trajectory.' },
-    { icone: 'ü•ä', nom: 'Sparring partner', desc: 'I support leaders in their key reflections, bringing structure, perspective and momentum.' },
-    { icone: 'üîó', nom: 'Connector', desc: 'I bridge worlds: technology and business, startups and institutions, people and ideas.' },
-    { icone: 'üß©', nom: 'Facilitator', desc: 'I smooth collective dynamics so implementation stays simple and effective.' },
-    { icone: 'üéº', nom: 'Orchestrator', desc: 'I structure and improve organizations to enable autonomy and action.' },
+    { icone: '🛰️', nom: 'Scout', desc: 'I pick up and connect outside signals to widen perspectives and challenge certainties.' },
+    { icone: '🔎', nom: 'Investigator', desc: 'I cross internal knowledge with external insights to shed light on the issues at stake.' },
+    { icone: '♟️', nom: 'Strategist', desc: 'I turn analysis into vision, then into a coherent, actionable trajectory.' },
+    { icone: '🥊', nom: 'Sparring partner', desc: 'I support leaders in their key reflections, bringing structure, perspective and momentum.' },
+    { icone: '🔗', nom: 'Connector', desc: 'I bridge worlds: technology and business, startups and institutions, people and ideas.' },
+    { icone: '🧩', nom: 'Facilitator', desc: 'I smooth collective dynamics so implementation stays simple and effective.' },
+    { icone: '🎼', nom: 'Orchestrator', desc: 'I structure and improve organizations to enable autonomy and action.' },
   ],
 
   apports: [],
 
   timeline: [
-    { annee: '2012‚Äì2016', titre: 'Audencia Business School', lieu: 'Nantes ¬∑ Seoul', role: 'Master in Management', desc: 'Major in strategy & corporate finance. Exchange semester at Korea University.', type: 'formation' },
-    { annee: '2014', titre: 'Mantra Investment Partners & APAX', lieu: 'Paris', role: 'Junior analyst ‚Äî investments', desc: 'First steps in financial analysis and deal screening.', type: 'exp' },
-    { annee: '2016', titre: 'Ind√©fi & Humans Matter', lieu: 'Paris', role: 'Junior strategy consultant', desc: 'Strategy consulting with a human-centred approach.', type: 'exp' },
-    { annee: '2017‚Äì2021', titre: 'Lagard√®re Travel Retail', lieu: '35+ countries ¬∑ ‚Ç¨5bn revenue', role: 'Chief of Staff & project lead ‚Äî Strategy & Innovation', desc: 'Alongside the VP Strategy & Innovation: built and rolled out the group‚Äôs innovation strategy across 10+ countries, ran the open-innovation ecosystem (Plug & Play), led innovative retail projects (robotics, AI, CRM) and strategic analyses for the Executive Committee.', type: 'exp' },
-    { annee: '2021‚Äì2023', titre: 'K√©a & Partners / Ylios', lieu: 'Paris', role: 'Senior strategy consultant', desc: 'Industry team: climate resilience for a power distributor (HEDNO), SMR market maturity, coaching junior consultants.', type: 'exp' },
-    { annee: 'Since 2023', titre: 'Independent consultant', lieu: 'AXA, AP-HP, start-ups', role: 'Chief of Staff / Project director ‚Äî Strategy, Innovation & AI', desc: 'Supporting leadership teams on strategic and operational stakes, steering projects in complex environments, producing executive deliverables and coordinating cross-functional teams.', type: 'exp' },
+    { annee: '2012–2016', titre: 'Audencia Business School', lieu: 'Nantes · Seoul', role: 'Master in Management', desc: 'Major in strategy & corporate finance. Exchange semester at Korea University.', type: 'formation' },
+    { annee: '2014', titre: 'Mantra Investment Partners & APAX', lieu: 'Paris', role: 'Junior analyst — investments', desc: 'First steps in financial analysis and deal screening.', type: 'exp' },
+    { annee: '2016', titre: 'Indéfi & Humans Matter', lieu: 'Paris', role: 'Junior strategy consultant', desc: 'Strategy consulting with a human-centred approach.', type: 'exp' },
+    { annee: '2017–2021', titre: 'Lagardère Travel Retail', lieu: '35+ countries · €5bn revenue', role: 'Chief of Staff & project lead — Strategy & Innovation', desc: 'Alongside the VP Strategy & Innovation: built and rolled out the group’s innovation strategy across 10+ countries, ran the open-innovation ecosystem (Plug & Play), led innovative retail projects (robotics, AI, CRM) and strategic analyses for the Executive Committee.', type: 'exp' },
+    { annee: '2021–2023', titre: 'Kéa & Partners / Ylios', lieu: 'Paris', role: 'Senior strategy consultant', desc: 'Industry team: climate resilience for a power distributor (HEDNO), SMR market maturity, coaching junior consultants.', type: 'exp' },
+    { annee: 'Since 2023', titre: 'Independent consultant', lieu: 'AXA, AP-HP, start-ups', role: 'Chief of Staff / Project director — Strategy, Innovation & AI', desc: 'Supporting leadership teams on strategic and operational stakes, steering projects in complex environments, producing executive deliverables and coordinating cross-functional teams.', type: 'exp' },
     { annee: 'Since 2026', titre: 'Operational reserve', lieu: '12th Cuirassier Regiment', role: 'Reservist', desc: 'Military commitment alongside my professional activity.', type: 'engagement' },
   ],
 
@@ -252,7 +252,7 @@ window.PROFILE_EN = {
 
   convictions: [
     'Progress is a conviction; technology is a lever, not an end.',
-    'Always start with the ‚Äúwhy‚Äù and build a shared, holistic vision.',
+    'Always start with the “why” and build a shared, holistic vision.',
     'A system is only as effective as the coherence between its parts.',
     'Creating links between sub-systems improves the whole.',
     'Simplicity is the key to effectiveness.',
@@ -262,31 +262,31 @@ window.PROFILE_EN = {
   ],
 
   missions: [
-    { titre: 'Building extreme scenarios for the industry‚Äôs evolution', client: 'Lagard√®re Travel Retail', domaine: 'Strategy', secteur: 'Retail & Food Service', mode: 'CDI', duree: '1 week', tags: ['scenarios', 'foresight', 'workshop', 'strategy', 'retail'] },
+    { titre: 'Building extreme scenarios for the industry’s evolution', client: 'Lagardère Travel Retail', domaine: 'Strategy', secteur: 'Retail & Food Service', mode: 'CDI', duree: '1 week', tags: ['scenarios', 'foresight', 'workshop', 'strategy', 'retail'] },
     { titre: 'Impact of inflation and credit rates on the business model', client: 'Real-estate developer (top 5 FR)', domaine: 'Strategy', secteur: 'Real Estate', mode: 'Freelance', duree: '3 months', tags: ['economic modelling', 'scenarios', 'business model', 'real estate', 'finance'] },
     { titre: 'Climate resilience strategy', client: 'HEDNO (power distribution)', domaine: 'Strategy', secteur: 'Energy', mode: 'CDI', duree: '2 months', tags: ['climate resilience', 'csr', 'energy', 'benchmark', 'roadmap'] },
-    { titre: 'Covid impact on revenue', client: 'Lagard√®re Travel Retail', domaine: 'Strategy', secteur: 'Retail & Food Service', mode: 'CDI', duree: '2 months', tags: ['scenarios', 'financial analysis', 'crisis', 'retail'] },
-    { titre: 'Strategic diagnosis of a ‚Ç¨100m business line', client: 'AXA France', domaine: 'Strategy', secteur: 'Insurance', mode: 'Freelance', duree: '1 month', tags: ['diagnosis', 'business model', 'modelling', 'insurance'] },
-    { titre: 'Design & roll-out of competitive intelligence for the ExCom', client: 'Lagard√®re Travel Retail', domaine: 'Strategy', secteur: 'Retail & Food Service', mode: 'CDI', duree: 'ongoing', tags: ['intelligence', 'benchmark', 'excom'] },
+    { titre: 'Covid impact on revenue', client: 'Lagardère Travel Retail', domaine: 'Strategy', secteur: 'Retail & Food Service', mode: 'CDI', duree: '2 months', tags: ['scenarios', 'financial analysis', 'crisis', 'retail'] },
+    { titre: 'Strategic diagnosis of a €100m business line', client: 'AXA France', domaine: 'Strategy', secteur: 'Insurance', mode: 'Freelance', duree: '1 month', tags: ['diagnosis', 'business model', 'modelling', 'insurance'] },
+    { titre: 'Design & roll-out of competitive intelligence for the ExCom', client: 'Lagardère Travel Retail', domaine: 'Strategy', secteur: 'Retail & Food Service', mode: 'CDI', duree: 'ongoing', tags: ['intelligence', 'benchmark', 'excom'] },
     { titre: 'Flash diagnosis of the bus offer', client: 'RATP Group', domaine: 'Strategy', secteur: 'Mobility', mode: 'CDI', duree: '2 months', tags: ['mobility', 'positioning', 'optimization', 'innovation'] },
-    { titre: 'Value proposition & business model for an insurer √ó Big Tech partnership', client: 'AXA', domaine: 'Strategy', secteur: 'Insurance', mode: 'Freelance', duree: '3 months', tags: ['partnership', 'business model', 'negotiation', 'insurance', 'tech'] },
-    { titre: 'Growth opportunities study in South-East Asia', client: 'Lagard√®re Travel Retail', domaine: 'Go-to-market', secteur: 'Retail & Food Service', mode: 'CDI', duree: '1 month', tags: ['expansion', 'international', 'benchmark', 'market entry'] },
+    { titre: 'Value proposition & business model for an insurer × Big Tech partnership', client: 'AXA', domaine: 'Strategy', secteur: 'Insurance', mode: 'Freelance', duree: '3 months', tags: ['partnership', 'business model', 'negotiation', 'insurance', 'tech'] },
+    { titre: 'Growth opportunities study in South-East Asia', client: 'Lagardère Travel Retail', domaine: 'Go-to-market', secteur: 'Retail & Food Service', mode: 'CDI', duree: '1 month', tags: ['expansion', 'international', 'benchmark', 'market entry'] },
     { titre: 'Commercial support for a European health-tech company', client: 'AXA', domaine: 'Go-to-market', secteur: 'Healthcare', mode: 'Freelance', duree: '3.5 months', tags: ['go-to-market', 'segmentation', 'value proposition', 'health', 'healthtech'] },
-    { titre: 'Coaching 8 key-account managers (‚Ç¨40m+) on their account strategies', client: 'Global chemicals leader', domaine: 'Go-to-market', secteur: 'Industry', mode: 'Freelance', duree: '3 months', tags: ['key account', 'kam', 'roadmap', 'training', 'industry'] },
-    { titre: 'Due diligences (construction, automotive, healthcare)', client: 'Private Equity', domaine: 'M&A', secteur: 'Finance', mode: 'Freelance', duree: '5 √ó 1 month', tags: ['due diligence', 'm&a', 'private equity', 'analysis'] },
+    { titre: 'Coaching 8 key-account managers (€40m+) on their account strategies', client: 'Global chemicals leader', domaine: 'Go-to-market', secteur: 'Industry', mode: 'Freelance', duree: '3 months', tags: ['key account', 'kam', 'roadmap', 'training', 'industry'] },
+    { titre: 'Due diligences (construction, automotive, healthcare)', client: 'Private Equity', domaine: 'M&A', secteur: 'Finance', mode: 'Freelance', duree: '5 × 1 month', tags: ['due diligence', 'm&a', 'private equity', 'analysis'] },
     { titre: 'Mapping the small modular reactor (SMR) market', client: 'Confidential', domaine: 'M&A', secteur: 'Energy', mode: 'CDI', duree: '1 month', tags: ['nuclear', 'energy', 'market mapping', 'research'] },
-    { titre: 'Screening partnership & acquisition opportunities', client: 'Lagard√®re Travel Retail', domaine: 'M&A', secteur: 'Retail & Food Service', mode: 'CDI', duree: 'ongoing', tags: ['m&a', 'partnerships', 'screening', 'benchmark'] },
+    { titre: 'Screening partnership & acquisition opportunities', client: 'Lagardère Travel Retail', domaine: 'M&A', secteur: 'Retail & Food Service', mode: 'CDI', duree: 'ongoing', tags: ['m&a', 'partnerships', 'screening', 'benchmark'] },
     { titre: 'HR strategy for a 2,000-people IT department', client: 'Bank', domaine: 'Organization', secteur: 'Finance', mode: 'Freelance', duree: '3 months', tags: ['hr', 'organization', 'social climate', 'action plan', 'it'] },
     { titre: 'Transition organization for an IT workforce transfer', client: 'ProBTP', domaine: 'Organization', secteur: 'Insurance', mode: 'CDI', duree: '3 months', tags: ['organization', 'change management', 'it', 'skills'] },
-    { titre: 'Identifying & codifying operational best practices', client: 'Lagard√®re Travel Retail', domaine: 'Operations', secteur: 'Retail & Food Service', mode: 'CDI', duree: '3 months', tags: ['operational excellence', 'best practices', 'sales force', 'retail'] },
+    { titre: 'Identifying & codifying operational best practices', client: 'Lagardère Travel Retail', domaine: 'Operations', secteur: 'Retail & Food Service', mode: 'CDI', duree: '3 months', tags: ['operational excellence', 'best practices', 'sales force', 'retail'] },
     { titre: 'Online appointment booking for a hospital group', client: 'AP-HP', domaine: 'Operations', secteur: 'Healthcare', mode: 'CDD', duree: '7 months', tags: ['health', 'product', 'doctolib', 'steering', 'partner'] },
     { titre: 'Framing the IT delivery model & AI opportunities', client: 'AXA', domaine: 'Operations', secteur: 'Insurance', mode: 'Freelance', duree: '6 months', tags: ['ai', 'it delivery', 'target vision', 'use cases', 'hackathon'] },
-    { titre: 'Structuring & iterating the group‚Äôs innovation approach', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: '3.5 years', tags: ['innovation strategy', 'okr', 'vision', 'open innovation', 'co-construction'] },
-    { titre: 'European innovation challenge (400 participants, 7 teams)', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: '6 months', tags: ['ideation', 'prototyping', 'facilitation', 'coaching', 'event'] },
-    { titre: 'Running the Plug & Play Retail Europe open-innovation partnership', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: '3 years', tags: ['open innovation', 'startups', 'ecosystem', 'partnership', 'sourcing'] },
-    { titre: 'Framing innovation themes & use cases (robotics, AI, CRM)', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: 'ongoing', tags: ['ai', 'robotics', 'crm', 'use cases', 'acculturation'] },
+    { titre: 'Structuring & iterating the group’s innovation approach', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: '3.5 years', tags: ['innovation strategy', 'okr', 'vision', 'open innovation', 'co-construction'] },
+    { titre: 'European innovation challenge (400 participants, 7 teams)', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: '6 months', tags: ['ideation', 'prototyping', 'facilitation', 'coaching', 'event'] },
+    { titre: 'Running the Plug & Play Retail Europe open-innovation partnership', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: '3 years', tags: ['open innovation', 'startups', 'ecosystem', 'partnership', 'sourcing'] },
+    { titre: 'Framing innovation themes & use cases (robotics, AI, CRM)', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: 'ongoing', tags: ['ai', 'robotics', 'crm', 'use cases', 'acculturation'] },
     { titre: 'Digital translation solutions for a hospital group', client: 'AP-HP', domaine: 'Innovation', secteur: 'Healthcare', mode: 'CDD', duree: '7 months', tags: ['health', 'experimentation', 'benchmark', 'digital', 'patients'] },
-    { titre: 'Group digital vision & strategy', client: 'Lagard√®re Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: '1 month', tags: ['digital strategy', 'value chain', 'use cases', 'co-construction'] },
+    { titre: 'Group digital vision & strategy', client: 'Lagardère Travel Retail', domaine: 'Innovation', secteur: 'Retail & Food Service', mode: 'CDI', duree: '1 month', tags: ['digital strategy', 'value chain', 'use cases', 'co-construction'] },
     { titre: 'Knowledge management for AI use cases', client: 'AXA', domaine: 'Innovation', secteur: 'Insurance', mode: 'Freelance', duree: '3 months', tags: ['ai', 'knowledge management', 'governance', 'processes', 'insurance'] },
     { titre: 'Design & prototyping of a financial-prevention platform', client: 'AXA', domaine: 'Innovation', secteur: 'Insurance', mode: 'Freelance', duree: '6 months', tags: ['prototyping', 'ux', 'product', 'user testing', 'insurance'] },
     { titre: 'Mapping solution for group-health risks', client: 'AXA', domaine: 'Innovation', secteur: 'Insurance', mode: 'Freelance', duree: '6 months', tags: ['health', 'data', 'ai', 'prototyping', 'risks'] },
@@ -330,82 +330,82 @@ const { useState, useEffect, useMemo, useRef } = React;
 /* ---------- i18n ---------- */
 const TXT = {
   fr: {
-    kicker: 'J√©r√©my Hamon ¬∑ Freelance',
-    heroPitch: 'Curieux de nature, j‚Äôaime comprendre, relier les id√©es et les personnes, et faire avancer. C‚Äôest ce que je m‚Äôefforce d‚Äôapporter, en mission, aux d√©cideurs et √† leurs √©quipes.',
+    kicker: 'Jérémy Hamon · Freelance',
+    heroPitch: 'Curieux de nature, j’aime comprendre, relier les idées et les personnes, et faire avancer. C’est ce que je m’efforce d’apporter, en mission, aux décideurs et à leurs équipes.',
     ctaMatch: 'Tester le match',
     ctaContact: 'Me contacter',
-    statLabels: ['ans d‚Äôexp√©rience', 'missions men√©es', 'secteurs', 'postures-cl√©s'],
+    statLabels: ['ans d’expérience', 'missions menées', 'secteurs', 'postures-clés'],
     postKicker: 'Au quotidien',
-    postTitle: 'Sept fa√ßons de me rendre utile',
-    postIntro: 'Une mission traverse des moments tr√®s diff√©rents ‚Äî voici les casquettes que j‚Äôendosse, selon ce dont vous avez besoin.',
-    tlKicker: 'D‚Äôo√π je viens',
+    postTitle: 'Sept façons de me rendre utile',
+    postIntro: 'Une mission traverse des moments très différents — voici les casquettes que j’endosse, selon ce dont vous avez besoin.',
+    tlKicker: 'D’où je viens',
     tlTitle: 'Mon parcours',
     readMore: 'Lire la suite',
-    collapse: 'R√©duire',
+    collapse: 'Réduire',
     misKicker: 'Sur le terrain',
-    misTitle: 'Ce sur quoi j‚Äôai travaill√©',
+    misTitle: 'Ce sur quoi j’ai travaillé',
     dims: [{ key: 'domaine', label: 'Par type de projet' }, { key: 'secteur', label: 'Par industrie' }],
     all: 'Tous',
-    seeAll: (n) => `Voir les ${n} r√©f√©rences`,
+    seeAll: (n) => `Voir les ${n} références`,
     matchKicker: 'Et vous ?',
     matchTitle: 'Votre besoin, mon profil : testez le match',
-    matchIntro: 'D√©crivez votre besoin ou collez une offre de mission, puis lancez l‚Äôanalyse ‚Äî la r√©ponse est g√©n√©r√©e par IA √† partir de mon profil. Indicative, bien s√ªr : rien ne remplace un √©change.',
-    placeholder: 'Ex. : piloter notre transformation et nos projets d‚Äôinnovation IA‚Ä¶',
+    matchIntro: 'Décrivez votre besoin ou collez une offre de mission, puis lancez l’analyse — la réponse est générée par IA à partir de mon profil. Indicative, bien sûr : rien ne remplace un échange.',
+    placeholder: 'Ex. : piloter notre transformation et nos projets d’innovation IA…',
     tryLabel: 'Essayez',
     example: (i) => `Exemple ${i}`,
     examples: [
-      'Chief of Staff pour structurer notre strat√©gie d‚Äôinnovation et d√©ployer l‚ÄôIA g√©n√©rative.',
-      'Mission freelance : go-to-market sant√© et facilitation d‚Äôateliers avec le COMEX.',
-      'Transformation d‚Äôun d√©partement IT, conduite du changement et excellence op√©rationnelle.',
+      'Chief of Staff pour structurer notre stratégie d’innovation et déployer l’IA générative.',
+      'Mission freelance : go-to-market santé et facilitation d’ateliers avec le COMEX.',
+      'Transformation d’un département IT, conduite du changement et excellence opérationnelle.',
     ],
     matchWord: 'MATCH',
-    vGreat: 'Tr√®s bon match',
+    vGreat: 'Très bon match',
     vGood: 'Bon match',
     vPartial: 'Match partiel',
     aiBtn: 'Analyser le match',
-    aiLoading: 'Analyse en cours‚Ä¶',
+    aiLoading: 'Analyse en cours…',
     srcAI: 'Analyse IA',
-    aiNote: 'R√©ponse g√©n√©r√©e par IA √† partir de mon profil ‚Äî indicative, comme le score.',
-    aiError: 'L‚Äôanalyse n‚Äôa pas abouti. R√©essayez, ou √©crivez-moi directement.',
-    aiPrompt: (resume, need) => `R√îLE
-Tu √©values honn√™tement l‚Äôad√©quation entre J√©r√©my Hamon, consultant freelance, et l‚Äô√©l√©ment fourni en bas de ce message (offre compl√®te OU simple phrase d√©crivant un besoin).
+    aiNote: 'Réponse générée par IA à partir de mon profil — indicative, comme le score.',
+    aiError: 'L’analyse n’a pas abouti. Réessayez, ou écrivez-moi directement.',
+    aiPrompt: (resume, need) => `RÔLE
+Tu évalues honnêtement l’adéquation entre Jérémy Hamon, consultant freelance, et l’élément fourni en bas de ce message (offre complète OU simple phrase décrivant un besoin).
 
-SOURCES DE V√âRIT√â
-Fonde-toi exclusivement sur le profil ci-dessous. N‚Äôinvente jamais d‚Äôexp√©rience, de dipl√¥me, de chiffre, de client ou de comp√©tence. Si une information utile manque, √©cris ¬´ √Ä confirmer avec J√©r√©my ¬ª.
+SOURCES DE VÉRITÉ
+Fonde-toi exclusivement sur le profil ci-dessous. N’invente jamais d’expérience, de diplôme, de chiffre, de client ou de compétence. Si une information utile manque, écris « À confirmer avec Jérémy ».
 
 PROFIL
 ${resume}
 
-FORMAT ‚Äî 120 MOTS MAXIMUM
-R√©ponds en fran√ßais (ou en anglais si l‚Äôoffre est r√©dig√©e en anglais), en texte brut sans Markdown (ni **, ni #), tirets simples pour les puces.
-Style tranchant : phrases courtes, z√©ro remplissage, z√©ro paraphrase de l‚Äôoffre, aucun jargon creux. Chaque mot doit m√©riter sa place.
-1. Commence par ¬´ Score : XX/100 ‚Äî ¬ª suivi du verdict : ‚â•80 ¬´ Tr√®s bon fit ¬ª ; 70‚Äì79 ¬´ Bon fit ¬ª ; 60‚Äì69 ¬´ Fit partiel mais d√©fendable ¬ª ; <60 ¬´ Fit faible ¬ª.
-2. Forces (3 max) : une ligne chacune, 15 mots maximum ‚Äî le fait d‚Äôabord, la preuve ensuite (client + projet).
-3. Vigilances (3 max) : une ligne chacune, 15 mots maximum ‚Äî l‚Äô√©cart, sans le minimiser.
-4. Recommandation : une phrase s√®che (√©changer avec J√©r√©my / √©changer en adressant X / passer).
+FORMAT — 120 MOTS MAXIMUM
+Réponds en français (ou en anglais si l’offre est rédigée en anglais), en texte brut sans Markdown (ni **, ni #), tirets simples pour les puces.
+Style tranchant : phrases courtes, zéro remplissage, zéro paraphrase de l’offre, aucun jargon creux. Chaque mot doit mériter sa place.
+1. Commence par « Score : XX/100 — » suivi du verdict : ≥80 « Très bon fit » ; 70–79 « Bon fit » ; 60–69 « Fit partiel mais défendable » ; <60 « Fit faible ».
+2. Forces (3 max) : une ligne chacune, 15 mots maximum — le fait d’abord, la preuve ensuite (client + projet).
+3. Vigilances (3 max) : une ligne chacune, 15 mots maximum — l’écart, sans le minimiser.
+4. Recommandation : une phrase sèche (échanger avec Jérémy / échanger en adressant X / passer).
 
-EXIGENCES D‚ÄôHONN√äTET√â
-- Scores diff√©renci√©s : pas de regroupement artificiel entre 60 et 75 ; un mauvais fit se dit clairement.
-- V√©rifie syst√©matiquement ces √©carts r√©currents s‚Äôils sont pertinents : formation √©cole de commerce (Audencia) vs profil ing√©nieur ; environ 10 ans d‚Äôexp√©rience vs seuils exigeant 12‚Äì15 ans ou plus ; pas de mod√©lisation financi√®re niveau banque/PE ; pas de management d‚Äô√©quipe permanente document√© ; pas de profondeur op√©rationnelle technique (PLM, HPC, architecture SI).
-- Chaque affirmation doit √™tre tra√ßable au profil ou √† l‚Äôoffre ; aucune phrase g√©n√©rique.
-- Si l‚Äôentr√©e est une simple phrase (pas une offre compl√®te) : termine par ¬´ Analyse limit√©e ‚Äî fond√©e sur l‚Äôintitul√© seul ¬ª + une ligne listant les informations manquantes qui changeraient le score.
+EXIGENCES D’HONNÊTETÉ
+- Scores différenciés : pas de regroupement artificiel entre 60 et 75 ; un mauvais fit se dit clairement.
+- Vérifie systématiquement ces écarts récurrents s’ils sont pertinents : formation école de commerce (Audencia) vs profil ingénieur ; environ 10 ans d’expérience vs seuils exigeant 12–15 ans ou plus ; pas de modélisation financière niveau banque/PE ; pas de management d’équipe permanente documenté ; pas de profondeur opérationnelle technique (PLM, HPC, architecture SI).
+- Chaque affirmation doit être traçable au profil ou à l’offre ; aucune phrase générique.
+- Si l’entrée est une simple phrase (pas une offre complète) : termine par « Analyse limitée — fondée sur l’intitulé seul » + une ligne listant les informations manquantes qui changeraient le score.
 
-√âL√âMENT √Ä ANALYSER :
+ÉLÉMENT À ANALYSER :
 """${need}"""`,
     contactKicker: 'Contact',
-    contactTitle: '√âchangeons ?',
-    contactLine: 'Un projet, une question, une intuition √† confronter ? √âcrivez-moi ‚Äî je r√©ponds avec plaisir, et nous verrons simplement si je peux vous √™tre utile.',
+    contactTitle: 'Échangeons ?',
+    contactLine: 'Un projet, une question, une intuition à confronter ? Écrivez-moi — je réponds avec plaisir, et nous verrons simplement si je peux vous être utile.',
     footer: 'Freelance',
   },
   en: {
-    kicker: 'J√©r√©my Hamon ¬∑ Freelance',
+    kicker: 'Jérémy Hamon · Freelance',
     heroPitch: 'Naturally curious, I like to understand, connect ideas and people, and move things forward. That is what I try to bring, on assignment, to leaders and their teams.',
     ctaMatch: 'Test the match',
     ctaContact: 'Get in touch',
     statLabels: ['years of experience', 'missions delivered', 'industries', 'key postures'],
     postKicker: 'Day to day',
     postTitle: 'Seven ways I can help',
-    postIntro: 'A mission goes through very different moments ‚Äî here are the hats I wear, depending on what you need.',
+    postIntro: 'A mission goes through very different moments — here are the hats I wear, depending on what you need.',
     tlKicker: 'Where I come from',
     tlTitle: 'My journey',
     readMore: 'Read more',
@@ -417,8 +417,8 @@ EXIGENCES D‚ÄôHONN√äTET√â
     seeAll: (n) => `See all ${n} references`,
     matchKicker: 'What about you?',
     matchTitle: 'Your need, my profile: test the match',
-    matchIntro: 'Describe your need or paste a mission brief, then run the analysis ‚Äî the answer is AI-generated from my profile. Indicative, of course: nothing replaces a conversation.',
-    placeholder: 'E.g.: lead our transformation and our AI innovation projects‚Ä¶',
+    matchIntro: 'Describe your need or paste a mission brief, then run the analysis — the answer is AI-generated from my profile. Indicative, of course: nothing replaces a conversation.',
+    placeholder: 'E.g.: lead our transformation and our AI innovation projects…',
     tryLabel: 'Try',
     example: (i) => `Example ${i}`,
     examples: [
@@ -431,38 +431,38 @@ EXIGENCES D‚ÄôHONN√äTET√â
     vGood: 'Good match',
     vPartial: 'Partial match',
     aiBtn: 'Analyse the match',
-    aiLoading: 'Analyzing‚Ä¶',
+    aiLoading: 'Analyzing…',
     srcAI: 'AI analysis',
-    aiNote: 'AI-generated from my profile ‚Äî indicative, like the score.',
+    aiNote: 'AI-generated from my profile — indicative, like the score.',
     aiError: 'The analysis failed. Try again, or write to me directly.',
     aiPrompt: (resume, need) => `ROLE
-You honestly assess the fit between J√©r√©my Hamon, freelance consultant, and the element provided at the bottom of this message (a full job/mission posting OR a single sentence describing a need).
+You honestly assess the fit between Jérémy Hamon, freelance consultant, and the element provided at the bottom of this message (a full job/mission posting OR a single sentence describing a need).
 
 SOURCES OF TRUTH
-Rely exclusively on the profile below. Never invent experience, degrees, figures, clients or skills. If a useful piece of information is missing, write "To be confirmed with J√©r√©my".
+Rely exclusively on the profile below. Never invent experience, degrees, figures, clients or skills. If a useful piece of information is missing, write "To be confirmed with Jérémy".
 
 PROFILE
 ${resume}
 
-FORMAT ‚Äî 120 WORDS MAXIMUM
+FORMAT — 120 WORDS MAXIMUM
 Answer in English (or in French if the posting is written in French), plain text without Markdown (no **, no #), simple dashes for bullets.
 Sharp style: short sentences, zero filler, zero paraphrasing of the posting, no empty jargon. Every word must earn its place.
-1. Start with "Score: XX/100 ‚Äî " followed by the verdict: ‚â•80 "Very good fit"; 70‚Äì79 "Good fit"; 60‚Äì69 "Partial but defensible fit"; <60 "Weak fit".
-2. Strengths (3 max): one line each, 15 words maximum ‚Äî fact first, then proof (client + project).
-3. Watch-outs (3 max): one line each, 15 words maximum ‚Äî the gap, without downplaying it.
-4. Recommendation: one blunt sentence (talk with J√©r√©my / talk while addressing X / pass).
+1. Start with "Score: XX/100 — " followed by the verdict: ≥80 "Very good fit"; 70–79 "Good fit"; 60–69 "Partial but defensible fit"; <60 "Weak fit".
+2. Strengths (3 max): one line each, 15 words maximum — fact first, then proof (client + project).
+3. Watch-outs (3 max): one line each, 15 words maximum — the gap, without downplaying it.
+4. Recommendation: one blunt sentence (talk with Jérémy / talk while addressing X / pass).
 
 HONESTY REQUIREMENTS
 - Differentiated scores: no artificial clustering between 60 and 75; a poor fit must be stated clearly.
-- Systematically check these recurring gaps when relevant: business-school background (Audencia) vs engineering profiles; about 10 years of experience vs thresholds requiring 12‚Äì15+ years; no banking/PE-grade financial modelling; no documented permanent team management; no deep technical operations background (PLM, HPC, IT architecture).
+- Systematically check these recurring gaps when relevant: business-school background (Audencia) vs engineering profiles; about 10 years of experience vs thresholds requiring 12–15+ years; no banking/PE-grade financial modelling; no documented permanent team management; no deep technical operations background (PLM, HPC, IT architecture).
 - Every statement must be traceable to the profile or the posting; no generic sentences.
-- If the input is a single sentence (not a full posting): end with "Limited analysis ‚Äî based on the title alone" + one line listing the missing information that would change the score.
+- If the input is a single sentence (not a full posting): end with "Limited analysis — based on the title alone" + one line listing the missing information that would change the score.
 
 ELEMENT TO ANALYSE:
 """${need}"""`,
     contactKicker: 'Contact',
     contactTitle: 'Shall we talk?',
-    contactLine: 'A project, a question, a hunch to pressure-test? Drop me a line ‚Äî I reply with pleasure, and we will simply see whether I can help.',
+    contactLine: 'A project, a question, a hunch to pressure-test? Drop me a line — I reply with pleasure, and we will simply see whether I can help.',
     footer: 'Freelance',
   },
 };
@@ -552,7 +552,7 @@ function Hero() {
         <div className="up" style={S.heroText}>
           <div style={S.kicker}>{T.kicker}</div>
           <h1 style={S.heroTitle}>{P.identite.titre}</h1>
-          <p style={S.heroAccroche}>¬´ {P.identite.accroche} ¬ª</p>
+          <p style={S.heroAccroche}>« {P.identite.accroche} »</p>
           <p style={S.heroPitch}>{T.heroPitch}</p>
           <div style={S.heroCtas}>
             <button className="btn" style={S.ctaPrimary} onClick={scrollMatch}>{T.ctaMatch}</button>
@@ -561,7 +561,7 @@ function Hero() {
         </div>
         {window.PHOTO && (
           <div className="up" style={{ ...S.heroPhotoWrap, animationDelay: '.15s' }}>
-            <img src={window.PHOTO} alt="J√©r√©my Hamon" style={S.heroPhoto} />
+            <img src={window.PHOTO} alt="Jérémy Hamon" style={S.heroPhoto} />
           </div>
         )}
       </div>
@@ -670,7 +670,7 @@ function Missions() {
               <span style={S.misDom}>{m[dim === 'secteur' ? 'secteur' : 'domaine']}</span>
               <span>
                 <div style={S.misTitre}>{m.titre}</div>
-                <div style={S.misMeta}>{m.client} ¬∑ {m.duree}</div>
+                <div style={S.misMeta}>{m.client} · {m.duree}</div>
               </span>
             </div>
           </Reveal>
@@ -693,13 +693,13 @@ const apiReady = () => { const a = API(); return !!(a.key || (a.provider === 'cu
 
 function buildResume() {
   return [
-    P.identite.titre + ' ‚Äî ¬´ ' + P.identite.accroche + ' ¬ª',
+    P.identite.titre + ' — « ' + P.identite.accroche + ' »',
     'Formation : ' + P.identite.formation,
     'Langues : ' + P.identite.langues.join(', '),
-    'Comp√©tences : ' + P.competences.map((c) => c.label).join(', '),
+    'Compétences : ' + P.competences.map((c) => c.label).join(', '),
     'Secteurs connus : ' + P.secteursMatch.map((s) => s.label).join(', '),
     'Parcours : ' + P.timeline.map((t) => `${t.annee} ${t.titre} (${t.role})`).join(' | '),
-    'Missions : ' + P.missions.map((m) => `${m.titre} [${m.domaine} ‚Äî ${m.client}]`).join(' ; '),
+    'Missions : ' + P.missions.map((m) => `${m.titre} [${m.domaine} — ${m.client}]`).join(' ; '),
   ].join('\n');
 }
 
@@ -741,15 +741,15 @@ async function callMatchAPI(need, lang) {
   return (j.content && j.content[0] && j.content[0].text) || '';
 }
 
-/* Extrait ¬´ Score : XX/100 ‚Äî verdict ¬ª de la r√©ponse IA ; body = texte sans cette ligne. */
+/* Extrait « Score : XX/100 — verdict » de la réponse IA ; body = texte sans cette ligne. */
 function parseAI(t) {
   if (!t) return null;
-  const m = t.match(/score\s*:?\s*(\d{1,3})\s*\/\s*100\s*(?:[‚Äî‚Äì-]\s*)?([^\n]*)/i);
+  const m = t.match(/score\s*:?\s*(\d{1,3})\s*\/\s*100\s*(?:[—–-]\s*)?([^\n]*)/i);
   if (!m) return { score: null, verdict: '', body: t.trim() };
   return {
     score: Math.min(100, parseInt(m[1], 10)),
-    verdict: (m[2] || '').replace(/^[¬´"\s]+|[¬ª"\s]+$/g, '').trim(),
-    body: t.replace(m[0], '').replace(/^[\s¬´¬ª"]*\n/, '').trim(),
+    verdict: (m[2] || '').replace(/^[«"\s]+|[»"\s]+$/g, '').trim(),
+    body: t.replace(m[0], '').replace(/^[\s«»"]*\n/, '').trim(),
   };
 }
 
@@ -831,7 +831,7 @@ function Contact() {
   }, []);
   return (
     <Section id="contact" kicker={T.contactKicker} title={T.contactTitle} alt>
-      <div key={ci} className="fadeq" style={S.convQuote}>¬´ {P.convictions[ci]} ¬ª</div>
+      <div key={ci} className="fadeq" style={S.convQuote}>« {P.convictions[ci]} »</div>
       <Reveal>
         <div style={S.contactCard}>
           <p style={S.contactPitch}>{T.contactLine}</p>
@@ -871,7 +871,7 @@ function App() {
         <Missions />
         <Matching lang={lang} />
         <Contact />
-        <footer style={S.footer}>¬© {new Date().getFullYear()} J√©r√©my Hamon ‚Äî {T.footer}</footer>
+        <footer style={S.footer}>© {new Date().getFullYear()} Jérémy Hamon — {T.footer}</footer>
       </div>
     </div>
   );
