@@ -331,19 +331,19 @@ const { useState, useEffect, useMemo, useRef } = React;
 const TXT = {
   fr: {
     kicker: 'Jérémy Hamon · Freelance',
-    heroPitch: 'Curieux de nature, je pose un nombre déraisonnable de questions — on a fini par appeler cela un métier. J’aide les décideurs et leurs équipes à clarifier, relier, et faire avancer.',
+    heroPitch: 'Curieux de nature, je pose un nombre déraisonnable de questions — jusqu’à en faire un métier. J’aide les décideurs et leurs équipes à clarifier, relier et faire avancer ce qui compte.',
     ctaMatch: 'Tester le match',
     ctaContact: 'Me contacter',
     statLabels: ['ans d’expérience', 'missions menées', 'secteurs', 'postures-clés'],
     postKicker: 'Au quotidien',
     postTitle: 'Sept casquettes, une seule tête',
-    postIntro: 'Selon le moment de la mission, j’endosse l’une de ces casquettes. Une à la fois — il faut savoir se tenir.',
+    postIntro: 'Selon le moment de la mission, j’endosse la casquette la plus utile. Une à la fois — il faut savoir rester digne.',
     tlKicker: 'D’où je viens',
     tlTitle: 'Mon parcours, sans les détours',
     readMore: 'Lire la suite',
     collapse: 'Réduire',
     misKicker: 'Sur le terrain',
-    misTitle: 'Des faits — les slides vous seront épargnées',
+    misTitle: 'Quelques faits — sans vous imposer les slides',
     dims: [{ key: 'domaine', label: 'Par type de projet' }, { key: 'secteur', label: 'Par industrie' }],
     all: 'Tous',
     seeAll: (n) => `Voir les ${n} références`,
@@ -376,18 +376,19 @@ Fonde-toi exclusivement sur le profil ci-dessous. N’invente jamais d’expéri
 PROFIL
 ${resume}
 
-FORMAT — 120 MOTS MAXIMUM
-Réponds en français (ou en anglais si l’offre est rédigée en anglais), en texte brut sans Markdown (ni **, ni #), tirets simples pour les puces.
-Style tranchant : phrases courtes, zéro remplissage, zéro paraphrase de l’offre, aucun jargon creux. Chaque mot doit mériter sa place.
+FORMAT — 100 MOTS MAXIMUM
+Réponds en français (ou en anglais si l’offre est rédigée en anglais), en texte brut sans Markdown (ni **, ni #), tirets simples pour les puces, une ligne vide entre chaque section.
+Style tranchant : phrases courtes, zéro remplissage, zéro paraphrase de l’offre, aucun jargon creux.
 1. Commence par « Score : XX/100 — » suivi du verdict : ≥80 « Très bon fit » ; 70–79 « Bon fit » ; 60–69 « Fit partiel mais défendable » ; <60 « Fit faible ».
-2. Forces (3 max) : une ligne chacune, 15 mots maximum — le fait d’abord, la preuve ensuite (client + projet).
-3. Vigilances (3 max) : une ligne chacune, 15 mots maximum — l’écart, sans le minimiser.
-4. Recommandation : une phrase sèche (échanger avec Jérémy / échanger en adressant X / passer).
+2. Ligne « FORCES » (le mot seul, en majuscules), puis 2 à 3 puces d’une ligne, 12 mots maximum chacune — le fait, puis la preuve (client).
+3. Ligne « VIGILANCES », puis 1 à 2 puces d’une ligne, 12 mots maximum — l’écart, sans le minimiser.
+4. Ligne « RECOMMANDATION », puis une seule phrase sèche (échanger avec Jérémy / échanger en adressant X / passer).
+Rien d’autre.
 
 CAS PARTICULIER — SCORE ENTRE 25 ET 49
 Si ton évaluation honnête donne un score entre 25 et 49 : n’écris ni forces, ni vigilances, ni recommandation.
 1. Garde la première ligne « Score : XX/100 — Fit faible ».
-2. Enchaîne avec 2 à 3 phrases maximum, ton pince-sans-rire à l’anglaise : litote, flegme, autodérision discrète ; jamais d’exclamation, jamais moqueur envers le besoin du visiteur. Reconnais que ce n’est pas le bon casting, dis en un mot quel profil conviendrait mieux, et laisse une porte entrouverte si le besoin glisse un jour vers la stratégie, l’innovation ou l’IA.
+2. Enchaîne avec 2 phrases maximum, ton pince-sans-rire à l’anglaise : litote, flegme, autodérision discrète ; jamais d’exclamation, jamais moqueur envers le besoin du visiteur. Reconnais que ce n’est pas le bon casting, dis en un mot quel profil conviendrait mieux, et laisse une porte entrouverte si le besoin glisse un jour vers la stratégie, l’innovation ou l’IA.
 Exemple de ton (à adapter, surtout ne pas copier) : « Vous cherchez un expert SAP ; je facilite des transformations. Je ne doute pas que la conversation serait excellente — votre ERP, en revanche, mérite quelqu’un d’autre. »
 
 SOUS-CAS — SCORE SOUS 25/100
@@ -411,19 +412,19 @@ EXIGENCES D’HONNÊTETÉ
   },
   en: {
     kicker: 'Jérémy Hamon · Freelance',
-    heroPitch: 'Naturally curious, I ask an unreasonable number of questions — eventually, someone decided to call it a profession. I help leaders and their teams clarify, connect, and move things forward.',
+    heroPitch: 'Naturally curious, I ask an unreasonable number of questions — to the point of making it a profession. I help leaders and their teams clarify, connect, and move forward what matters.',
     ctaMatch: 'Test the match',
     ctaContact: 'Get in touch',
     statLabels: ['years of experience', 'missions delivered', 'industries', 'key postures'],
     postKicker: 'Day to day',
     postTitle: 'Seven hats, one head',
-    postIntro: 'Depending on the moment of a mission, I wear one of these hats. One at a time — standards must be maintained.',
+    postIntro: 'Depending on the moment of a mission, I wear whichever hat is most useful. One at a time — one must remain dignified.',
     tlKicker: 'Where I come from',
     tlTitle: 'My journey, minus the detours',
     readMore: 'Read more',
     collapse: 'Collapse',
     misKicker: 'In the field',
-    misTitle: 'The facts, slides mercifully omitted',
+    misTitle: 'A few facts — no slides inflicted',
     dims: [{ key: 'domaine', label: 'By project type' }, { key: 'secteur', label: 'By industry' }],
     all: 'All',
     seeAll: (n) => `See all ${n} references`,
@@ -456,18 +457,19 @@ Rely exclusively on the profile below. Never invent experience, degrees, figures
 PROFILE
 ${resume}
 
-FORMAT — 120 WORDS MAXIMUM
-Answer in English (or in French if the posting is written in French), plain text without Markdown (no **, no #), simple dashes for bullets.
-Sharp style: short sentences, zero filler, zero paraphrasing of the posting, no empty jargon. Every word must earn its place.
+FORMAT — 100 WORDS MAXIMUM
+Answer in English (or in French if the posting is written in French), plain text without Markdown (no **, no #), simple dashes for bullets, one blank line between sections.
+Sharp style: short sentences, zero filler, zero paraphrasing of the posting, no empty jargon.
 1. Start with "Score: XX/100 — " followed by the verdict: ≥80 "Very good fit"; 70–79 "Good fit"; 60–69 "Partial but defensible fit"; <60 "Weak fit".
-2. Strengths (3 max): one line each, 15 words maximum — fact first, then proof (client + project).
-3. Watch-outs (3 max): one line each, 15 words maximum — the gap, without downplaying it.
-4. Recommendation: one blunt sentence (talk with Jérémy / talk while addressing X / pass).
+2. Line "STRENGTHS" (the single word, uppercase), then 2–3 one-line bullets, 12 words maximum each — the fact, then the proof (client).
+3. Line "WATCH-OUTS", then 1–2 one-line bullets, 12 words maximum — the gap, without downplaying it.
+4. Line "RECOMMENDATION", then one single blunt sentence (talk with Jérémy / talk while addressing X / pass).
+Nothing else.
 
 SPECIAL CASE — SCORE BETWEEN 25 AND 49
 If your honest assessment lands between 25 and 49: write neither strengths, nor watch-outs, nor recommendation.
 1. Keep the first line "Score: XX/100 — Weak fit".
-2. Follow with 2–3 sentences maximum, in dry, understated British wit: understatement, composure, discreet self-deprecation; no exclamation marks, never mocking the visitor's need. Acknowledge it is the wrong casting, say in a word which profile would fit better, and leave the door ajar should the need ever drift toward strategy, innovation or AI.
+2. Follow with 2 sentences maximum, in dry, understated British wit: understatement, composure, discreet self-deprecation; no exclamation marks, never mocking the visitor's need. Acknowledge it is the wrong casting, say in a word which profile would fit better, and leave the door ajar should the need ever drift toward strategy, innovation or AI.
 Tone example (adapt it, do not copy): "You need a SAP expert; I facilitate transformations. I have no doubt the conversation would be excellent — your ERP, however, deserves someone else."
 
 SUB-CASE — SCORE BELOW 25/100
