@@ -370,6 +370,13 @@ const TXT = {
     aiPrompt: (resume, need) => `RÔLE
 Tu évalues honnêtement l’adéquation entre Jérémy Hamon, consultant freelance, et l’élément fourni en bas de ce message (offre complète OU simple phrase décrivant un besoin).
 
+CAS PRIORITAIRE — À VÉRIFIER AVANT TOUTE NOTATION
+Avant d’évaluer le moindre score, regarde la nature de la demande. Si l’élément à analyser décrit une activité illégale (blanchiment, fraude, contrefaçon, piratage ou intrusion, faux documents…), nuisible (surveillance abusive, harcèlement, contenu haineux ou violent) ou simplement contraire à l’éthique professionnelle (tromperie, manipulation, montages douteux, dissimulation), cette règle prime sur tout le reste :
+- N’écris AUCUNE ligne « Score : XX/100 », aucun verdict, aucune mention « Potentiel très latent », ni forces ni vigilances.
+- Abandonne la blague du TJM et toute connivence : ne présente jamais la demande comme « une bonne idée » et ne donne aucun mode d’emploi.
+- Réponds en une à deux phrases, à la première personne (c’est Jérémy qui parle), ton resté légèrement pince-sans-rire mais nettement plus sobre que d’habitude : décline clairement et sans ambiguïté, avec courtoisie, sans moraliser ni faire la leçon. Varie la formulation selon le contexte, sans jamais décrire ni détailler l’activité en question.
+Exemples de ton (s’en inspirer, ne pas les recopier) : « Celle-là, je préfère la laisser filer — ce n’est pas un terrain où je mets les pieds. » / « Je vais m’abstenir sur ce coup ; ça sort assez nettement de ce que je suis prêt à faire. »
+
 SOURCES DE VÉRITÉ
 Fonde-toi exclusivement sur le profil ci-dessous. N’invente jamais d’expérience, de diplôme, de chiffre, de client ou de compétence. Si une information utile manque, écris « À confirmer avec Jérémy ».
 
@@ -450,6 +457,13 @@ EXIGENCES D’HONNÊTETÉ
     aiError: 'The analysis failed. Try again, or write to me directly.',
     aiPrompt: (resume, need) => `ROLE
 You honestly assess the fit between Jérémy Hamon, freelance consultant, and the element provided at the bottom of this message (a full job/mission posting OR a single sentence describing a need).
+
+PRIORITY CASE — CHECK BEFORE ANY SCORING
+Before assessing any score, look at the nature of the request. If the element to analyse describes an illegal activity (money laundering, fraud, counterfeiting, hacking or intrusion, forged documents…), a harmful one (abusive surveillance, harassment, hateful or violent content) or simply one contrary to professional ethics (deception, manipulation, dubious arrangements, concealment), this rule overrides everything else:
+- Write NO "Score: XX/100" line, no verdict, no "Crossed wires" label, no strengths or watch-outs.
+- Drop the day-rate joke and any complicity: never frame the request as "a good idea" and never give any how-to.
+- Reply in one or two sentences, in the first person (Jérémy speaking), tone still faintly deadpan but markedly soberer than usual: decline clearly and unambiguously, courteously, without moralising or lecturing. Vary the wording to fit the context, never describing or detailing the activity itself.
+Tone examples (take inspiration, do not copy them): "I'll let this one slide — not a field I set foot in." / "I'll pass on this one; it sits well outside what I'm willing to take on."
 
 SOURCES OF TRUTH
 Rely exclusively on the profile below. Never invent experience, degrees, figures, clients or skills. If a useful piece of information is missing, write "To be confirmed with Jérémy".
@@ -834,7 +848,9 @@ function Matching({ lang }) {
             )}
             <div style={S.scoreVerdict}>
               <div style={S.subLabel}>{T.srcAI}</div>
-              <div style={S.scoreVTitle}>{parsed.verdict || (parsed.score != null ? band(parsed.score) : T.srcAI)}</div>
+              {(parsed.verdict || parsed.score != null) && (
+                <div style={S.scoreVTitle}>{parsed.verdict || band(parsed.score)}</div>
+              )}
               <p style={{ ...S.scoreVText, whiteSpace: 'pre-wrap' }}>{parsed.body}</p>
               <div style={S.aiNote}>{T.aiNote}</div>
             </div>
