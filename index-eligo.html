@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jérémy Hamon — Chief of Staff, for Eligo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#152238; --acc:#33618f; --accl:#6a8fb5; --mut:#64707f; --line:#e2e7ed; --bg:#f7f9fb; --alt:#eef2f6;
+    --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  .wrap{max-width:1020px; margin:0 auto; padding:0 28px;}
+  a{color:inherit;}
+  ::selection{background:#d6e4f0;}
+  .progress{position:fixed; top:0; left:0; height:2px; background:var(--acc); z-index:60; width:0;}
+
+  nav{position:sticky; top:0; z-index:40; display:flex; justify-content:space-between; align-items:center;
+    padding:14px 28px; backdrop-filter:saturate(120%) blur(6px); background:linear-gradient(rgba(247,249,251,.9),rgba(247,249,251,.55)); border-bottom:1px solid rgba(226,231,237,.7);}
+  .brand{font-weight:600; letter-spacing:.4px; font-size:14px;}
+  .brand b{color:var(--acc);}
+  .nav-r{display:flex; gap:18px; align-items:center;}
+  .nav-tag{font-size:11px; letter-spacing:2px; color:#8a97a6; font-weight:600; text-transform:uppercase;}
+  .nav-cta{font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:600; text-decoration:none; color:var(--bg); background:var(--ink); padding:8px 14px; border-radius:2px; transition:transform .2s,box-shadow .3s;}
+  .nav-cta:hover{transform:translateY(-1px); box-shadow:0 10px 24px -12px rgba(21,34,56,.6);}
+
+  .hero{padding:66px 0 30px;}
+  .hero-grid{display:flex; flex-wrap:wrap-reverse; gap:38px 60px; align-items:center; justify-content:space-between;}
+  .hero-text{flex:1 1 440px; max-width:610px;}
+  .kicker{color:var(--acc); font-weight:600; letter-spacing:3.5px; text-transform:uppercase; font-size:11px;}
+  .acc-line{height:2px; width:44px; background:var(--acc); transform-origin:left; transform:scaleX(0); transition:transform .7s cubic-bezier(.2,.7,.2,1) .1s; margin:14px 0;}
+  .acc-line.in{transform:scaleX(1);}
+  .hero h1{font-family:var(--serif); font-weight:500; font-size:clamp(34px,5vw,52px); line-height:1.08; letter-spacing:-.5px; margin:0;}
+  .hero h1 .am{color:var(--acc); font-style:italic;}
+  .accroche{font-family:var(--serif); font-style:italic; font-size:clamp(18px,2.3vw,23px); color:#2e3a4a; margin:20px 0 0;}
+  .lead{color:var(--mut); font-size:16px; line-height:1.72; max-width:58ch; margin:16px 0 0;}
+  .ctas{display:flex; gap:13px; margin-top:30px; flex-wrap:wrap;}
+  .btn{font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; padding:14px 26px; border-radius:2px; text-decoration:none; display:inline-block; cursor:pointer; border:1px solid transparent; transition:transform .2s,box-shadow .3s,background .2s,color .2s;}
+  .btn.pri{background:var(--ink); color:var(--bg); border-color:var(--ink); position:relative; overflow:hidden;}
+  .btn.pri:hover{transform:translateY(-2px); box-shadow:0 16px 32px -18px rgba(21,34,56,.6);}
+  .btn.pri::after{content:""; position:absolute; top:0; left:-130%; width:55%; height:100%; transform:skewX(-18deg); background:linear-gradient(100deg,transparent,rgba(255,255,255,.25),transparent); transition:left .6s ease;}
+  .btn.pri:hover::after{left:150%;}
+  .btn.ghost{background:transparent; border-color:#c3cedb; color:var(--ink);}
+  .btn.ghost:hover{border-color:var(--acc); color:var(--acc);}
+  .hero-photo{flex:0 0 188px; max-width:188px;}
+  .hero-photo img{width:100%; display:block; aspect-ratio:1/1; object-fit:cover; filter:grayscale(1); border:1px solid var(--line); border-radius:2px; transition:filter .5s, transform .5s;}
+  .hero-photo img:hover{filter:grayscale(0); transform:scale(1.02);}
+
+  .stats{display:flex; flex-wrap:wrap; border-top:1px solid var(--line); margin-top:44px;}
+  .stat{flex:1 1 150px; padding:20px 10px 0 0;}
+  .stat .n{font-family:var(--serif); font-size:clamp(30px,4vw,38px); font-weight:500;}
+  .stat .l{font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:var(--mut); margin-top:3px;}
+
+  section{padding:58px 0;}
+  .alt{background:var(--alt);}
+  .sec-k{color:var(--acc); font-weight:600; letter-spacing:3.5px; text-transform:uppercase; font-size:11px;}
+  .sec-h{font-family:var(--serif); font-weight:500; font-size:clamp(28px,4vw,38px); letter-spacing:-.3px; margin:12px 0 0;}
+  .sec-intro{color:var(--mut); font-size:15px; max-width:62ch; margin:16px 0 0; line-height:1.6;}
+
+  .rv{opacity:0; transform:translateY(22px); filter:blur(5px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1), filter .7s ease;}
+  .rv.in{opacity:1; transform:none; filter:none;}
+
+  /* pillars : the three things to own */
+  .pillars{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:26px;}
+  @media(max-width:820px){.pillars{grid-template-columns:1fr;}}
+  .pcard{background:#fff; border:1px solid var(--line); border-radius:3px; padding:24px; transition:transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .3s, border-color .25s;}
+  .pcard:hover{transform:translateY(-4px); box-shadow:0 18px 36px -24px rgba(21,34,56,.4); border-color:#c9d6e3;}
+  .pcard .pn{font-family:var(--serif); font-size:30px; color:var(--accl); font-weight:500;}
+  .pcard h3{font-family:var(--serif); font-size:23px; font-weight:600; margin:6px 0 14px; line-height:1.15;}
+  .pcard .lab{font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--acc); font-weight:600; margin-bottom:4px;}
+  .pcard p{font-size:13.5px; line-height:1.55; color:var(--mut); margin:0 0 14px;}
+  .pcard .mine{color:var(--ink);}
+  .pcard .mine b{font-weight:600;}
+
+  /* traits */
+  .traits{display:grid; grid-template-columns:1fr 1fr; gap:14px 30px; margin-top:24px;}
+  @media(max-width:680px){.traits{grid-template-columns:1fr;}}
+  .trait{display:flex; gap:13px; align-items:baseline; font-size:14.5px; line-height:1.55; color:var(--ink);}
+  .trait .b{flex:0 0 auto; width:7px; height:7px; border-radius:50%; background:var(--acc); margin-top:7px;}
+  .trait span{color:var(--mut);}
+
+  .tl{position:relative; margin-top:14px;}
+  .tl-track{position:absolute; left:113px; top:6px; bottom:6px; width:1px; background:var(--line);}
+  .tl-fill{position:absolute; left:113px; top:6px; width:1px; background:var(--acc); transform-origin:top; transform:scaleY(0);}
+  .tl-row{display:grid; grid-template-columns:106px 24px 1fr; gap:6px; align-items:start; margin-bottom:24px; position:relative;}
+  .tl-yr{text-align:right; font-weight:600; color:var(--mut); font-size:12px; padding-top:3px;}
+  .tl-dot{width:9px; height:9px; border-radius:50%; background:var(--acc); margin:6px auto 0; box-shadow:0 0 0 4px var(--alt); position:relative; z-index:1;}
+  .tl-dot.form{background:#9fb0c2;}
+  .tl-titre{font-weight:600; font-size:15.5px;}
+  .tl-lieu{font-size:12px; color:#8a97a6; margin-left:8px;}
+  .tl-role{color:var(--acc); font-size:13px; font-weight:600; margin:2px 0 5px;}
+  .tl-desc{font-size:13.5px; color:var(--mut); line-height:1.55; max-width:62ch;}
+  .tl-eng{display:inline-block; font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--acc); border:1px solid #b9ccde; border-radius:20px; padding:1px 7px; margin-left:8px; vertical-align:middle;}
+
+  .filters{display:flex; gap:8px 18px; flex-wrap:wrap; align-items:center; margin:22px 0 4px; padding-top:14px; border-top:1px solid var(--line);}
+  .chip{background:transparent; border:none; padding:6px 2px; font-size:12px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--mut); cursor:pointer; box-shadow:inset 0 -1px 0 transparent; transition:color .25s, box-shadow .25s;}
+  .chip:hover{color:var(--ink);}
+  .chip.on{color:var(--ink); box-shadow:inset 0 -2px 0 var(--acc);}
+  .mgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px;}
+  @media(max-width:820px){.mgrid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:540px){.mgrid{grid-template-columns:1fr;}}
+  .mcard{background:#fff; border:1px solid var(--line); border-radius:3px; padding:20px; display:flex; flex-direction:column; min-height:150px; transition:transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .3s, border-color .25s;}
+  .mcard:hover{transform:translateY(-4px); box-shadow:0 18px 36px -24px rgba(21,34,56,.4); border-color:#c9d6e3;}
+  .mcard.hide{display:none;}
+  .mc-top{font-size:10px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--acc); display:flex; justify-content:space-between; gap:8px;}
+  .mc-top span:last-child{color:#9aa6b3;}
+  .mc-h{font-weight:600; font-size:14.5px; line-height:1.35; margin:13px 0 auto;}
+  .mc-b{font-size:11.5px; color:#8a97a6; margin-top:14px; padding-top:12px; border-top:1px solid #eef2f6;}
+
+  .match-intro{color:var(--mut); font-size:15px; max-width:62ch; margin:16px 0 22px; line-height:1.6;}
+  .console{background:#fff; border:1px solid var(--line); border-radius:4px; overflow:hidden; box-shadow:0 30px 70px -50px rgba(21,34,56,.5);}
+  .con-bar{display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid var(--line); font-size:12px; color:#8a97a6;}
+  .con-bar .dots{display:flex; gap:6px;} .con-bar .dots i{width:9px;height:9px;border-radius:50%;background:#dde4ec;} .con-bar .dots i:first-child{background:var(--acc);}
+  .con-bar .tag{margin-left:auto; font-size:11px; border:1px solid var(--line); padding:2px 9px; border-radius:4px; color:#9aa6b3;}
+  .con-body{padding:22px;}
+  textarea{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:3px; color:var(--ink); padding:14px; font-size:15px; font-family:var(--sans); resize:vertical; line-height:1.5; min-height:62px;}
+  textarea:focus{outline:none; border-color:var(--accl);}
+  .exrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:13px; align-items:center;}
+  .exlab{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#9aa6b3; font-weight:600;}
+  .ex{font-size:11.5px; color:var(--mut); background:transparent; border:1px solid #cfd9e3; border-radius:2px; padding:6px 12px; cursor:pointer;}
+  .ex:hover{border-color:var(--acc); color:var(--acc);}
+  .runrow{display:flex; align-items:center; gap:14px; margin-top:18px;}
+  .runnote{font-size:11px; color:#9aa6b3;}
+  .result{margin-top:22px; border-top:1px solid var(--line); padding-top:22px; display:none;}
+  .result.show{display:block; animation:rise .55s cubic-bezier(.2,.7,.2,1) both;}
+  @keyframes rise{from{opacity:0; transform:translateY(14px);}to{opacity:1; transform:none;}}
+  .res-grid{display:grid; grid-template-columns:150px 1fr; gap:26px; align-items:start;}
+  @media(max-width:560px){.res-grid{grid-template-columns:1fr;}}
+  .ring{position:relative; width:128px; height:128px; margin:0 auto;}
+  .ring svg{transform:rotate(-90deg);}
+  .ring .v{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .ring .v b{font-family:var(--serif); font-size:34px; font-weight:500;}
+  .ring .v span{font-size:9.5px; letter-spacing:2px; color:#9aa6b3; margin-top:2px;}
+  .verdict{text-align:center; color:var(--acc); font-weight:600; letter-spacing:1px; font-size:12px; text-transform:uppercase; margin-top:12px;}
+  .res h6{font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:#9aa6b3; margin:0 0 8px;}
+  .res h6:not(:first-child){margin-top:16px;}
+  .res ul{margin:0; padding:0; list-style:none;}
+  .res li{font-size:14px; padding-left:18px; position:relative; margin-bottom:5px;}
+  .res li::before{content:"—"; position:absolute; left:0; color:var(--acc);}
+  .res .reco{font-size:14.5px; border-left:2px solid var(--acc); padding-left:13px;}
+
+  .contact{text-align:center; padding:92px 0;}
+  .contact h2{font-family:var(--serif); font-weight:500; font-size:clamp(40px,7vw,70px); letter-spacing:-1px; margin:14px 0 0;}
+  .contact p{color:var(--mut); max-width:48ch; margin:18px auto 0; font-size:16px; line-height:1.6;}
+  .contact .cc{display:flex; gap:13px; justify-content:center; margin-top:30px; flex-wrap:wrap;}
+  footer{border-top:1px solid var(--line); padding:24px 0; text-align:center; font-size:11px; letter-spacing:1px; color:#9aa6b3;}
+  footer .mono{display:block; margin-top:6px; text-transform:none; letter-spacing:0; font-size:12px; color:var(--mut); font-style:italic; font-family:var(--serif);}
+
+  .flag{position:fixed; bottom:16px; right:16px; z-index:50; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--acc); background:rgba(247,249,251,.92); border:1px solid #b9ccde; padding:7px 12px; border-radius:20px; backdrop-filter:blur(4px);}
+
+  @keyframes rise2{from{opacity:0; transform:translateY(20px); filter:blur(5px);}to{opacity:1; transform:none; filter:none;}}
+  .stagger>*{animation:rise2 .8s cubic-bezier(.2,.7,.2,1) both;}
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important; transition:none!important;} .rv{opacity:1; transform:none; filter:none;} .acc-line{transform:scaleX(1);} }
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+
+<nav>
+  <div class="brand"><b>Jérémy</b> Hamon</div>
+  <div class="nav-r"><span class="nav-tag">Chief of Staff · for Eligo</span><a class="nav-cta" href="#contact">Get in touch</a></div>
+</nav>
+
+<header class="hero wrap">
+  <div class="hero-grid">
+    <div class="hero-text stagger">
+      <div class="kicker" style="animation-delay:.05s">Application · Chief of Staff · Eligo</div>
+      <div class="acc-line in" style="animation-delay:.1s"></div>
+      <h1 style="animation-delay:.16s">I keep the wheels on <span class="am">—</span> and make the machine go faster.</h1>
+      <p class="accroche" style="animation-delay:.26s">The engine room is the inside seat. That’s exactly where I do my best work.</p>
+      <p class="lead" style="animation-delay:.34s">Eligo just crossed from the lab into first-in-human — where the platform becomes a drug. I’d take the engine room off Xavier’s plate: own how the company runs and scales, make the board, investor and partner moments land, and run the special projects that have no home yet — so the leadership team stays on the one thing that matters: getting the science to patients.</p>
+      <div class="ctas" style="animation-delay:.44s">
+        <a class="btn pri" href="#own">What I’d own</a>
+        <a class="btn ghost" href="#match">Test the match</a>
+      </div>
+    </div>
+    <div class="hero-photo stagger"><img src="src/photo.jpg" alt="Jérémy Hamon" style="animation-delay:.5s" onerror="this.style.display='none'" /></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="n"><span class="count" data-to="10">0</span>+</div><div class="l">years a step behind leaders</div></div>
+    <div class="stat"><div class="n"><span class="count" data-to="28">0</span></div><div class="l">missions owned end-to-end</div></div>
+    <div class="stat"><div class="n"><span class="count" data-to="10">0</span>+</div><div class="l">countries coordinated</div></div>
+    <div class="stat"><div class="n"><span class="count" data-to="7">0</span></div><div class="l">sectors, incl. healthcare</div></div>
+  </div>
+</header>
+
+<section id="own" class="alt"><div class="wrap">
+  <div class="rv"><div class="sec-k">What I’d own</div><h2 class="sec-h">Three things — run better than you would yourself</h2><div class="acc-line"></div></div>
+  <p class="sec-intro rv">Your three buckets, mapped to where I’ve already done the work.</p>
+  <div class="pillars rv">
+    <div class="pcard">
+      <div class="pn">01</div><h3>How the company runs &amp; scales</h3>
+      <div class="lab">At Eligo</div>
+      <p>The operating system — cadence, foresight, the quality bar — and the operational backbone: finance &amp; HR ops, legal/board/ESOP, IT, procurement, accounting. Keep the wheels on as Eligo turns clinical, and hunt the friction that slows it down.</p>
+      <div class="lab">Where I’ve done it</div>
+      <p class="mine"><b>HR strategy for a 2,000-person IT department; a transitional org for an IT workforce transfer (ProBTP); a field team’s operating practices codified at Lagardère.</b> I keep a friction log by instinct.</p>
+    </div>
+    <div class="pcard">
+      <div class="pn">02</div><h3>Making the critical moments land</h3>
+      <div class="lab">At Eligo</div>
+      <p>Board, investors, partners, JPM, comms — prep that starts six weeks out, structured, high standard. And pressure-testing the leadership team’s proposals before they leave the room.</p>
+      <div class="lab">Where I’ve done it</div>
+      <p class="mine"><b>Four years prepping executive-committee decisions and analyses at Lagardère; executive-grade deliverables and decision scenarios</b> (Covid, inflation, climate resilience) for directions at AXA and others.</p>
+    </div>
+    <div class="pcard">
+      <div class="pn">03</div><h3>The special projects</h3>
+      <div class="lab">At Eligo</div>
+      <p>The work with no home yet — pipeline positioning, comp framework, non-dilutive funding &amp; grants, the offsite, and making Eligo an AI-native company.</p>
+      <div class="lab">Where I’ve done it</div>
+      <p class="mine"><b>Structured a group’s innovation approach over 3.5 years; ran an open-innovation ecosystem (Plug &amp; Play); built AI use-cases and knowledge systems at AXA.</b> I also build AI tools myself — the match below is one.</p>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="rv"><div class="sec-k">How I work</div><h2 class="sec-h">Low ego, high bar, hands-on</h2><div class="acc-line"></div></div>
+  <div class="traits rv">
+    <div class="trait"><span class="b"></span><div>Obsessively organized. I find the recurring slowdown and kill it — <span>I’d keep your friction log honestly.</span></div></div>
+    <div class="trait"><span class="b"></span><div>Half this job is unglamorous ops. I’ve owned the tedious machinery — closes, IT transfers, vendor pipelines — and <span>genuinely liked making it run.</span></div></div>
+    <div class="trait"><span class="b"></span><div>I’ll push back hard. <span>But the homework comes first, then the sharper option — not just the objection.</span></div></div>
+    <div class="trait"><span class="b"></span><div>Structured thinker and writer. <span>I prep the decision, not just the deck.</span></div></div>
+    <div class="trait"><span class="b"></span><div>Not a scientist, and I won’t pretend to be. <span>AXA health-tech and AP-HP got me close; I climb learning curves fast.</span></div></div>
+    <div class="trait"><span class="b"></span><div>Mission-motivated. <span>Frontier science reaching real patients is a reason to get up early.</span></div></div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <div class="rv"><div class="sec-k">Where I come from</div><h2 class="sec-h">A path built for the engine room</h2><div class="acc-line"></div></div>
+  <div class="tl" id="tl"><div class="tl-track"></div><div class="tl-fill" id="tlfill"></div></div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="rv"><div class="sec-k">On the ground</div><h2 class="sec-h">Things I’ve made run</h2><div class="acc-line"></div></div>
+  <p class="sec-intro rv">Filtered by what this role actually is.</p>
+  <div class="filters rv" id="filters"></div>
+  <div class="mgrid rv" id="mgrid"></div>
+</div></section>
+
+<section id="match" class="alt"><div class="wrap">
+  <div class="rv"><div class="sec-k">An AI thing I built</div><h2 class="sec-h">Your need vs my profile — test it</h2><div class="acc-line"></div></div>
+  <p class="match-intro rv">One of the things I’ve made (yes — relevant to making Eligo AI-native). It compares a brief to my profile and answers without spin. Try it.</p>
+  <div class="console rv">
+    <div class="con-bar"><span class="dots"><i></i><i></i><i></i></span><span>match.engine</span><span class="tag">my worker · live</span></div>
+    <div class="con-body">
+      <textarea id="need" rows="2">Chief of Staff to Eligo’s CEO: own how the company runs and scales, make the board and investor moments land, and run the special projects.</textarea>
+      <div class="exrow"><span class="exlab">Try</span>
+        <button class="ex" data-ex="Right hand to a biotech CEO crossing from lab into the clinic — keep the wheels on and speed the machine up.">Right hand to a biotech CEO</button>
+        <button class="ex" data-ex="Own the operational backbone and the friction log; start board and JPM prep six weeks out.">Ops backbone + board prep</button>
+      </div>
+      <div class="runrow"><button class="btn pri" id="run">Analyse the match</button><span class="runnote" id="runnote">An AI tool I built — runs live on my own Cloudflare worker.</span></div>
+      <div class="result" id="result"><div class="res-grid">
+        <div><div class="ring" id="ringWrap"><svg width="128" height="128" viewBox="0 0 128 128">
+          <circle cx="64" cy="64" r="56" fill="none" stroke="#e1e8f0" stroke-width="7"/>
+          <circle id="arc" cx="64" cy="64" r="56" fill="none" stroke="#33618f" stroke-width="7" stroke-linecap="round" stroke-dasharray="351.8" stroke-dashoffset="351.8" style="transition:stroke-dashoffset 1s cubic-bezier(.2,.7,.2,1)"/>
+        </svg><div class="v"><b id="ringv">0</b><span>MATCH</span></div></div><div class="verdict" id="verdict"></div></div>
+        <div class="res"><p id="resbody" style="white-space:pre-wrap; font-size:14.5px; line-height:1.62; color:var(--ink); margin:0"></p></div>
+      </div></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="contact"><div class="wrap">
+  <div class="rv"><div class="sec-k" style="color:var(--acc)">Contact</div><h2>Let’s talk.</h2>
+  <p>The full application is in your inbox — this is the short, clickable version. If the engine room sounds like the right seat, I’d love to get into it.</p>
+  <div class="cc">
+    <a class="btn pri" href="mailto:hamon.jeremy@live.fr">hamon.jeremy@live.fr</a>
+    <a class="btn ghost" href="https://www.linkedin.com/in/jeremyhamon/" target="_blank" rel="noopener">LinkedIn</a>
+  </div></div>
+</div></section>
+
+<footer>© 2026 Jérémy Hamon — Chief of Staff
+  <span class="mono">This page is a thing I made for the quality of it. The thinking and the voice are mine.</span>
+</footer>
+<div class="flag">Eligo application</div>
+
+<script>
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const TL=[
+  ['2012–2016','Audencia Business School','Nantes · Seoul','Master in Management','Strategy & corporate-finance major. Exchange semester at Korea University.','form'],
+  ['2014','Mantra Investment Partners & APAX','Paris','Junior analyst — investments','First steps in financial analysis and opportunity assessment.','exp'],
+  ['2016','Indéfi & Humans Matter','Paris','Junior consultant — strategy','Strategy consulting with a human-centred approach.','exp'],
+  ['2017–2021','Lagardère Travel Retail','+35 countries · €5bn','Chief of Staff — Strategy & Innovation (+10 countries)','Right hand to the VP Strategy & Innovation: priorities, coordinating innovation across +10 countries, prepping decisions and analyses for the executive committee.','cos'],
+  ['2021–2023','Kéa & Partners / Ylios','Paris','Senior strategy consultant','Industry team: climate resilience of a power distributor (HEDNO), SMR market, mentoring juniors.','exp'],
+  ['Since 2023','Chief of Staff / Project director — freelance','AXA · AP-HP · start-ups','Right hand to leaders','Piloting cross-functional work in complex environments, prepping trade-offs, executive deliverables, coordinating teams. Healthcare exposure: AXA, AP-HP.','cos'],
+  ['Since 2026','French Army','12th Cuirassier Regiment','Operational reservist','Military commitment alongside my professional activity.','eng'],
+];
+const MIS=[
+  ['Run & scale','Finance','HR strategy for a 2,000-person IT department','Bank','3 mo'],
+  ['Run & scale','Insurance','Transitional org for an IT workforce transfer','ProBTP','3 mo'],
+  ['Run & scale','Retail','Codified a field team’s operating best practices','Lagardère TR','3 mo'],
+  ['Decisions & board','Retail','Designed competitive intelligence for the exec committee','Lagardère TR','ongoing'],
+  ['Decisions & board','Insurance','Strategic diagnostic of a €100M business','AXA France','1 mo'],
+  ['Decisions & board','Retail','Impact scenarios (Covid, inflation) for leadership','Lagardère TR','2 mo'],
+  ['AI & special projects','Insurance','IT delivery model & generative-AI use cases','AXA','6 mo'],
+  ['AI & special projects','Retail','Structured the group’s innovation approach','Lagardère TR','3.5 yr'],
+  ['AI & special projects','Insurance','Knowledge system for AI use cases','AXA','3 mo'],
+  ['Healthcare','Health','Online appointment booking for a hospital group','AP-HP','7 mo'],
+  ['Healthcare','Health','Go-to-market support for a health-tech','AXA','3.5 mo'],
+  ['Healthcare','Insurance','Prototyped a prevention platform','AXA','6 mo'],
+];
+
+const tl=document.getElementById('tl');
+TL.forEach(e=>{const r=document.createElement('div'); r.className='tl-row';
+  r.innerHTML='<div class="tl-yr">'+e[0]+'</div><div><div class="tl-dot'+(e[5]==='form'?' form':'')+'"></div></div>'+
+  '<div><div class="tl-titre">'+e[1]+'<span class="tl-lieu">'+e[2]+'</span>'+(e[5]==='eng'?'<span class="tl-eng">commitment</span>':(e[5]==='cos'?'<span class="tl-eng">Chief of Staff</span>':''))+'</div>'+
+  '<div class="tl-role">'+e[3]+'</div><div class="tl-desc">'+e[4]+'</div></div>'; tl.appendChild(r);});
+
+const mg=document.getElementById('mgrid');
+MIS.forEach(m=>{const c=document.createElement('div'); c.className='mcard'; c.dataset.dom=m[0];
+  c.innerHTML='<div class="mc-top"><span>'+m[0]+'</span><span>'+m[1]+'</span></div><div class="mc-h">'+m[2]+'</div><div class="mc-b">'+m[3]+' · '+m[4]+'</div>'; mg.appendChild(c);});
+const filtersEl=document.getElementById('filters');
+['All',...new Set(MIS.map(m=>m[0]))].forEach((d,i)=>{
+  const b=document.createElement('button'); b.className='chip'+(i===0?' on':''); b.textContent=d;
+  b.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+    document.querySelectorAll('.mcard').forEach(c=>c.classList.toggle('hide', d!=='All' && c.dataset.dom!==d));};
+  filtersEl.appendChild(b);
+});
+
+document.querySelectorAll('.ex').forEach(b=>b.onclick=()=>document.getElementById('need').value=b.dataset.ex);
+
+const WORKER='https://match-jeremy.hamon-jeremy.workers.dev';
+const RESUME=[
+ 'Jérémy Hamon — Chief of Staff / right hand to leaders. About 10 years alongside decision-makers.',
+ 'Chief of Staff & project lead, Lagardère Travel Retail (2017–2021): right hand to the VP Strategy & Innovation across +10 countries — priorities, coordination, executive-committee decision prep, open-innovation (Plug & Play), retail innovation (robotics, AI, CRM).',
+ 'Senior strategy consultant, Kéa & Partners / Ylios (2021–2023): climate resilience of a power distributor (HEDNO), small modular reactors market, mentoring juniors.',
+ 'Independent Chief of Staff / project director since 2023 (AXA, AP-HP, start-ups): cross-functional pilotage in complex environments, executive deliverables, trade-off prep, team coordination; IT delivery model and generative-AI use cases at AXA.',
+ 'Education: Audencia Business School (Master in Management), exchange at Korea University. Languages: French native, English fluent (TOEIC 980).',
+ 'Healthcare exposure: AXA health-tech, AP-HP. Strengths: operating model and ops backbone, decision/board prep, AI use-cases, facilitation, go-to-market, M&A/due diligence, organisation and change.',
+ 'Honest gaps: not a scientist or biotech expert; no documented permanent line-management of a large team; business-school (not engineering) background; about 10 years (not 15+).'
+].join('\n');
+function aiPrompt(need){return `ROLE
+You honestly assess the fit between Jérémy Hamon, Chief of Staff, and the need at the bottom of this message.
+Rely only on the profile below — never invent experience, figures or skills.
+If the need is illegal, harmful or unethical: ignore the format and decline in one sober sentence, no score.
+FORMAT — 90 words max, plain text, no markdown, a blank line between sections:
+1. Start with "Score: XX/100 — " then the verdict (>=80 "Strong fit"; 70-79 "Good fit"; 60-69 "Partial but defensible fit"; <60 "Weak fit").
+2. "STRENGTHS" on its own line, then 2-3 one-line bullets starting with "- " (the fact, then the proof).
+3. "WATCH-OUTS" on its own line, then 1-2 one-line bullets starting with "- " (the gap, without minimizing it).
+4. "RECOMMENDATION" on its own line, then one blunt sentence.
+Be differentiated and honest; a weak fit must be said plainly.
+PROFILE
+${RESUME}
+ELEMENT TO ANALYSE:
+"""${need}"""`;}
+function parseAI(t){
+  if(!t) return {score:null,verdict:'',body:''};
+  const m=t.match(/score\s*:?\s*(\d{1,3})\s*\/\s*100\s*(?:[—–-]\s*)?([^\n]*)/i);
+  if(!m) return {score:null,verdict:'',body:t.trim()};
+  return {score:Math.min(100,parseInt(m[1],10)), verdict:(m[2]||'').replace(/^[«"\s]+|[»"\s]+$/g,'').trim(), body:t.replace(m[0],'').replace(/^[\s«»"]*\n/,'').trim()};
+}
+function showResult(p){
+  const res=document.getElementById('result'); res.classList.add('show');
+  const rw=document.getElementById('ringWrap');
+  if(p.score!=null){ rw.style.display=''; document.getElementById('arc').style.strokeDashoffset=351.8*(1-p.score/100);
+    let v=0; const iv=setInterval(()=>{v+=2; if(v>=p.score){v=p.score;clearInterval(iv);} document.getElementById('ringv').textContent=v+'%';},16);
+  } else rw.style.display='none';
+  document.getElementById('verdict').textContent=p.verdict||'';
+  document.getElementById('resbody').textContent=p.body||'';
+  res.scrollIntoView({behavior:'smooth',block:'center'});
+}
+document.getElementById('run').onclick=async()=>{
+  const need=document.getElementById('need').value.trim(); if(need.length<8) return;
+  const btn=document.getElementById('run'), note=document.getElementById('runnote');
+  btn.textContent='Analysing…'; note.textContent='Comparing your brief to the profile…';
+  try{
+    const r=await fetch(WORKER,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({besoin:need, profil:RESUME, prompt:aiPrompt(need), lang:'en'})});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const raw=await r.text(); let out; try{const j=JSON.parse(raw); out=j.analyse||j.text||j.output||(typeof j==='string'?j:raw);}catch(e){out=raw;}
+    showResult(parseAI((out||'').trim()));
+  }catch(e){
+    const res=document.getElementById('result'); res.classList.add('show'); document.getElementById('ringWrap').style.display='none';
+    document.getElementById('verdict').textContent=''; document.getElementById('resbody').textContent='The analysis didn’t go through — try again, or just email me.';
+  }
+  btn.textContent='Analyse the match'; note.textContent='An AI tool I built — runs live on my own Cloudflare worker.';
+};
+
+if(!REDUCE){
+  const io=new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting){
+    e.target.classList.add('in');
+    e.target.querySelectorAll && e.target.querySelectorAll('.acc-line').forEach(l=>l.classList.add('in'));
+    io.unobserve(e.target);
+  }}),{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+  document.querySelectorAll('.acc-line:not(.in)').forEach(el=>io.observe(el));
+
+  const cio=new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting){
+    const el=e.target, to=+el.dataset.to, t0=performance.now();
+    (function tick(now){const p=Math.min(1,(now-t0)/1100); el.textContent=Math.round(to*(1-Math.pow(1-p,3))); if(p<1) requestAnimationFrame(tick);})(t0);
+    cio.unobserve(el);
+  }}),{threshold:.6});
+  document.querySelectorAll('.count').forEach(el=>cio.observe(el));
+
+  const tlfill=document.getElementById('tlfill'), tlEl=document.getElementById('tl'), prog=document.getElementById('prog');
+  addEventListener('scroll',()=>{
+    const h=document.documentElement;
+    prog.style.width=(h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight)*100)+'%';
+    const rect=tlEl.getBoundingClientRect();
+    const p=Math.max(0,Math.min(1,(innerHeight*0.75-rect.top)/(rect.height*0.8)));
+    tlfill.style.height=rect.height+'px'; tlfill.style.transform='scaleY('+p+')';
+  },{passive:true});
+} else {
+  document.querySelectorAll('.count').forEach(el=>el.textContent=el.dataset.to);
+}
+</script>
+</body>
+</html>
