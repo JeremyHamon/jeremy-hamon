@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jérémy Hamon — Freelance · version 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+<style>
+  :root{
+    --ink:#152238; --acc:#33618f; --accl:#6a8fb5; --mut:#64707f; --line:#e2e7ed; --bg:#f7f9fb; --alt:#eef2f6;
+    --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  #bg{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;}
+  .content{position:relative; z-index:1;}
+  .wrap{max-width:1020px; margin:0 auto; padding:0 28px;}
+  a{color:inherit;}
+  ::selection{background:#d6e4f0;}
+
+  /* nav */
+  nav{position:fixed; top:0; left:0; right:0; z-index:40; display:flex; justify-content:space-between; align-items:center;
+    padding:14px 28px; backdrop-filter:saturate(120%) blur(6px); background:linear-gradient(rgba(247,249,251,.86),rgba(247,249,251,.4)); border-bottom:1px solid rgba(226,231,237,.7);}
+  .brand{font-weight:600; letter-spacing:.5px; font-size:14px;}
+  .brand b{color:var(--acc);}
+  .nav-r{display:flex; gap:18px; align-items:center;}
+  .lang{font-size:11px; letter-spacing:2px; color:#8a97a6; font-weight:600;}
+  .lang b{color:var(--ink);}
+  .nav-cta{font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:600; text-decoration:none; color:var(--bg); background:var(--ink); padding:8px 14px; border-radius:2px;}
+
+  /* hero */
+  .hero{min-height:100vh; display:flex; flex-direction:column; justify-content:center; position:relative;}
+  .kicker{color:var(--acc); font-weight:600; letter-spacing:3.5px; text-transform:uppercase; font-size:11px; margin-bottom:14px;}
+  .hero h1{font-family:var(--serif); font-weight:500; font-size:clamp(38px,6vw,68px); line-height:1.07; letter-spacing:-.5px; margin:0; max-width:14ch;}
+  .hero h1 .amp{color:var(--acc); font-style:italic;}
+  .accroche{font-family:var(--serif); font-style:italic; font-size:clamp(18px,2.4vw,24px); color:#2e3a4a; margin:22px 0 0;}
+  .lead{color:var(--mut); font-size:16px; line-height:1.7; max-width:52ch; margin:16px 0 0;}
+  .ctas{display:flex; gap:13px; margin-top:32px; flex-wrap:wrap;}
+  .btn{font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; padding:14px 26px; border-radius:2px; text-decoration:none; display:inline-block; cursor:pointer; border:1px solid transparent; transition:transform .2s ease, box-shadow .3s ease, background .2s, color .2s;}
+  .btn.pri{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+  .btn.pri:hover{transform:translateY(-2px); box-shadow:0 16px 32px -18px rgba(21,34,56,.6);}
+  .btn.ghost{background:rgba(247,249,251,.6); border-color:#c3cedb; color:var(--ink);}
+  .btn.ghost:hover{border-color:var(--acc); color:var(--acc);}
+  .scrollcue{position:absolute; bottom:30px; left:0; font-size:10.5px; letter-spacing:3px; text-transform:uppercase; color:#9aa6b3; display:flex; align-items:center; gap:10px;}
+  .scrollcue .bar{width:34px; height:1px; background:#9aa6b3; transform-origin:left; animation:cue 2.2s ease-in-out infinite;}
+  @keyframes cue{0%,100%{transform:scaleX(.4); opacity:.5;}50%{transform:scaleX(1); opacity:1;}}
+
+  /* generic section / panels */
+  section{padding:90px 0; position:relative;}
+  .panel{background:rgba(247,249,251,.9); border-radius:3px;}
+  .panel.alt{background:rgba(238,242,246,.92);}
+  .sec-k{color:var(--acc); font-weight:600; letter-spacing:3.5px; text-transform:uppercase; font-size:11px;}
+  .sec-h{font-family:var(--serif); font-weight:500; font-size:clamp(28px,4vw,40px); letter-spacing:-.3px; margin:12px 0 0;}
+  .sec-line{height:2px; width:46px; background:var(--acc); transform-origin:left; margin:16px 0 0;}
+  .sec-intro{color:var(--mut); font-size:15px; max-width:52ch; margin:18px 0 0;}
+
+  /* stats */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:1px solid var(--line); margin-top:8px;}
+  .stat{padding:24px 14px 0 0;}
+  .stat .n{font-family:var(--serif); font-size:clamp(34px,4.5vw,48px); font-weight:500;}
+  .stat .l{font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:var(--mut); margin-top:4px;}
+  @media(max-width:620px){.stats{grid-template-columns:repeat(2,1fr); gap:20px 0;}}
+
+  /* postures (compactes) */
+  .post-grid{display:grid; grid-template-columns:.82fr 1.18fr; gap:38px; align-items:start; width:100%;}
+  @media(max-width:760px){.post-grid{grid-template-columns:1fr; gap:18px;}}
+  .post-pills{display:flex; flex-direction:column; gap:1px; margin-top:18px;}
+  .post-pill{display:flex; align-items:baseline; gap:12px; padding:8px 0; font-size:12.5px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#9aa6b3; border-bottom:1px solid rgba(226,231,237,.7); transition:color .3s, padding-left .3s; cursor:pointer;}
+  .post-pill .pn{font-size:11px; color:#b8c4d0;}
+  .post-pill:hover{color:#5b6675;}
+  .post-pill.on{color:var(--ink); padding-left:12px;}
+  .post-pill.on .pn{color:var(--acc);}
+  .post-desc{font-family:var(--serif); font-style:italic; font-size:clamp(20px,2.6vw,28px); line-height:1.4; color:#2a3647; min-height:92px; align-self:center;}
+  .post-tag{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--acc); font-style:normal; font-family:var(--sans); font-weight:600; display:block; margin-bottom:12px;}
+
+  /* timeline */
+  .tl{position:relative; margin-top:10px;}
+  .tl-track{position:absolute; left:103px; top:6px; bottom:6px; width:1px; background:var(--line);}
+  .tl-fill{position:absolute; left:103px; top:6px; width:1px; height:100%; background:var(--acc); transform-origin:top; transform:scaleY(0);}
+  .tl-row{display:grid; grid-template-columns:96px 24px 1fr; gap:6px; align-items:start; margin-bottom:26px; position:relative;}
+  .tl-yr{text-align:right; font-weight:600; color:var(--mut); font-size:12px; padding-top:3px;}
+  .tl-dot{width:9px; height:9px; border-radius:50%; background:var(--acc); margin:6px auto 0; box-shadow:0 0 0 4px var(--bg); position:relative; z-index:1;}
+  .tl-dot.form{background:#9fb0c2;}
+  .tl-titre{font-weight:600; font-size:15.5px;}
+  .tl-lieu{font-size:12px; color:#8a97a6; margin-left:8px;}
+  .tl-role{color:var(--acc); font-size:13px; font-weight:600; margin:2px 0 5px;}
+  .tl-desc{font-size:13.5px; color:var(--mut); line-height:1.55; max-width:64ch;}
+  .tl-eng{display:inline-block; font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--acc); border:1px solid #b9ccde; border-radius:20px; padding:1px 7px; margin-left:8px;}
+
+  /* missions */
+  .filters{display:flex; gap:8px 18px; flex-wrap:wrap; align-items:center; margin:22px 0 4px; padding-top:14px; border-top:1px solid var(--line);}
+  .chip{background:transparent; border:none; padding:6px 2px; font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--mut); cursor:pointer; box-shadow:inset 0 -1px 0 transparent; transition:color .25s, box-shadow .25s;}
+  .chip:hover{color:var(--ink);}
+  .chip.on{color:var(--ink); box-shadow:inset 0 -2px 0 var(--acc);}
+  .mcard.hide{display:none;}
+  .mgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px;}
+  @media(max-width:820px){.mgrid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:540px){.mgrid{grid-template-columns:1fr;}}
+  .mcard{background:#fff; border:1px solid var(--line); border-radius:3px; padding:20px; display:flex; flex-direction:column; min-height:150px; transition:transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .3s, border-color .25s;}
+  .mcard:hover{transform:translateY(-4px); box-shadow:0 18px 36px -24px rgba(21,34,56,.4); border-color:#c9d6e3;}
+  .mc-top{font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--acc); display:flex; justify-content:space-between; gap:8px;}
+  .mc-top span:last-child{color:#9aa6b3;}
+  .mc-h{font-weight:600; font-size:14.5px; line-height:1.35; margin:13px 0 auto;}
+  .mc-b{font-size:11.5px; color:#8a97a6; margin-top:14px; padding-top:12px; border-top:1px solid #eef2f6;}
+
+  /* match console */
+  .match-box{margin-top:8px;}
+  .match-intro{color:var(--mut); font-size:15px; max-width:56ch; margin:0 0 22px;}
+  .console{background:#fff; border:1px solid var(--line); border-radius:4px; overflow:hidden; box-shadow:0 30px 70px -50px rgba(21,34,56,.5);}
+  .con-bar{display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid var(--line); font-size:12px; color:#8a97a6;}
+  .con-bar .dots{display:flex; gap:6px;} .con-bar .dots i{width:9px;height:9px;border-radius:50%;background:#dde4ec;} .con-bar .dots i:first-child{background:var(--acc);}
+  .con-bar .tag{margin-left:auto; font-size:11px; letter-spacing:.5px; border:1px solid var(--line); padding:2px 9px; border-radius:4px; color:#9aa6b3;}
+  .con-body{padding:22px;}
+  textarea{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:3px; color:var(--ink); padding:14px; font-size:15px; font-family:var(--sans); resize:vertical; line-height:1.5; min-height:64px;}
+  textarea:focus{outline:none; border-color:var(--accl);}
+  .exrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:13px; align-items:center;}
+  .exlab{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#9aa6b3; font-weight:600;}
+  .ex{font-size:11.5px; color:var(--mut); background:transparent; border:1px solid #cfd9e3; border-radius:2px; padding:6px 12px; cursor:pointer;}
+  .ex:hover{border-color:var(--acc); color:var(--acc);}
+  .runrow{display:flex; align-items:center; gap:14px; margin-top:18px;}
+  .runnote{font-size:11px; color:#9aa6b3;}
+  .result{margin-top:22px; border-top:1px solid var(--line); padding-top:22px; opacity:0; height:0; overflow:hidden;}
+  .res-grid{display:grid; grid-template-columns:150px 1fr; gap:26px; align-items:start;}
+  @media(max-width:560px){.res-grid{grid-template-columns:1fr;}}
+  .ring{position:relative; width:128px; height:128px; margin:0 auto;}
+  .ring svg{transform:rotate(-90deg);}
+  .ring .v{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .ring .v b{font-family:var(--serif); font-size:34px; font-weight:500;}
+  .ring .v span{font-size:9.5px; letter-spacing:2px; color:#9aa6b3; margin-top:2px;}
+  .verdict{text-align:center; color:var(--acc); font-weight:600; letter-spacing:1px; font-size:12px; text-transform:uppercase; margin-top:12px;}
+  .res h6{font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:#9aa6b3; margin:0 0 8px;}
+  .res h6:not(:first-child){margin-top:16px;}
+  .res ul{margin:0; padding:0; list-style:none;}
+  .res li{font-size:14px; padding-left:18px; position:relative; margin-bottom:5px;}
+  .res li::before{content:"—"; position:absolute; left:0; color:var(--acc);}
+  .res .reco{font-size:14.5px; border-left:2px solid var(--acc); padding-left:13px;}
+
+  /* contact */
+  .contact{text-align:center; padding:110px 0;}
+  .contact h2{font-family:var(--serif); font-weight:500; font-size:clamp(40px,7vw,72px); letter-spacing:-1px; margin:14px 0 0;}
+  .contact p{color:var(--mut); max-width:44ch; margin:18px auto 0; font-size:16px;}
+  .contact .cc{display:flex; gap:13px; justify-content:center; margin-top:30px; flex-wrap:wrap;}
+  footer{border-top:1px solid var(--line); padding:26px 0; text-align:center; font-size:11px; letter-spacing:1px; color:#9aa6b3; text-transform:uppercase;}
+
+  .flag{position:fixed; bottom:16px; right:16px; z-index:50; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--acc); background:rgba(247,249,251,.9); border:1px solid #b9ccde; padding:7px 12px; border-radius:20px; backdrop-filter:blur(4px);}
+
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important; transition:none!important;} .scrollcue{display:none;} }
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<nav>
+  <div class="brand"><b>Jérémy</b> Hamon</div>
+  <div class="nav-r"><span class="lang"><b>FR</b> · EN</span><a class="nav-cta" href="#match">Tester le match</a></div>
+</nav>
+
+<div class="content">
+  <header class="hero wrap">
+    <div class="kicker" data-hero>Jérémy Hamon · Freelance</div>
+    <h1 data-hero>Facilitateur d’innovation <span class="amp">&</span> de transformation stratégique</h1>
+    <p class="accroche" data-hero>Innover sans perdre le cap, transformer sans perdre le sens.</p>
+    <p class="lead" data-hero>J’accompagne les décideurs et leurs équipes dans leurs processus d’innovation et de transformation stratégique. J’interviens là où il faut clarifier, relier et faire avancer.</p>
+    <div class="ctas" data-hero>
+      <a class="btn pri" href="#match">Tester le match</a>
+      <a class="btn ghost" href="#contact">Me contacter</a>
+    </div>
+    <div class="scrollcue"><span class="bar"></span> Défiler</div>
+  </header>
+
+  <section class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="n"><span class="count" data-to="10">0</span>+</div><div class="l">ans d’expérience</div></div>
+      <div class="stat"><div class="n"><span class="count" data-to="28">0</span></div><div class="l">missions menées</div></div>
+      <div class="stat"><div class="n"><span class="count" data-to="7">0</span></div><div class="l">secteurs</div></div>
+      <div class="stat"><div class="n"><span class="count" data-to="7">0</span></div><div class="l">postures-clés</div></div>
+    </div>
+  </section>
+
+  <section id="postures"><div class="wrap"><div class="post-grid">
+    <div>
+      <div class="sec-k" data-rv>Au quotidien</div>
+      <h2 class="sec-h" data-rv>Sept casquettes,<br>une seule tête</h2>
+      <div class="sec-line" data-line></div>
+      <div class="post-pills" id="pills"></div>
+    </div>
+    <div class="post-desc"><span class="post-tag" id="ptag">01 · Posture</span><span id="pdesc"></span></div>
+  </div></div></section>
+
+  <section class="wrap"><div class="panel" style="padding:8px 0">
+    <div class="sec-k" data-rv>D’où je viens</div>
+    <h2 class="sec-h" data-rv>Mon parcours, sans les détours</h2>
+    <div class="sec-line" data-line></div>
+    <div class="tl" id="tl">
+      <div class="tl-track"></div><div class="tl-fill" id="tlfill"></div>
+    </div>
+  </div></section>
+
+  <section class="wrap">
+    <div class="sec-k" data-rv>Sur le terrain</div>
+    <h2 class="sec-h" data-rv>Quelques faits — sans vous imposer les slides</h2>
+    <div class="sec-line" data-line></div>
+    <div class="filters" id="filters"></div>
+    <div class="mgrid" id="mgrid"></div>
+  </section>
+
+  <section id="match" class="wrap"><div class="match-box">
+    <div class="sec-k" data-rv>Et vous ?</div>
+    <h2 class="sec-h" data-rv>Votre besoin, mon profil : testez le match</h2>
+    <div class="sec-line" data-line></div>
+    <p class="match-intro" style="margin-top:18px" data-rv>Décrivez votre besoin — une IA le compare à mon profil et répond avec une honnêteté sans fard.</p>
+    <div class="console" data-rv>
+      <div class="con-bar"><span class="dots"><i></i><i></i><i></i></span><span>match.engine</span><span class="tag">analyse IA</span></div>
+      <div class="con-body">
+        <textarea id="need" rows="2">Chief of Staff pour structurer notre stratégie d’innovation et déployer l’IA générative.</textarea>
+        <div class="exrow"><span class="exlab">Essayez</span>
+          <button class="ex" data-ex="Mission freelance : go-to-market santé et facilitation d’ateliers avec le COMEX.">Go-to-market santé</button>
+          <button class="ex" data-ex="Transformation d’un département IT, conduite du changement et excellence opérationnelle.">Transformation IT</button>
+        </div>
+        <div class="runrow"><button class="btn pri" id="run">Analyser le match</button><span class="runnote" id="runnote">Démonstration — réponse type générée à partir du profil.</span></div>
+        <div class="result" id="result"><div class="res-grid">
+          <div><div class="ring"><svg width="128" height="128" viewBox="0 0 128 128">
+            <circle cx="64" cy="64" r="56" fill="none" stroke="#e1e8f0" stroke-width="7"/>
+            <circle id="arc" cx="64" cy="64" r="56" fill="none" stroke="#33618f" stroke-width="7" stroke-linecap="round" stroke-dasharray="351.8" stroke-dashoffset="351.8"/>
+          </svg><div class="v"><b id="ringv">0</b><span>MATCH</span></div></div><div class="verdict">Très bon fit</div></div>
+          <div class="res">
+            <h6>Forces</h6><ul>
+              <li>Chief of Staff Stratégie &amp; Innovation — Lagardère Travel Retail (+10 pays).</li>
+              <li>Cadrage delivery IT &amp; cas d’usage IA générative — AXA.</li>
+              <li>Animation d’écosystèmes d’innovation — Plug &amp; Play Retail Europe.</li>
+            </ul>
+            <h6>Vigilances</h6><ul><li>Pas de management d’équipe permanente documenté.</li></ul>
+            <h6>Recommandation</h6><p class="reco">Échanger avec Jérémy — profil aligné sur le cœur du besoin.</p>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="contact wrap">
+    <div class="sec-k" data-rv style="color:var(--acc)">Contact</div>
+    <h2 data-rv>Échangeons ?</h2>
+    <p data-rv>Un projet, une question, une intuition à confronter ? Réponse rapide, jargon en option.</p>
+    <div class="cc" data-rv>
+      <a class="btn pri" href="mailto:hamon.jeremy@live.fr">hamon.jeremy@live.fr</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/jeremyhamon/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </section>
+
+  <footer>© 2026 Jérémy Hamon — Freelance</footer>
+</div>
+
+<div class="flag">Version 3D · Three.js + GSAP</div>
+
+<script>
+/* ---------- contenu réel ---------- */
+const POSTURES=[
+  ['Veilleur','Je capte et relie des signaux externes pour élargir les perspectives et challenger les certitudes.'],
+  ['Investigateur','Je croise les intelligences internes et les insights externes pour éclairer les enjeux.'],
+  ['Stratège','Je transforme l’analyse en vision, puis en trajectoire cohérente et opérationnelle.'],
+  ['Sparring partner','J’accompagne les dirigeants dans leurs réflexions clés, en apportant structure, recul et action.'],
+  ['Connecteur','Je fais le lien entre les mondes : technologie et métier, startup et institution, personnes et idées.'],
+  ['Facilitateur','Je fluidifie les dynamiques collectives pour des mises en œuvre simples et efficaces.'],
+  ['Orchestrateur','Je structure et améliore les organisations pour permettre l’autonomie et le passage à l’action.'],
+];
+const TL=[
+  ['2012–2016','Audencia Business School','Nantes · Séoul','Master in Management','Majeure stratégie & finance d’entreprise. Semestre d’échange à Korea University.','form'],
+  ['2014','Mantra Investment Partners & APAX','Paris','Analyste junior — investissements','Premiers pas dans l’analyse financière et l’évaluation d’opportunités.','exp'],
+  ['2016','Indéfi & Humans Matter','Paris','Consultant junior — stratégie','Conseil en stratégie et approche centrée sur l’humain.','exp'],
+  ['2017–2021','Lagardère Travel Retail','+35 pays · 5 Md€','Chief of Staff & chef de projet — Stratégie & Innovation','Création et déploiement de la stratégie d’innovation du groupe dans +10 pays, open-innovation (Plug & Play), projets retail (robotique, IA, CRM), analyses pour le COMEX.','exp'],
+  ['2021–2023','Kéa & Partners / Ylios','Paris','Consultant senior en stratégie','Équipe industrie : résilience climatique d’un distributeur d’électricité (HEDNO), marché des SMR, encadrement de juniors.','exp'],
+  ['Depuis 2023','Consultant indépendant','AXA · AP-HP · start-ups','Chief of Staff / Dir. de projet — Stratégie, Innovation & IA','Pilotage de projets en environnements complexes, livrables exécutifs, coordination d’équipes transverses.','exp'],
+  ['Depuis 2026','Armée de terre','12e régiment de cuirassiers','Réserviste opérationnel','Engagement militaire en parallèle de l’activité professionnelle.','eng'],
+];
+const MIS=[
+  ['Innovation','Assurance','Cadrage du modèle de delivery IT & opportunités IA','AXA','6 mois'],
+  ['Innovation','Retail','Structuration & itération de l’approche innovation du groupe','Lagardère TR','3,5 ans'],
+  ['Innovation','Retail','Animation open-innovation Plug & Play Retail Europe','Lagardère TR','3 ans'],
+  ['Innovation','Assurance','Gestion des connaissances pour les cas d’usage IA','AXA','3 mois'],
+  ['Innovation','Assurance','Prototypage d’une plateforme de prévention financière','AXA','6 mois'],
+  ['Stratégie','Assurance','Diagnostic stratégique d’une activité (100 M€ de CA)','AXA France','1 mois'],
+  ['Stratégie','Énergie','Stratégie de résilience climatique','HEDNO','2 mois'],
+  ['Stratégie','Mobilité','Diagnostic flash de l’offre bus','Groupe RATP','2 mois'],
+  ['Go-to-market','Santé','Soutien commercial d’une Health Tech européenne','AXA','3,5 mois'],
+  ['Go-to-market','Industrie','Accompagnement de 8 responsables grands comptes (+40 M€)','Leader chimie','3 mois'],
+  ['M&A','Finance','Due diligences (construction, automobile, santé)','Private Equity','5 × 1 mois'],
+  ['M&A','Énergie','Documentation du marché des petits réacteurs (SMR)','Confidentiel','1 mois'],
+  ['Organisation','Finance','Stratégie RH d’un département IT (2000 employés)','Banque','3 mois'],
+  ['Opérations','Santé','Prise de rendez-vous en ligne (groupe hospitalier)','AP-HP','7 mois'],
+  ['Opérations','Retail','Codification des meilleures pratiques opérationnelles','Lagardère TR','3 mois'],
+];
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* build DOM lists */
+const pills=document.getElementById('pills');
+POSTURES.forEach((p,i)=>{const d=document.createElement('div'); d.className='post-pill'+(i===0?' on':''); d.dataset.i=i;
+  d.innerHTML='<span class="pn">'+String(i+1).padStart(2,'0')+'</span> '+p[0]; pills.appendChild(d);});
+function setPosture(i){
+  document.querySelectorAll('.post-pill').forEach(x=>x.classList.toggle('on', +x.dataset.i===i));
+  document.getElementById('ptag').textContent=String(i+1).padStart(2,'0')+' · Posture';
+  const d=document.getElementById('pdesc'); d.textContent=POSTURES[i][1];
+  if(window.gsap && !REDUCE) gsap.fromTo(d,{opacity:0},{opacity:1,duration:.45,ease:'power2.out'});
+}
+setPosture(0);
+/* casquettes : clic + rotation auto (compacte, sans épinglage) */
+let pAuto=true, pIdx=0;
+document.querySelectorAll('.post-pill').forEach(el=>el.onclick=()=>{ pAuto=false; pIdx=+el.dataset.i; setPosture(pIdx); });
+setInterval(()=>{ if(pAuto && !document.hidden){ pIdx=(pIdx+1)%POSTURES.length; setPosture(pIdx); } }, 3400);
+
+const tl=document.getElementById('tl');
+TL.forEach(e=>{const r=document.createElement('div'); r.className='tl-row';
+  r.innerHTML='<div class="tl-yr">'+e[0]+'</div><div><div class="tl-dot'+(e[5]!=='exp'?' form':'')+'"></div></div>'+
+  '<div><div class="tl-titre">'+e[1]+'<span class="tl-lieu">'+e[2]+'</span>'+(e[5]==='eng'?'<span class="tl-eng">engagement</span>':'')+'</div>'+
+  '<div class="tl-role">'+e[3]+'</div><div class="tl-desc">'+e[4]+'</div></div>'; tl.appendChild(r);});
+
+const mg=document.getElementById('mgrid');
+MIS.forEach(m=>{const c=document.createElement('div'); c.className='mcard'; c.dataset.dom=m[0];
+  c.innerHTML='<div class="mc-top"><span>'+m[0]+'</span><span>'+m[1]+'</span></div><div class="mc-h">'+m[2]+'</div><div class="mc-b">'+m[3]+' · '+m[4]+'</div>'; mg.appendChild(c);});
+/* filtres missions par domaine */
+const filtersEl=document.getElementById('filters');
+['Tous',...new Set(MIS.map(m=>m[0]))].forEach((d,i)=>{
+  const b=document.createElement('button'); b.className='chip'+(i===0?' on':''); b.textContent=d;
+  b.onclick=()=>{
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+    const vis=[];
+    document.querySelectorAll('.mcard').forEach(c=>{const ok=(d==='Tous'||c.dataset.dom===d); c.classList.toggle('hide',!ok); if(ok) vis.push(c);});
+    if(window.gsap && !REDUCE) gsap.fromTo(vis,{opacity:0,y:14},{opacity:1,y:0,duration:.45,ease:'power2.out',stagger:.04});
+    if(window.ScrollTrigger) ScrollTrigger.refresh();
+  };
+  filtersEl.appendChild(b);
+});
+
+document.querySelectorAll('.ex').forEach(b=>b.onclick=()=>document.getElementById('need').value=b.dataset.ex);
+
+/* match demo */
+document.getElementById('run').onclick=()=>{
+  const r=document.getElementById('result'); const btn=document.getElementById('run');
+  btn.textContent='Analyse en cours…';
+  setTimeout(()=>{
+    btn.textContent='Analyser le match';
+    const G=window.gsap;
+    if(G){
+      G.set(r,{height:'auto'});
+      G.fromTo(r,{opacity:0,y:14},{opacity:1,y:0,duration:.6,ease:'power3.out'});
+      G.to('#arc',{strokeDashoffset:351.8*(1-86/100),duration:1.1,ease:'power2.out'});
+      G.to({v:0},{v:86,duration:1.1,ease:'power2.out',onUpdate(){document.getElementById('ringv').textContent=Math.round(this.targets()[0].v)+'%';}});
+    } else { r.style.height='auto'; r.style.opacity=1; document.getElementById('arc').style.strokeDashoffset=351.8*(1-86/100); document.getElementById('ringv').textContent='86%'; }
+    r.scrollIntoView({behavior:'smooth',block:'center'});
+  },550);
+};
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------------- Three.js backdrop ---------------- */
+const canvas=document.getElementById('bg');
+const renderer=new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(60, 16/9, 0.1, 100);
+camera.position.set(0,0,6);
+
+/* champ de particules — seul élément 3D (deux couches pour la profondeur) */
+const field=new THREE.Group(); scene.add(field);
+function layer(count, rMin, rMax, color, size, opacity){
+  const pos=new Float32Array(count*3);
+  for(let i=0;i<count;i++){const r=rMin+Math.random()*(rMax-rMin), t=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+    pos[i*3]=r*Math.sin(ph)*Math.cos(t); pos[i*3+1]=r*Math.sin(ph)*Math.sin(t); pos[i*3+2]=r*Math.cos(ph);}
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const p=new THREE.Points(g, new THREE.PointsMaterial({color, size, sizeAttenuation:true, transparent:true, opacity, depthWrite:false}));
+  field.add(p); return p;
+}
+const layerA=layer(950, 2.2, 8, 0x33618f, 0.035, 0.8);    // accent, proche
+const layerB=layer(520, 5, 13, 0x9fb0c2, 0.05, 0.5);      // clair, lointain
+
+/* interaction state */
+const mouse={x:0,y:0}, mt={x:0,y:0};
+addEventListener('pointermove',e=>{mt.x=(e.clientX/innerWidth)*2-1; mt.y=(e.clientY/innerHeight)*2-1;},{passive:true});
+let scrollProg=0;
+const maxScroll=()=>Math.max(1, document.body.scrollHeight-innerHeight);
+
+const clock=new THREE.Clock();
+function frame(){
+  const dt=Math.min(clock.getDelta(),0.05), t=clock.elapsedTime;
+  scrollProg=window.scrollY/maxScroll();
+  mouse.x+=(mt.x-mouse.x)*0.05; mouse.y+=(mt.y-mouse.y)*0.05;
+
+  field.rotation.y += dt*0.05 + mouse.x*0.0012;          // dérive lente + parallaxe souris
+  field.rotation.x = Math.sin(t*0.1)*0.08 + mouse.y*0.15 + scrollProg*0.5;
+  layerB.rotation.y -= dt*0.025;                         // parallaxe entre les deux couches
+  field.scale.setScalar(1 + scrollProg*0.28);            // les particules se déploient au scroll
+
+  camera.position.z = 6 + scrollProg*3.2;                // recul caméra au scroll
+  camera.position.x = mouse.x*0.45;
+  camera.position.y = -mouse.y*0.3;
+  camera.lookAt(0,0,0);
+
+  renderer.render(scene,camera);
+}
+/* dimensionnement robuste : on se base sur la taille réelle du canvas
+   (innerWidth peut être indisponible selon le contexte de rendu) */
+function resize(){
+  const w = canvas.clientWidth || document.documentElement.clientWidth || window.innerWidth || 1200;
+  const h = canvas.clientHeight || document.documentElement.clientHeight || window.innerHeight || 800;
+  if(!w || !h) return;
+  camera.aspect = w/h; camera.updateProjectionMatrix();
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(w, h, false);
+  renderer.render(scene,camera);
+}
+new ResizeObserver(resize).observe(canvas);
+addEventListener('resize',()=>{ resize(); if(window.ScrollTrigger) ScrollTrigger.refresh(); });
+resize();
+
+if(REDUCE){ renderer.render(scene,camera); }
+else { renderer.setAnimationLoop(()=>{ if(!document.hidden){ if(!canvas.width) resize(); frame(); } }); }
+
+/* ---------------- GSAP ScrollTrigger ---------------- */
+const gsap=window.gsap, ScrollTrigger=window.ScrollTrigger;
+if(gsap && ScrollTrigger && !REDUCE){
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* hero : entrée orchestrée */
+  gsap.from('[data-hero]',{y:34, opacity:0, filter:'blur(6px)', duration:1, ease:'power3.out', stagger:.12, delay:.15});
+
+  /* reveals génériques */
+  gsap.utils.toArray('[data-rv]').forEach(el=>{
+    gsap.from(el,{y:42, opacity:0, duration:.9, ease:'power3.out',
+      scrollTrigger:{trigger:el, start:'top 86%', once:true}});
+  });
+
+  /* lignes d'accent qui se tracent */
+  gsap.utils.toArray('[data-line]').forEach(el=>{
+    gsap.fromTo(el,{scaleX:0},{scaleX:1, duration:.7, ease:'power2.out',
+      scrollTrigger:{trigger:el, start:'top 88%', once:true}});
+  });
+
+  /* compteurs */
+  gsap.utils.toArray('.count').forEach(el=>{
+    const to=+el.dataset.to;
+    gsap.fromTo(el,{innerText:0},{innerText:to, duration:1.2, ease:'power2.out', snap:{innerText:1},
+      scrollTrigger:{trigger:el, start:'top 90%', once:true}});
+  });
+
+  /* parcours : lignes en cascade + trait qui se remplit */
+  gsap.from('.tl-row',{x:-26, opacity:0, duration:.7, ease:'power3.out', stagger:.13,
+    scrollTrigger:{trigger:'#tl', start:'top 80%', once:true}});
+  gsap.fromTo('#tlfill',{scaleY:0},{scaleY:1, ease:'none',
+    scrollTrigger:{trigger:'#tl', start:'top 75%', end:'bottom 82%', scrub:true}});
+
+  /* missions : cascade */
+  gsap.from('.mcard',{y:50, opacity:0, duration:.7, ease:'power3.out', stagger:.08,
+    scrollTrigger:{trigger:'#mgrid', start:'top 82%', once:true}});
+
+  /* rafraîchir après chargement des polices */
+  window.addEventListener('load',()=>ScrollTrigger.refresh());
+  setTimeout(()=>ScrollTrigger.refresh(), 600);
+}
+</script>
+</body>
+</html>
