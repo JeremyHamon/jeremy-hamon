@@ -65,6 +65,21 @@
   .rv{opacity:0; transform:translateY(22px); filter:blur(5px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1), filter .7s ease;}
   .rv.in{opacity:1; transform:none; filter:none;}
 
+  .nav-links{display:flex; gap:20px; align-items:center;}
+  .nav-links a{font-size:12px; letter-spacing:.4px; color:var(--mut); text-decoration:none; transition:color .2s;}
+  .nav-links a:hover{color:var(--acc);}
+  @media(max-width:880px){.nav-links{display:none;}}
+  .role-grid{display:grid; grid-template-columns:.82fr 1.18fr; gap:38px; align-items:start; margin-top:24px;}
+  @media(max-width:760px){.role-grid{grid-template-columns:1fr; gap:18px;}}
+  .pills{display:flex; flex-direction:column; gap:1px;}
+  .pill{display:flex; align-items:baseline; gap:12px; padding:9px 0; font-size:12.5px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:#9aa6b3; border-bottom:1px solid rgba(226,231,237,.8); transition:color .3s, padding-left .3s; cursor:pointer;}
+  .pill .pn{font-size:11px; color:#b8c4d0;}
+  .pill:hover{color:#5b6675;}
+  .pill.on{color:var(--ink); padding-left:12px;}
+  .pill.on .pn{color:var(--acc);}
+  .role-desc{font-family:var(--serif); font-style:italic; font-size:clamp(20px,2.6vw,28px); line-height:1.4; color:#2a3647; min-height:96px; align-self:center;}
+  .role-tag{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--acc); font-style:normal; font-family:var(--sans); font-weight:600; display:block; margin-bottom:12px;}
+
   /* pillars : the three things to own */
   .pillars{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:26px;}
   @media(max-width:820px){.pillars{grid-template-columns:1fr;}}
@@ -173,7 +188,14 @@
 
 <nav>
   <div class="brand"><b>Jérémy</b> Hamon</div>
-  <div class="nav-r"><span class="nav-tag">Chief of Staff · for Eligo</span><a class="nav-cta" href="#contact">Get in touch</a></div>
+  <div class="nav-links">
+    <a href="#roles">Roles</a>
+    <a href="#path">Path</a>
+    <a href="#ground">On the ground</a>
+    <a href="#answers">Answers</a>
+    <a href="#match">Match</a>
+  </div>
+  <div class="nav-r"><span class="nav-tag">Chief of Staff · Eligo</span><a class="nav-cta" href="#contact">Get in touch</a></div>
 </nav>
 
 <header class="hero wrap">
@@ -199,12 +221,22 @@
   </div>
 </header>
 
-<section class="alt"><div class="wrap">
+<section id="roles"><div class="wrap">
+  <div class="rv"><div class="sec-k">In the engine room</div><h2 class="sec-h">Seven hats, one head</h2><div class="acc-line"></div></div>
+  <p class="sec-intro rv">A Chief of Staff wears whichever hat the moment needs — one at a time, always in service of the leader and of execution.</p>
+  <div class="role-grid rv">
+    <div class="pills" id="pills"></div>
+    <div class="role-desc"><span class="role-tag" id="rtag">01 · Hat</span><span id="rdesc"></span></div>
+  </div>
+</div></section>
+
+
+<section id="path" class="alt"><div class="wrap">
   <div class="rv"><div class="sec-k">Where I come from</div><h2 class="sec-h">A path built for the engine room</h2><div class="acc-line"></div></div>
   <div class="tl" id="tl"><div class="tl-track"></div><div class="tl-fill" id="tlfill"></div></div>
 </div></section>
 
-<section><div class="wrap">
+<section id="ground"><div class="wrap">
   <div class="rv"><div class="sec-k">On the ground</div><h2 class="sec-h">Things I’ve made run</h2><div class="acc-line"></div></div>
   <p class="sec-intro rv">Filtered by what this role actually is.</p>
   <div class="filters rv" id="filters"></div>
@@ -284,7 +316,7 @@
   </div>
 </div></section>
 
-<section class="contact"><div class="wrap">
+<section id="contact" class="contact"><div class="wrap">
   <div class="rv"><div class="sec-k" style="color:var(--acc)">Contact</div><h2>Let’s talk.</h2>
   <p>The full application is in your inbox — this is the short, clickable version. If the engine room sounds like the right seat, I’d love to get into it.</p>
   <div class="cc">
@@ -427,6 +459,26 @@ if(!REDUCE){
 } else {
   document.querySelectorAll('.count').forEach(el=>el.textContent=el.dataset.to);
 }
+
+/* Seven hats — interactive */
+(function(){
+  var ROLES=[
+    ['Right hand','The leader’s thinking partner — structure, perspective and execution on the calls that matter.'],
+    ['Guardian of priorities','Turn the vision into clear priorities, arbitrate the urgent against the important, and hold the line.'],
+    ['Conductor','Coordinate the cross-functional work and the stakeholders so everything converges, on time.'],
+    ['Board & COMEX interface','Bridge leadership, functions and the floor — and keep the information flowing both ways.'],
+    ['Decision-prep','Gather the inputs, sharpen the trade-offs, and prepare decisions that are documented and ready to act on.'],
+    ['Lookout','Catch the weak signals and the blind spots before they turn into problems.'],
+    ['Force of execution','Unblock, simplify, ship — turn decisions into real outcomes.'],
+  ];
+  var pills=document.getElementById('pills'); if(!pills) return;
+  ROLES.forEach(function(p,i){var d=document.createElement('div'); d.className='pill'+(i===0?' on':''); d.dataset.i=i; d.innerHTML='<span class="pn">0'+(i+1)+'</span> '+p[0]; pills.appendChild(d);});
+  function setRole(i){ document.querySelectorAll('.pill').forEach(function(x){x.classList.toggle('on', +x.dataset.i===i);}); document.getElementById('rtag').textContent='0'+(i+1)+' · Hat'; document.getElementById('rdesc').textContent=ROLES[i][1]; }
+  setRole(0);
+  var rAuto=true, rIdx=0;
+  document.querySelectorAll('.pill').forEach(function(el){el.onclick=function(){rAuto=false; rIdx=+el.dataset.i; setRole(rIdx);};});
+  setInterval(function(){ if(rAuto && !document.hidden){ rIdx=(rIdx+1)%ROLES.length; setRole(rIdx);} },3400);
+})();
 </script>
 </body>
 </html>
