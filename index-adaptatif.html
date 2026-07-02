@@ -41,6 +41,17 @@
     .rhead > div { flex:1; display:flex; flex-direction:column; min-width:0; }
     #need-echo { color:var(--mut); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .banner { background:#fdf6e8; border:1px solid #ecd9a8; border-radius:10px; padding:10px 14px; font-size:13px; margin-top:14px; }
+    .fiche-row { display:flex; flex-direction:column; gap:6px; align-items:center; margin-top:2px; }
+    .fiche-status { color:var(--mut); font-size:12px; min-height:16px; }
+    .score-wrap { display:flex; gap:22px; align-items:center; }
+    .score-ring-box { position:relative; width:84px; height:84px; flex:0 0 84px; }
+    .score-ring { width:84px; height:84px; transform:rotate(-90deg); }
+    .ring-bg { fill:none; stroke:var(--line); stroke-width:6; }
+    .ring-fg { fill:none; stroke:var(--acc); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset 1s ease; }
+    .score-label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .score-label strong { font-size:18px; }
+    .score-label span { font-size:9px; letter-spacing:.12em; color:var(--mut); }
+    .score-text h2 { font-size:24px; margin-bottom:4px; }
     .sec { padding:34px 0 20px; border-bottom:1px solid var(--line); }
     .kicker { color:var(--acc); font-size:12px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 6px; font-weight:600; }
     .sec h2 { font-size:28px; margin-bottom:10px; }
@@ -110,6 +121,11 @@
       <button class="pill ex">Préparer un board ou un COMEX</button>
       <button class="pill ex">Piloter un projet complexe</button>
     </div>
+    <div class="fiche-row">
+      <button id="fiche-btn" class="pill">ou déposez une fiche de mission (PDF, TXT)</button>
+      <input id="fiche-input" type="file" accept=".pdf,.txt,application/pdf,text/plain" hidden />
+      <span id="fiche-status" class="fiche-status" aria-live="polite"></span>
+    </div>
   </main>
 
   <main id="results" hidden>
@@ -122,6 +138,7 @@
       <button id="reset" class="pill">Nouveau besoin</button>
     </header>
     <div id="degraded" class="banner" hidden>La personnalisation est momentanément indisponible — voici l'essentiel.</div>
+    <section id="sec-score" class="sec"></section>
     <section id="sec-synthese" class="sec"></section>
     <section id="sec-cv" class="sec"></section>
     <section id="sec-missions" class="sec"></section>
@@ -298,7 +315,7 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
   'use strict';
 
   var WORKER_URL = 'https://match-jeremy.hamon-jeremy.workers.dev';
-  var NEED_MAX = 1200;      /* caractères max du besoin injecté dans les prompts */
+  var NEED_MAX = 3000;      /* caractères max du besoin (relevé pour les fiches de mission) */
   var QUESTION_MAX = 500;   /* caractères max d'une question de chat */
   var HISTORY_MAX = 2500;   /* budget caractères de l'historique replié */
 
@@ -353,11 +370,11 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
 
   /* Bloc anti-demandes illégales/nuisibles — repris du calibrage du site principal (14/06/2026), adapté au format JSON. */
   var PRIORITY_JSON = 'CAS PRIORITAIRE — À VÉRIFIER AVANT TOUT\n' +
-    "Avant toute chose, regarde la nature du besoin fourni en bas de ce message. S'il décrit une activité illégale, nuisible ou contraire à l'éthique professionnelle, cette règle prime sur tout le reste : ne produis PAS le JSON demandé plus bas. Réponds UNIQUEMENT avec {\"ok\":false,\"message\":\"…\"} où message contient une à deux phrases à la première personne (c'est Jérémy qui parle) : décline nettement et sans ambiguïté, ton sobre et posé, avec tout au plus une légère retenue à l'anglaise (litote, flegme). PAS de blague, pas d'esquive ironique, pas de jeu de mots, aucune connivence (jamais « bonne idée », jamais « tentant ») ; ne donne jamais le moindre mode d'emploi et ne détaille jamais l'activité. Si la demande vise à nuire à une personne (violence, menaces, harcèlement, doxxing, intimidation, haine, exploitation) : refus ferme et net, sans même la litote.";
+    "Avant toute chose, regarde la nature du besoin fourni en bas de ce message. S'il décrit une activité illégale, nuisible ou contraire à l'éthique professionnelle, cette règle prime sur tout le reste : ne produis PAS le JSON demandé plus bas. Réponds UNIQUEMENT avec {\"ok\":false,\"message\":\"…\"} où message contient une à deux phrases à la première personne (c'est Jérémy qui parle) : décline nettement et sans ambiguïté, ton sobre et posé, avec tout au plus une légère retenue à l'anglaise (litote, flegme). PAS de blague, pas d'esquive ironique, pas de jeu de mots, aucune connivence (jamais « bonne idée », jamais « tentant ») ; ne donne jamais le moindre mode d'emploi et ne détaille jamais l'activité. Si la demande vise à nuire à une personne (violence, menaces, harcèlement, doxxing, intimidation, haine, exploitation) : refus ferme et net, sans même la litote. Périmètre : un besoin LÉGITIME mais simplement éloigné de mon métier (autre profession, autre secteur) n'est PAS un cas prioritaire — produis normalement le JSON demandé, le score et les sections diront l'écart.";
 
   /* Même bloc pour le chat (réponse texte, pas JSON). */
   var PRIORITY_TEXT = 'CAS PRIORITAIRE — À VÉRIFIER AVANT TOUT\n' +
-    "Avant de répondre, regarde la nature de la question. Si elle décrit ou sollicite une activité illégale, nuisible ou contraire à l'éthique professionnelle, cette règle prime sur tout le reste : ne réponds pas à la question. Réponds uniquement par une à deux phrases à la première personne (c'est Jérémy qui parle) : décline nettement et sans ambiguïté, ton sobre et posé, au plus une légère retenue à l'anglaise (litote). PAS de blague, pas d'ironie, pas de jeu de mots, aucune connivence ; jamais de mode d'emploi, jamais de détail de l'activité. Si la question vise à nuire à une personne (violence, menaces, harcèlement, doxxing, haine, exploitation) : refus ferme et net, sans même la litote.";
+    "Avant de répondre, regarde la nature de la question. Si elle décrit ou sollicite une activité illégale, nuisible ou contraire à l'éthique professionnelle, cette règle prime sur tout le reste : ne réponds pas à la question. Réponds uniquement par une à deux phrases à la première personne (c'est Jérémy qui parle) : décline nettement et sans ambiguïté, ton sobre et posé, au plus une légère retenue à l'anglaise (litote). PAS de blague, pas d'ironie, pas de jeu de mots, aucune connivence ; jamais de mode d'emploi, jamais de détail de l'activité. Si la question vise à nuire à une personne (violence, menaces, harcèlement, doxxing, haine, exploitation) : refus ferme et net, sans même la litote. Périmètre : une question légitime mais éloignée de mon métier n'est PAS un cas prioritaire — réponds normalement selon les règles ci-dessous.";
 
   var HONESTY = 'SOURCES DE VÉRITÉ ET HONNÊTETÉ\n' +
     "Fonde-toi exclusivement sur le profil ci-dessus. N'invente jamais d'expérience, de diplôme, de chiffre, de client ou de compétence : oriente et reformule, n'enjolive pas. Écarts connus à ne pas masquer s'ils sont pertinents : formation école de commerce (Audencia), pas ingénieur ; environ 10 ans d'expérience ; pas de modélisation financière niveau banque/PE ; pas de management d'équipe permanente ; pas de profondeur technique (PLM, HPC, architecture SI). Si une information utile manque, ne l'invente pas.";
@@ -376,7 +393,8 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
       '- titre : 4 à 8 mots, orienté vers le besoin du visiteur, sans point final.\n' +
       "- synthese : 70 à 100 mots, première personne, phrases courtes, zéro jargon creux : ce que je peux concrètement faire sur ce besoin, en m'appuyant sur mes postures et mon parcours réels.\n" +
       "- angles : exactement 3 angles d'attaque possibles pour démarrer, 8 à 14 mots chacun.\n" +
-      'Reste sous 1200 caractères au total.\n\n' +
+      'Reste sous 1200 caractères au total.\n' +
+      "Besoin éloigné de mon métier : produis QUAND MÊME ce JSON — synthèse honnête orientée sur le transposable (méthode, cadrage, pilotage), sans prétendre à une expertise absente. Le {\"ok\":false} n'est prévu QUE pour l'illégal ou le nuisible.\n\n" +
       'ÉLÉMENT À ANALYSER :\n"""' + need + '"""';
   }
 
@@ -392,7 +410,8 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
       '- accroche : une phrase de 20 à 30 mots reliant mon parcours au besoin du visiteur.\n' +
       "- etapes : 3 ou 4 étapes choisies dans le PARCOURS ci-dessus, ordre chronologique ; reprends « annee » et « titre » EXACTEMENT tels qu'écrits ; « apport » = ce que cette étape m'a appris d'utile pour CE besoin, 15 à 25 mots.\n" +
       '- competences : 5 ou 6 libellés recopiés tels quels depuis la ligne COMPÉTENCES ci-dessus, les plus pertinents pour ce besoin.\n' +
-      'Reste sous 1300 caractères au total.\n\n' +
+      'Reste sous 1300 caractères au total.\n' +
+      "Besoin éloigné de mon métier : produis QUAND MÊME ce JSON — raconte les étapes vraies sous l'angle du transposable, sans prétendre à une expertise absente. Le {\"ok\":false} n'est prévu QUE pour l'illégal ou le nuisible.\n\n" +
       'ÉLÉMENT À ANALYSER :\n"""' + need + '"""';
   }
 
@@ -408,7 +427,8 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
       '- missions : 3 à 5 entrées, classées de la plus pertinente à la moins pertinente.\n' +
       "- id : le numéro [id] EXACT d'une mission de la liste MISSIONS ci-dessus (nombre entier, sans crochets). Uniquement des ids existants, jamais deux fois le même.\n" +
       '- pourquoi : 12 à 20 mots, à la première personne, en quoi cette mission éclaire le besoin du visiteur.\n' +
-      'Reste sous 900 caractères au total.\n\n' +
+      'Reste sous 900 caractères au total.\n' +
+      "Besoin éloigné de mon métier : produis QUAND MÊME ce JSON — choisis les missions les plus transposables (méthode, cadrage, organisation). Le {\"ok\":false} n'est prévu QUE pour l'illégal ou le nuisible.\n\n" +
       'ÉLÉMENT À ANALYSER :\n"""' + need + '"""';
   }
 
@@ -426,7 +446,7 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
         'Besoin initial du visiteur : """' + need + '"""\n' +
         (hist ? 'Échanges précédents :\n' + hist : 'Premier échange.') + '\n\n' +
         'FORMAT\n' +
-        'Texte brut sans Markdown (ni **, ni #), 60 à 90 mots maximum, première personne, phrases courtes.\n\n' +
+        'Texte brut sans Markdown (ni **, ni #), 60 à 90 mots maximum, première personne, vouvoiement systématique, phrases courtes.\n\n' +
         'ÉLÉMENT À ANALYSER :\n"""' + question + '"""';
     }
     /* Budget dynamique : on mesure le prompt sans historique, puis on replie l'historique dans la marge restante. */
@@ -441,6 +461,24 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
     var out = history.map(function (h) { return 'V : ' + h.q + '\nR : ' + h.a; });
     while (out.length > 0 && out.join('\n\n').length > maxChars) out.shift();
     return out.join('\n\n');
+  }
+
+  /* Score de matching — 4e appel dédié ; réutilise la discipline de scoring calibrée du site principal. */
+  function promptScore(corpus, need) {
+    need = clamp(need, NEED_MAX);
+    return 'RÔLE\n' +
+      "Tu évalues honnêtement l'adéquation entre Jérémy Hamon, consultant indépendant, et le besoin fourni en bas de ce message (fiche de mission complète OU simple phrase).\n\n" +
+      PRIORITY_JSON + '\n\n' +
+      'PROFIL\n' + corpus + '\n\n' +
+      HONESTY + '\n' +
+      "Scores différenciés : pas de regroupement artificiel entre 60 et 75 ; un mauvais fit se dit clairement. Vérifie systématiquement les écarts listés ci-dessus s'ils sont pertinents.\n\n" +
+      'FORMAT\n' + JSON_RULES +
+      '{"ok":true,"score":72,"verdict":"Bon fit","raison":"…"}\n' +
+      '- score : entier entre 0 et 100.\n' +
+      '- verdict : EXACTEMENT la bande du score — 80 ou plus : "Très bon fit" ; 70 à 79 : "Bon fit" ; 60 à 69 : "Fit partiel mais défendable" ; sous 60 : "Fit faible".\n' +
+      "- raison : 15 à 25 mots, factuelle et traçable au profil — l'écart principal si le score est bas, la force principale sinon.\n" +
+      'Reste sous 300 caractères au total.\n\n' +
+      'ÉLÉMENT À ANALYSER :\n"""' + need + '"""';
   }
 
   /* Extrait et parse le premier objet JSON équilibré d'une réponse IA (tolère texte autour et balises de code). */
@@ -501,6 +539,21 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
 
   function isRefusal(o) { return !!(o && o.ok === false && isNonEmptyString(o.message)); }
 
+  function validateScore(o) {
+    if (!o || o.ok !== true) return false;
+    return typeof o.score === 'number' && o.score === Math.floor(o.score) &&
+      o.score >= 0 && o.score <= 100 &&
+      isNonEmptyString(o.verdict) && isNonEmptyString(o.raison);
+  }
+
+  /* Le chiffre fait foi : la bande est re-dérivée côté client. */
+  function scoreBand(score) {
+    if (score >= 80) return 'Très bon fit';
+    if (score >= 70) return 'Bon fit';
+    if (score >= 60) return 'Fit partiel mais défendable';
+    return 'Fit faible';
+  }
+
   /* Matching naïf par mots-clés — uniquement pour le repli statique de la section expériences. */
   function naiveMissionMatch(need, missions, n) {
     function norm(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
@@ -529,14 +582,91 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
     promptMissions: promptMissions,
     promptChat: promptChat,
     foldHistory: foldHistory,
+    promptScore: promptScore,
     parseAIJson: parseAIJson,
     validateSynthese: validateSynthese,
     validateCV: validateCV,
     validateMissions: validateMissions,
     isRefusal: isRefusal,
+    validateScore: validateScore,
+    scoreBand: scoreBand,
     naiveMissionMatch: naiveMissionMatch,
   };
 })(typeof window !== 'undefined' ? window : globalThis);
+</script>
+  <script>/* Dépôt d'une fiche de mission (PDF/TXT) — extraction 100 % locale (rien n'est téléversé),
+   le texte extrait remplit le textarea. pdf.js (épinglé) n'est chargé qu'au premier PDF. */
+window.FICHE_UPLOAD = (function () {
+  'use strict';
+  var PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  var PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  var MAX_PAGES = 12;
+  var pdfjsLoading = null;
+
+  function loadPdfjs() {
+    if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+    if (pdfjsLoading) return pdfjsLoading;
+    pdfjsLoading = new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = PDFJS_URL;
+      s.onload = function () {
+        if (!window.pdfjsLib) { pdfjsLoading = null; reject(new Error('pdfjsLib absent')); return; }
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+        resolve(window.pdfjsLib);
+      };
+      s.onerror = function () { pdfjsLoading = null; reject(new Error('chargement pdf.js')); };
+      document.head.appendChild(s);
+    });
+    return pdfjsLoading;
+  }
+
+  function extractPdf(file) {
+    return loadPdfjs().then(function (pdfjs) {
+      return file.arrayBuffer().then(function (buf) {
+        return pdfjs.getDocument({ data: buf }).promise;
+      });
+    }).then(function (doc) {
+      var n = Math.min(doc.numPages, MAX_PAGES);
+      var pages = [];
+      for (var i = 1; i <= n; i++) {
+        pages.push(doc.getPage(i).then(function (p) { return p.getTextContent(); }));
+      }
+      return Promise.all(pages).then(function (contents) {
+        return contents.map(function (c) {
+          return c.items.map(function (it) { return it.str; }).join(' ');
+        }).join('\n');
+      });
+    });
+  }
+
+  function extractTxt(file) { return file.text(); }
+
+  /* wire(input, bouton, textarea, statut, onFilled) — branche le dépôt sur un champ besoin. */
+  function wire(input, button, textarea, status, onFilled) {
+    button.addEventListener('click', function () { input.click(); });
+    input.addEventListener('change', function () {
+      var file = input.files && input.files[0];
+      if (!file) return;
+      input.value = ''; /* permet de re-déposer le même fichier */
+      status.textContent = 'Lecture de « ' + file.name + ' »…';
+      var isPdf = /\.pdf$/i.test(file.name) || file.type === 'application/pdf';
+      (isPdf ? extractPdf(file) : extractTxt(file))
+        .then(function (text) {
+          text = String(text || '').replace(/\s+/g, ' ').trim();
+          if (!text) throw new Error('vide'); /* PDF scanné sans texte encodé, ou fichier vide */
+          if (window.ADAPT_LIB) text = window.ADAPT_LIB.clamp(text, window.ADAPT_LIB.NEED_MAX);
+          textarea.value = text;
+          status.textContent = '« ' + file.name + ' » lu — vérifiez le texte, élaguez si besoin.';
+          if (onFilled) onFilled(text);
+        })
+        .catch(function () {
+          status.textContent = 'Impossible de lire ce fichier — collez le texte directement.';
+        });
+    });
+  }
+
+  return { wire: wire };
+})();
 </script>
   <script>/* Logique DOM du site adaptatif — s'appuie sur ADAPT_LIB (fonctions pures) et window.PROFILE. */
 (function () {
@@ -654,7 +784,7 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
     callJSON(function () { return LIB.promptSynthese(CORPUS, need); }, LIB.validateSynthese)
       .then(function (r) {
         if (gen !== state.gen) return; /* réponse d'une analyse abandonnée */
-        if (r.refusal) return onRefusal(r.refusal);
+        if (r.refusal) { if (!state.refused) { staticSynthese(); sectionDone(false); } return; } /* seul le refus de l'appel score fait foi */
         renderSynthese(r.data);
         sectionDone(true);
       })
@@ -711,7 +841,7 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
     callJSON(function () { return LIB.promptCV(CORPUS, need); }, LIB.validateCV)
       .then(function (r) {
         if (gen !== state.gen) return; /* réponse d'une analyse abandonnée */
-        if (r.refusal) return onRefusal(r.refusal);
+        if (r.refusal) { if (!state.refused) { staticCV(); sectionDone(false); } return; } /* seul le refus de l'appel score fait foi */
         renderCV(r.data);
         sectionDone(true);
       })
@@ -760,7 +890,7 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
     )
       .then(function (r) {
         if (gen !== state.gen) return; /* réponse d'une analyse abandonnée */
-        if (r.refusal) return onRefusal(r.refusal);
+        if (r.refusal) { if (!state.refused) { staticMissions(need); sectionDone(false); } return; } /* seul le refus de l'appel score fait foi */
         renderMissions(r.data);
         sectionDone(true);
       })
@@ -768,6 +898,48 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
         if (gen !== state.gen) return; /* réponse d'une analyse abandonnée */
         state.failures++;
         if (!state.refused) { staticMissions(need); sectionDone(false); checkAllFailed(); }
+      });
+  }
+
+  /* ---------- score de matching (avenant) ---------- */
+  function renderScore(o) {
+    if (state.refused) return;
+    var sec = $('sec-score');
+    var pct = o.score; /* entier 0-100 validé par validateScore */
+    var C = Math.round(2 * Math.PI * 34);
+    sec.hidden = false;
+    sec.innerHTML = '';
+    sec.appendChild(el('p', 'kicker', 'Votre besoin, mon profil'));
+    var wrap = el('div', 'score-wrap');
+    var ring = el('div', 'score-ring-box');
+    /* seul du NUMÉRIQUE validé est interpolé ici — le texte IA passe par textContent plus bas */
+    ring.innerHTML = '<svg class="score-ring" viewBox="0 0 84 84" role="img" aria-label="Score de matching ' + pct + ' pour cent">' +
+      '<circle class="ring-bg" cx="42" cy="42" r="34"/>' +
+      '<circle class="ring-fg" cx="42" cy="42" r="34" stroke-dasharray="' + C + '" stroke-dashoffset="' + Math.round(C * (1 - pct / 100)) + '"/>' +
+      '</svg>';
+    var lab = el('div', 'score-label');
+    lab.appendChild(el('strong', null, pct + ' %'));
+    lab.appendChild(el('span', null, 'MATCH'));
+    ring.appendChild(lab);
+    wrap.appendChild(ring);
+    var txt = el('div', 'score-text');
+    txt.appendChild(el('h2', null, LIB.scoreBand(pct)));
+    txt.appendChild(el('p', 'body', o.raison));
+    wrap.appendChild(txt);
+    sec.appendChild(wrap);
+  }
+
+  function runScore(need, gen) {
+    callJSON(function () { return LIB.promptScore(CORPUS, need); }, LIB.validateScore)
+      .then(function (r) {
+        if (gen !== state.gen) return; /* réponse d'une analyse abandonnée */
+        if (r.refusal) return onRefusal(r.refusal);
+        renderScore(r.data);
+        sectionDone(true);
+      })
+      .catch(function () {
+        if (gen !== state.gen || state.refused) return;
+        $('sec-score').hidden = true; /* pas de score honnête possible en repli — on l'omet */
       });
   }
 
@@ -818,8 +990,10 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
     $('degraded').hidden = true;
     $('sec-chat').hidden = true;
     $('need-echo').textContent = '« ' + need + ' »';
-    ['sec-synthese', 'sec-cv', 'sec-missions'].forEach(function (id) { setSkeleton($(id)); });
+    ['sec-score', 'sec-synthese', 'sec-cv', 'sec-missions'].forEach(function (id) { setSkeleton($(id)); });
+    $('sec-score').hidden = false;
     show('results');
+    runScore(need, gen);
     runSynthese(need, gen);
     runCV(need, gen);
     runMissions(need, gen);
@@ -855,6 +1029,12 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
     });
     $('chat-send').addEventListener('click', function () { sendChat($('chat-q').value); });
     $('chat-q').addEventListener('keydown', function (e) { if (e.key === 'Enter') sendChat($('chat-q').value); });
+
+    if (window.FICHE_UPLOAD) {
+      window.FICHE_UPLOAD.wire($('fiche-input'), $('fiche-btn'), ta, $('fiche-status'), function () {
+        go.disabled = ta.value.trim().length < 8;
+      });
+    }
   }
 
   document.addEventListener('DOMContentLoaded', init);
