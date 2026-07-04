@@ -80,6 +80,10 @@
     .allege .chevron { display:none !important; }
     @media (max-width:700px) { .chevron { display:none; } }
 
+    #lien-classique { position:fixed; top:16px; left:18px; z-index:30; font-size:12px; letter-spacing:.04em; color:var(--mut); text-decoration:none; border:1px solid var(--line); background:rgba(255,255,255,.85); border-radius:999px; padding:7px 14px; transition:color .2s, border-color .2s; }
+    #lien-classique:hover { color:var(--acc); border-color:var(--acc); }
+    @media (max-width:480px) { #lien-classique { top:10px; left:10px; padding:6px 11px; } }
+
     .salle { position:fixed; inset:0; z-index:10; display:flex; align-items:center; justify-content:center; padding:24px; visibility:hidden; opacity:0; pointer-events:none; perspective:900px; }
     .salle .papier { pointer-events:auto; background:var(--papier); border-radius:14px; box-shadow:0 34px 80px -30px rgba(21,34,56,.35); padding:24px 30px; width:100%; max-width:640px; max-height:86vh; overflow-y:auto; overscroll-behavior:contain; will-change:transform,opacity; }
 
@@ -176,6 +180,7 @@
 </head>
 <body>
   <canvas id="monde"></canvas>
+  <a id="lien-classique" href="index-adaptatif.html">Version classique</a>
 
   <main id="vestibule">
     <img id="v-photo" alt="Jérémy Hamon" />
@@ -1232,6 +1237,7 @@ window.JOURNEY = (function () {
   }
 
   function goToRoom(i) {
+    gsap.killTweensOf(window); /* pas d'empilement de tweens de scroll (double-pression, snap en vol) */
     i = Math.max(0, Math.min(ROOMS.length - 1, i));
     var y = (ROOMS[i].enter + FADE + 0.015) * trackScrollLength();
     gsap.to(window, { duration: 1.2, ease: 'power2.inOut', scrollTo: y });
@@ -1268,6 +1274,7 @@ window.JOURNEY = (function () {
           snapTo: ROOMS.map(function (r) { return r.enter + FADE + 0.015; }),
           duration: { min: 0.25, max: 0.7 },
           delay: 0.12,
+          directional: false, /* aimante au PLUS PROCHE — sinon une arrivée à epsilon d'un point pousse au suivant */
           ease: 'power1.inOut',
         },
       },
