@@ -41,7 +41,9 @@
     .rhead > div { flex:1; display:flex; flex-direction:column; min-width:0; }
     #need-echo { color:var(--mut); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .banner { background:#fdf6e8; border:1px solid #ecd9a8; border-radius:10px; padding:10px 14px; font-size:13px; margin-top:14px; }
-    .fiche-row { display:flex; flex-direction:column; gap:6px; align-items:center; margin-top:2px; }
+    .fiche-row { display:flex; flex-direction:column; gap:6px; align-items:center; margin-top:10px; }
+    .fiche-cta { border:1.5px dashed var(--acc); background:rgba(51,97,143,.06); color:var(--acc); border-radius:12px; padding:12px 24px; font-size:14px; font-weight:500; cursor:pointer; transition:background .2s, transform .15s; }
+    .fiche-cta:hover { background:rgba(51,97,143,.12); transform:translateY(-1px); }
     .fiche-status { color:var(--mut); font-size:12px; min-height:16px; }
     .score-wrap { display:flex; gap:22px; align-items:center; }
     .score-ring-box { position:relative; width:84px; height:84px; flex:0 0 84px; }
@@ -114,17 +116,17 @@
     <h2 class="home-q">En quoi puis-je vous aider&nbsp;?</h2>
     <textarea id="need" maxlength="1200" rows="3" placeholder="Décrivez votre besoin, ou collez une offre…"></textarea>
     <button id="go" class="btn-pri" disabled>Voyons cela</button>
+    <div class="fiche-row">
+      <button id="fiche-btn" class="fiche-cta">📄&nbsp;Déposer une fiche de mission (PDF, TXT)</button>
+      <input id="fiche-input" type="file" accept=".pdf,.txt,application/pdf,text/plain" hidden />
+      <span id="fiche-status" class="fiche-status" aria-live="polite"></span>
+    </div>
     <div class="examples">
       <span class="ex-label">Par exemple&nbsp;:</span>
       <button class="pill ex">Cadrer une transformation</button>
       <button class="pill ex">Structurer une démarche IA</button>
       <button class="pill ex">Préparer un board ou un COMEX</button>
       <button class="pill ex">Piloter un projet complexe</button>
-    </div>
-    <div class="fiche-row">
-      <button id="fiche-btn" class="pill">ou déposez une fiche de mission (PDF, TXT)</button>
-      <input id="fiche-input" type="file" accept=".pdf,.txt,application/pdf,text/plain" hidden />
-      <span id="fiche-status" class="fiche-status" aria-live="polite"></span>
     </div>
   </main>
 
@@ -408,7 +410,7 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
       'FORMAT\n' + JSON_RULES +
       '{"ok":true,"accroche":"…","apports":["…"],"competences":["…"]}\n' +
       '- accroche : une phrase de 20 à 30 mots reliant mon parcours au besoin du visiteur.\n' +
-      "- apports : EXACTEMENT " + nbEtapes + " entrées — une par ligne [P1] à [P" + nbEtapes + "] du PARCOURS ci-dessus, dans cet ordre — chacune 8 à 14 mots, première personne : ce que cette étape apporte pour CE besoin. N'invente rien : appuie-toi sur la description réelle de chaque étape.\n" +
+      "- apports : EXACTEMENT " + nbEtapes + " entrées — une par ligne [P1] à [P" + nbEtapes + "] du PARCOURS ci-dessus, dans cet ordre — chacune 8 à 14 mots, première personne : ce que cette étape apporte pour CE besoin. Les lignes suivantes du PARCOURS (engagements personnels) restent sans description : n'écris RIEN pour elles. N'invente rien : appuie-toi sur la description réelle de chaque étape.\n" +
       '- competences : 5 ou 6 libellés recopiés tels quels depuis la ligne COMPÉTENCES ci-dessus, les plus pertinents pour ce besoin.\n' +
       'Reste sous 1400 caractères au total.\n' +
       "Besoin éloigné de mon métier : produis QUAND MÊME ce JSON — des apports honnêtement transposables, sans prétendre à une expertise absente. Le {\"ok\":false} n'est prévu QUE pour l'illégal ou le nuisible.\n\n" +
@@ -674,6 +676,7 @@ window.FICHE_UPLOAD = (function () {
   var LIB = window.ADAPT_LIB;
   var P = window.PROFILE;
   var CORPUS = LIB.buildCorpus(P);
+  var NB_APPORTS_CV = P.timeline.filter(function (t) { return t.type !== 'engagement'; }).length;
   /* ?worker=off force une URL invalide pour tester les replis sans toucher au Worker */
   var WORKER_URL = new URLSearchParams(location.search).get('worker') === 'off'
     ? 'https://offline.invalid'
@@ -804,12 +807,16 @@ window.FICHE_UPLOAD = (function () {
     sec.appendChild(el('h2', null, 'Mon CV complet, relu pour votre besoin'));
     sec.appendChild(el('p', 'body', o.accroche));
     var tl = el('div', 'tl');
-    P.timeline.forEach(function (t, i) {
+    var k = 0;
+    P.timeline.forEach(function (t) {
       var row = el('div', 'tl-row');
       row.appendChild(el('span', 'tl-annee', t.annee));
       var right = el('div', 'tl-right');
       right.appendChild(el('strong', null, t.titre + ' — ' + t.role));
-      right.appendChild(el('p', 'tl-apport', o.apports[i]));
+      if (t.type !== 'engagement') {
+        right.appendChild(el('p', 'tl-apport', o.apports[k]));
+        k++;
+      }
       row.appendChild(right);
       tl.appendChild(row);
     });
@@ -830,7 +837,7 @@ window.FICHE_UPLOAD = (function () {
       row.appendChild(el('span', 'tl-annee', t.annee));
       var right = el('div', 'tl-right');
       right.appendChild(el('strong', null, t.titre + ' — ' + t.role));
-      right.appendChild(el('p', 'tl-apport', t.desc));
+      if (t.type !== 'engagement') right.appendChild(el('p', 'tl-apport', t.desc));
       row.appendChild(right);
       tl.appendChild(row);
     });
@@ -838,7 +845,7 @@ window.FICHE_UPLOAD = (function () {
   }
 
   function runCV(need, gen) {
-    callJSON(function () { return LIB.promptCV(CORPUS, need, P.timeline.length); }, function (o) { return LIB.validateCV(o, P.timeline.length); })
+    callJSON(function () { return LIB.promptCV(CORPUS, need, NB_APPORTS_CV); }, function (o) { return LIB.validateCV(o, NB_APPORTS_CV); })
       .then(function (r) {
         if (gen !== state.gen) return; /* réponse d'une analyse abandonnée */
         if (r.refusal) { if (!state.refused) { staticCV(); sectionDone(false); } return; } /* seul le refus de l'appel score fait foi */
