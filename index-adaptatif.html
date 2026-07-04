@@ -6,7 +6,9 @@
   <title>Jérémy Hamon — En quoi puis-je vous aider ?</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- C8 : fontes non bloquantes (preload + swap au onload, noscript en secours) -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" /></noscript>
   <style>
     :root { --ink:#152238; --acc:#33618f; --mut:#5a6b80; --bg:#f7f9fb; --line:#dde5ec; }
     * { box-sizing:border-box; }
@@ -24,7 +26,7 @@
     #home h1 { font-size:44px; }
     .home-sub { color:var(--mut); font-size:14px; margin:0; letter-spacing:.4px; }
     .home-q { font-size:26px; font-style:italic; margin-top:18px; }
-    #need { width:100%; max-width:560px; min-height:88px; border:1px solid var(--line); border-radius:10px; padding:14px 16px; font:15px/1.5 'Inter',sans-serif; color:var(--ink); background:#fff; resize:vertical; }
+    #need { width:100%; max-width:560px; min-height:88px; border:1px solid var(--line); border-radius:10px; padding:14px 16px; font:16px/1.5 'Inter',sans-serif; color:var(--ink); background:#fff; resize:vertical; } /* C24 : 16px = pas de zoom auto iOS */
     #need:focus { outline:2px solid var(--acc); border-color:transparent; }
     .btn-pri { background:var(--ink); color:#fff; border:0; border-radius:999px; padding:12px 30px; font-size:15px; letter-spacing:.3px; transition:opacity .15s, transform .15s; }
     .btn-pri:hover { opacity:.88; }
@@ -34,6 +36,12 @@
     .ex-label { color:var(--mut); font-size:13px; }
     .pill { border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:7px 14px; font-size:13px; transition:border-color .2s, transform .2s; }
     .pill:hover { border-color:var(--acc); transform:translateY(-1px); }
+    /* rangée alternative (miroir de .v-alt de la page 3D) : pill profil complet + lien discret vers la galerie */
+    .home-alt { display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:14px; }
+    .home-alt .pill { text-decoration:none; padding:10px 22px; font-size:14px; }
+    #lien-3d { font-size:12px; color:var(--mut); text-decoration:underline dotted; text-underline-offset:3px; }
+    #lien-3d:hover { color:var(--acc); }
+    .home-contact { font-size:12px; color:var(--mut); margin:6px 0 0; }
 
     /* ---- résultats ---- */
     .rhead { display:flex; align-items:center; gap:12px; padding:14px 0 10px; border-bottom:1px solid var(--line); }
@@ -87,7 +95,7 @@
     .bubble.typing { color:var(--mut); letter-spacing:3px; }
     .chat-sugg { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
     .chat-row { display:flex; gap:10px; margin-top:6px; }
-    #chat-q { flex:1; border:1px solid var(--line); border-radius:999px; padding:11px 18px; font:14px 'Inter',sans-serif; color:var(--ink); }
+    #chat-q { flex:1; border:1px solid var(--line); border-radius:999px; padding:11px 18px; font:16px 'Inter',sans-serif; color:var(--ink); } /* C24 : 16px = pas de zoom auto iOS */
     #chat-q:focus { outline:2px solid var(--acc); border-color:transparent; }
     .ai-note { color:var(--mut); font-size:12px; margin-top:10px; }
 
@@ -96,6 +104,13 @@
     #refus-msg { font-family:'Cormorant Garamond',serif; font-size:24px; max-width:540px; margin:0; }
 
     .contact { border-bottom:0; }
+
+    /* C23 : cibles tactiles ≥ 44px */
+    @media (pointer:coarse) {
+      .pill, .fiche-cta { min-height:44px; display:inline-flex; align-items:center; }
+      .pills .pill { min-height:0; display:inline-block; } /* pilules décoratives du CV (span non interactifs) : ne pas gonfler la mise en page */
+      .examples, .pills, .chat-sugg { gap:12px; }
+    }
 
     @media (max-width:480px) {
       #home h1 { font-size:34px; }
@@ -113,6 +128,7 @@
     <img id="home-photo" alt="Jérémy Hamon" />
     <h1>Jérémy Hamon</h1>
     <p class="home-sub">Consultant indépendant — stratégie, innovation, transformation</p>
+    <p class="home-sub home-preuves">10&nbsp;ans · stratégie, innovation, transformation · 28&nbsp;missions réelles</p> <!-- C2 : preuves visibles sans effort -->
     <h2 class="home-q">En quoi puis-je vous aider&nbsp;?</h2>
     <textarea id="need" maxlength="1200" rows="3" placeholder="Décrivez votre besoin, ou collez une offre…"></textarea>
     <button id="go" class="btn-pri" disabled>Voyons cela</button>
@@ -128,6 +144,11 @@
       <button class="pill ex">Préparer un board ou un COMEX</button>
       <button class="pill ex">Piloter un projet complexe</button>
     </div>
+    <div class="home-alt">
+      <a class="pill" href="profil.html">Voir mon profil complet — sans attendre</a>
+      <a id="lien-3d" href="./">version immersive 3D</a>
+    </div>
+    <p class="home-contact">Un projet&nbsp;? <a href="mailto:hamon.jeremy@live.fr">hamon.jeremy@live.fr</a> · <a href="https://www.linkedin.com/in/jeremyhamon/" rel="noopener">LinkedIn</a></p> <!-- C2 : contact atteignable sans effort -->
   </main>
 
   <main id="results" hidden>
@@ -1042,6 +1063,17 @@ window.FICHE_UPLOAD = (function () {
         go.disabled = ta.value.trim().length < 8;
       });
     }
+
+    /* C18 : reprise du besoin déposé par la page 3D (sessionStorage, purgé après lecture).
+       Pré-remplissage seul — aucune analyse lancée : le visiteur garde la main. */
+    try {
+      var partage = sessionStorage.getItem('besoin-partage');
+      if (partage) {
+        sessionStorage.removeItem('besoin-partage');
+        ta.value = partage.slice(0, LIB.NEED_MAX);
+        ta.dispatchEvent(new Event('input')); /* le listener existant décide de l'état du bouton */
+      }
+    } catch (e) { /* stockage indisponible (navigation privée stricte…) : champ vide, rien à faire */ }
   }
 
   document.addEventListener('DOMContentLoaded', init);
