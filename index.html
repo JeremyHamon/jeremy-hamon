@@ -232,15 +232,11 @@
 <body>
   <canvas id="monde"></canvas>
 
-  <!-- Sélecteurs persistants (langue + rendu) — visibles dans TOUTES les vues (placés AVANT #vestibule : le sélecteur frère de #lien-classique ne les concerne pas). #sel-3d est câblé par app3d (état effectif). -->
+  <!-- Sélecteur de langue — visible dans TOUTES les vues (placé AVANT #vestibule : le sélecteur frère de #lien-classique ne le concerne pas). Le site propose uniquement la version 3D : plus de choix de rendu. -->
   <nav id="selecteurs" aria-label="Langue et affichage">
     <div id="sel-lang" class="seg">
       <a href="./" class="on" aria-current="page">FR</a>
       <a href="en.html" class="" aria-current="false">EN</a>
-    </div>
-    <div id="sel-3d" class="seg">
-      <button id="btn-3d" type="button">3D</button>
-      <button id="btn-sans3d" type="button">sans 3D</button>
     </div>
   </nav>
 
@@ -839,12 +835,9 @@ window.FICHE_UPLOAD = (function () {
 /* Mode calculé AVANT le chargement du module scene.js (qui le lit). */
 window.GALERIE_MODE = (function () {
   'use strict';
-  /* V6 : préférence explicite du visiteur (sélecteur 3D/sans 3D) — lue AVANT toute
-     heuristique. 'off' force l'allégé ; 'on' ou absent laisse les heuristiques décider
-     (jamais de 3D forcée sur mobile : les contraintes réelles priment). */
-  try {
-    if (localStorage.getItem('galerie-3d') === 'off') return 'allege';
-  } catch (e) { /* stockage indisponible : heuristiques normales */ }
+  /* Le site propose UNIQUEMENT la version 3D : le mode est purement heuristique —
+     l'allégé n'est qu'un repli automatique pour les appareils qui ne peuvent pas
+     afficher la 3D (mobile, WebGL absent, animations réduites), jamais un choix. */
   function webglOK() {
     try {
       var c = document.createElement('canvas');
@@ -1114,20 +1107,6 @@ window.GALERIE_MODE = (function () {
      préférence stockée — appelé à l'init et à chaque repli runtime (fallbackToLight).
      La classe .on porte le rendu actif ET son pointer-events:none (mêmes règles CSS
      que le sélecteur de langue). */
-  function majSel3d() {
-    var b3 = $('btn-3d'), bs = $('btn-sans3d');
-    if (!b3 || !bs) return;
-    var allege = document.body.classList.contains('allege');
-    b3.classList.toggle('on', !allege);
-    bs.classList.toggle('on', allege);
-    b3.setAttribute('aria-pressed', String(!allege));
-    bs.setAttribute('aria-pressed', String(allege));
-    /* segment actif inerte au clavier comme le sélecteur de langue (cohérence a11y :
-       un toggle « on » reste sinon focusable mais sans effet) */
-    b3.setAttribute('tabindex', allege ? '0' : '-1');
-    bs.setAttribute('tabindex', allege ? '-1' : '0');
-  }
-
   function fallbackToLight(withBanner) {
     if (!state.light) {
       state.light = true;
@@ -1135,7 +1114,6 @@ window.GALERIE_MODE = (function () {
          — la scène ne sera alors jamais créée. À poser AVANT le dispose. */
       window.GALERIE_ABANDON = true;
       document.body.classList.add('allege');
-      majSel3d(); /* V6 : le sélecteur suit la bascule effective vers l'allégé */
       /* si GSAP n'a jamais chargé, aucun voyage n'a pu démarrer — rien à démonter ;
          teardown référence gsap nu et planterait sans lui (garde gsapPret) */
       if (window.JOURNEY && gsapPret()) window.JOURNEY.teardown();
@@ -1660,26 +1638,6 @@ window.GALERIE_MODE = (function () {
     window.addEventListener('popstate', function () {
       retourEnCours = false; /* le back demandé par retourVestibule est arrivé */
       if ($('vestibule').hidden) resetToVestibule();
-    });
-
-    /* V6 : sélecteur 3D/sans 3D — l'état visuel reflète le mode EFFECTIF (body.allege) ;
-       clic sur le segment inactif = mémoriser la préférence puis recharger (la reprise
-       galerie-visite couvre le contenu généré). Si la préférence '3D' se heurte à une
-       contrainte réelle (mobile, WebGL absent), le rechargement retombe en allégé et
-       l'état visuel reste cohérent — accepté. */
-    majSel3d();
-    Array.prototype.forEach.call(document.querySelectorAll('#sel-3d button'), function (b) {
-      b.addEventListener('click', function () {
-        if (b.classList.contains('on')) return; /* actif (activation clavier) : rien à faire */
-        var ok = true;
-        try { localStorage.setItem('galerie-3d', b.id === 'btn-3d' ? 'on' : 'off'); }
-        catch (e) { ok = false; }
-        /* stockage indisponible + « sans 3D » : recharger reviendrait en complet (boucle
-           muette) — on bascule à chaud, le choix vaut pour la page en cours */
-        if (!ok && b.id === 'btn-sans3d') { fallbackToLight(false); return; }
-        sauveBrouillon(); /* V6 : le besoin en cours de saisie survit au rechargement */
-        location.reload();
-      });
     });
 
     /* V6 : la préférence de langue reflète la dernière page adaptative visitée —
