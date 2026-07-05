@@ -42,6 +42,10 @@
     #lien-3d { font-size:12px; color:var(--mut); text-decoration:underline dotted; text-underline-offset:3px; }
     #lien-3d:hover { color:var(--acc); }
     .home-contact { font-size:12px; color:var(--mut); margin:6px 0 0; }
+    /* V6 : groupe « 3D » (retour galerie) — fixe haut droite ; placé DANS #home, il disparaît avec la vue
+       (règle [hidden] ci-dessus) : pas de collision avec « Nouveau besoin » en vue résultats sur mobile */
+    #retour-3d { position:fixed; top:14px; right:16px; z-index:30; border:1px solid var(--line); background:rgba(255,255,255,.82); color:var(--ink); border-radius:999px; padding:6px 14px; font-size:12px; letter-spacing:.4px; text-decoration:none; transition:border-color .2s, color .2s; }
+    #retour-3d:hover { border-color:var(--acc); color:var(--acc); }
 
     /* ---- résultats ---- */
     .rhead { display:flex; align-items:center; gap:12px; padding:14px 0 10px; border-bottom:1px solid var(--line); }
@@ -108,12 +112,14 @@
     /* C23 : cibles tactiles ≥ 44px */
     @media (pointer:coarse) {
       .pill, .fiche-cta { min-height:44px; display:inline-flex; align-items:center; }
+      #retour-3d { min-height:34px; display:inline-flex; align-items:center; } /* 34px assumé : bouton de mode discret, pas une cible primaire (C23 vise les CTA) */
       .pills .pill { min-height:0; display:inline-block; } /* pilules décoratives du CV (span non interactifs) : ne pas gonfler la mise en page */
       .examples, .pills, .chat-sugg { gap:12px; }
     }
 
     @media (max-width:480px) {
       #home h1 { font-size:34px; }
+      #retour-3d { top:10px; right:10px; }
       .home-q { font-size:21px; }
       .sec h2 { font-size:23px; }
       .tl-annee { flex-basis:74px; }
@@ -125,6 +131,7 @@
 </head>
 <body>
   <main id="home">
+    <a id="retour-3d" href="./" title="Revenir à la galerie 3D" aria-label="Revenir à la galerie 3D">3D</a> <!-- V6 : pose la pref galerie-3d='on' (listener app.js) puis rejoint l'accueil -->
     <img id="home-photo" alt="Jérémy Hamon" />
     <h1>Jérémy Hamon</h1>
     <p class="home-sub">Consultant indépendant — stratégie, innovation, transformation</p>
@@ -148,7 +155,7 @@
       <a class="pill" href="profil.html">Voir mon profil complet — sans attendre</a>
       <a id="lien-3d" href="./">version immersive 3D</a>
     </div>
-    <p class="home-contact">Un projet&nbsp;? <a href="mailto:hamon.jeremy@live.fr">hamon.jeremy@live.fr</a> · <a href="https://www.linkedin.com/in/jeremyhamon/" rel="noopener">LinkedIn</a></p> <!-- C2 : contact atteignable sans effort -->
+    <p class="home-contact"><a href="mailto:hamon.jeremy@live.fr">hamon.jeremy@live.fr</a> · <a href="https://www.linkedin.com/in/jeremyhamon/" rel="noopener">LinkedIn</a></p> <!-- C2 : contact atteignable sans effort (V6 : contact nu, sans intro) -->
   </main>
 
   <main id="results" hidden>
@@ -621,6 +628,20 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
    le texte extrait remplit le textarea. pdf.js (épinglé) n'est chargé qu'au premier PDF. */
 window.FICHE_UPLOAD = (function () {
   'use strict';
+  /* V6 : statuts localisés — la galerie injecte window.GALERIE_L10N (sous-objet fiche)
+     AVANT ce script. Replis FR = chaînes historiques EXACTES : fiche.js est aussi inliné
+     dans index-adaptatif.html (page classique, sans GALERIE_L10N) — zéro régression.
+     Fusion clé à clé : une clé absente de l'injection retombe sur son repli FR. */
+  var REPLI = {
+    lecturePre: 'Lecture de « ',
+    lecturePost: ' »…',
+    luPre: '« ',
+    luPost: ' » lu — vérifiez le texte, élaguez si besoin.',
+    erreur: 'Impossible de lire ce fichier — collez le texte directement.',
+  };
+  var INJ = (window.GALERIE_L10N && window.GALERIE_L10N.fiche) || {};
+  var FL = {};
+  Object.keys(REPLI).forEach(function (k) { FL[k] = INJ[k] !== undefined ? INJ[k] : REPLI[k]; });
   var PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
   var PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   var MAX_PAGES = 12;
@@ -671,7 +692,7 @@ window.FICHE_UPLOAD = (function () {
       var file = input.files && input.files[0];
       if (!file) return;
       input.value = ''; /* permet de re-déposer le même fichier */
-      status.textContent = 'Lecture de « ' + file.name + ' »…';
+      status.textContent = FL.lecturePre + file.name + FL.lecturePost;
       var isPdf = /\.pdf$/i.test(file.name) || file.type === 'application/pdf';
       (isPdf ? extractPdf(file) : extractTxt(file))
         .then(function (text) {
@@ -679,11 +700,11 @@ window.FICHE_UPLOAD = (function () {
           if (!text) throw new Error('vide'); /* PDF scanné sans texte encodé, ou fichier vide */
           if (window.ADAPT_LIB) text = window.ADAPT_LIB.clamp(text, window.ADAPT_LIB.NEED_MAX);
           textarea.value = text;
-          status.textContent = '« ' + file.name + ' » lu — vérifiez le texte, élaguez si besoin.';
+          status.textContent = FL.luPre + file.name + FL.luPost;
           if (onFilled) onFilled(text);
         })
         .catch(function () {
-          status.textContent = 'Impossible de lire ce fichier — collez le texte directement.';
+          status.textContent = FL.erreur;
         });
     });
   }
@@ -1057,6 +1078,15 @@ window.FICHE_UPLOAD = (function () {
     });
     $('chat-send').addEventListener('click', function () { sendChat($('chat-q').value); });
     $('chat-q').addEventListener('keydown', function (e) { if (e.key === 'Enter') sendChat($('chat-q').value); });
+
+    /* V6 : rejoindre la galerie = préférer le rendu 3D. On pose la pref au clic,
+       dans un try/catch : si le stockage est indisponible, la navigation se fait quand même. */
+    ['retour-3d', 'lien-3d'].forEach(function (id) {
+      var a = $(id);
+      if (a) a.addEventListener('click', function () {
+        try { localStorage.setItem('galerie-3d', 'on'); } catch (e) { /* stockage indisponible : on navigue sans pref */ }
+      });
+    });
 
     if (window.FICHE_UPLOAD) {
       window.FICHE_UPLOAD.wire($('fiche-input'), $('fiche-btn'), ta, $('fiche-status'), function () {
