@@ -9,6 +9,7 @@
   <!-- C8 : feuille de fontes non bloquante (preload as=style + swap onload, repli noscript) -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" /></noscript>
+  <script>document.documentElement.classList.add('js-pt');</script><!-- transition de page (fondu JS) : masque le body des le 1er rendu pour le fondu entrant -->
   <!-- C3/C12 : defer (ordre preserve react -> react-dom -> babel ; babel compile les blocs text/babel
        sur DOMContentLoaded, qui suit l'execution des scripts defer) + versions epinglees identiques,
        A L'OCTET PRES, aux prefetch de l'accueil (src/adaptatif3d/template3d.html) -->
@@ -16,17 +17,16 @@
   <script defer crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
   <script defer src="https://unpkg.com/@babel/standalone@7.29.7/babel.min.js"></script>
   <style>
+    html.js-pt body { opacity: 0; } /* etat initial masque — le script #transition-page (fin de body) fait le fondu entrant */
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; background: #f7f9fb; color: #152238; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; background: #f4f7fb; } /* meme fond que body : le fondu de page reste sur une couleur continue */
+    body { margin: 0; background: #f4f7fb; color: #152238; min-height: 100vh; -webkit-font-smoothing: antialiased; }
     button { font-family: inherit; }
     a { color: inherit; }
     ::selection { background: #d6e4f0; }
     ::-webkit-scrollbar { width: 10px; }
     ::-webkit-scrollbar-track { background: #eef1f5; }
     ::-webkit-scrollbar-thumb { background: #c9d2dc; border-radius: 5px; }
-    @keyframes up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-    .up { animation: up .7s cubic-bezier(.2,.7,.2,1) both; }
     @keyframes fadeq { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
     .fadeq { animation: fadeq .5s ease both; }
     .btn { transition: transform .15s ease, opacity .15s ease, background .2s ease, color .2s ease; }
@@ -35,32 +35,21 @@
     .clamp2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
     /* ---- motion (ajouts) ---- */
-    @keyframes rise { from { opacity: 0; transform: translateY(24px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
-    .rise { animation: rise .85s cubic-bezier(.2,.7,.2,1) both; }
-    @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
-    .floaty { animation: floaty 6.5s ease-in-out infinite; }
-    @keyframes glowpulse { 0%,100% { opacity: .4; transform: scale(1); } 50% { opacity: .85; transform: scale(1.1); } }
-    .hero-wrap { position: relative; overflow: hidden; }
-    .hero-wrap::before { content: ""; position: absolute; top: -50px; right: 2%; width: 360px; height: 360px; max-width: 62%; border-radius: 50%;
-      background: radial-gradient(circle, rgba(51,97,143,.20), rgba(51,97,143,0) 70%); filter: blur(10px); z-index: 0; pointer-events: none; animation: glowpulse 8s ease-in-out infinite; }
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } } /* simplifie : fondu + leger glissement, sans flou */
+    /* TEST : .rise neutralise — le heros apparait sans animation d'entree (les sections gardent leur apparition au scroll via Reveal) */
+    .rise { animation: none; }
+    /* H : héros calme — plus de flottement, de halo lumineux ni de survol animé de la photo (aligné sur l'accueil figé) */
+    .hero-wrap { position: relative; }
     .hero-wrap > * { position: relative; z-index: 1; }
-    .photo-anim { transition: transform .55s cubic-bezier(.2,.7,.2,1), filter .55s ease, box-shadow .4s ease; will-change: transform; }
-    .photo-anim:hover { transform: scale(1.035); filter: grayscale(0) contrast(1.02); box-shadow: 0 20px 44px -24px rgba(21,34,56,.55); }
     .accent-line { height: 2px; width: 44px; background: #33618f; transform-origin: left; transform: scaleX(0); transition: transform .7s cubic-bezier(.2,.7,.2,1) .1s; }
     .accent-line.in { transform: scaleX(1); }
-    .misrow { position: relative; transition: background .2s ease, transform .28s cubic-bezier(.2,.7,.2,1); }
-    .misrow::before { content: ""; position: absolute; left: 0; top: 14%; bottom: 14%; width: 2px; background: #33618f; transform: scaleY(0); transform-origin: center; transition: transform .28s cubic-bezier(.2,.7,.2,1); }
-    .misrow:hover { background: #e7edf3; transform: translateX(7px); }
-    .misrow:hover::before { transform: scaleY(1); }
-    .cta-pri { position: relative; overflow: hidden; transition: transform .2s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease, opacity .15s ease; }
-    .cta-pri:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -18px rgba(21,34,56,.6); opacity: 1; }
-    .cta-pri::after { content: ""; position: absolute; top: 0; left: -130%; width: 55%; height: 100%; transform: skewX(-18deg);
-      background: linear-gradient(100deg, transparent, rgba(255,255,255,.30), transparent); transition: left .65s ease; }
-    .cta-pri:hover::after { left: 150%; }
-    .tlcard-anim { transition: transform .25s cubic-bezier(.2,.7,.2,1); }
-    .tlcard-anim:hover { transform: translateX(5px); }
-    .pill-anim { transition: color .25s ease, box-shadow .35s cubic-bezier(.2,.7,.2,1), transform .25s ease; }
-    .pill-anim:hover { transform: translateY(-1px); }
+    .misrow { transition: background .2s ease; } /* simplifie : simple teinte au survol, plus de decalage ni de barre laterale */
+    .misrow:hover { background: #e7edf3; }
+    /* H : bouton calme — plus de reflet qui balaie, survol sobre (opacité) comme la galerie */
+    .cta-pri { transition: opacity .15s ease; }
+    .cta-pri:hover { opacity: .88; }
+    /* simplifie : plus de decalage au survol des cartes de parcours ni des pastilles de competences */
+    .pill-anim { transition: color .25s ease, box-shadow .35s cubic-bezier(.2,.7,.2,1); }
 
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
@@ -69,25 +58,47 @@
     }
 
     /* ---- C13 : pastille retour accueil (hors racine React, valeurs en dur — pas de var(--…) sur cette page) ---- */
-    #retour-accueil { position: fixed; top: 16px; left: 18px; z-index: 30; background: rgba(255,255,255,.85);
-      color: #64707f; border: 1px solid #e2e7ed; border-radius: 999px; padding: 7px 14px; font-size: 12px;
-      font-family: 'Inter', -apple-system, sans-serif; text-decoration: none; transition: color .2s ease, border-color .2s ease; }
-    #retour-accueil:hover { color: #33618f; border-color: #33618f; }
-    @media (max-width: 480px) { #retour-accueil { top: 10px; left: 10px; } }
+    /* nav commune : wordmark « Jérémy Hamon » en haut-gauche (identique galerie/profil) → ramène a l'accueil */
+    #marque { position: fixed; top: 16px; left: 18px; z-index: 70; color: #152238; font-size: 14px; font-weight: 600; letter-spacing: .01em;
+      font-family: 'Inter', -apple-system, sans-serif; text-decoration: none; transition: color .2s ease; }
+    #marque:hover { color: #33618f; }
+    @media (max-width: 480px) { #marque { top: 10px; left: 10px; } }
+    /* contact discret : icônes e-mail + LinkedIn, haut-gauche sous le wordmark (IDENTIQUE à la galerie) */
+    .contact-coin { position: fixed; top: 44px; left: 18px; z-index: 40; display: flex; gap: 12px; align-items: center; }
+    .contact-coin a { display: flex; color: #5a6b80; transition: color .2s ease; }
+    .contact-coin a:hover { color: #33618f; }
+    .contact-coin svg { width: 20px; height: 20px; display: block; fill: currentColor; }
+    @media (max-width: 480px) { .contact-coin { top: 36px; left: 10px; } }
+    /* bouton retour, sous FR/EN — MÊME icône ronde « ← » que la galerie (#nouveau) ; ramène à l'accueil (href bilingue géré par React) */
+    #retour-tab { position: fixed; top: 44px; right: 18px; z-index: 70; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid #dde5ec; background: rgba(255,255,255,.9); color: #152238; border-radius: 999px; font-size: 17px; line-height: 1; text-decoration: none; transition: border-color .2s ease, color .2s ease; }
+    #retour-tab:hover { border-color: #33618f; color: #33618f; }
+    @media (max-width: 480px) { #retour-tab { top: 50px; right: 10px; } }
+    /* selecteur FR/EN — aligne A L'IDENTIQUE sur l'accueil (#selecteurs .seg) : plein texte 13px, separateur slash, actif en encre sans soulignement */
+    #lang-seg { position: fixed; top: 16px; right: 18px; z-index: 70; display: flex; align-items: center; font-size: 13px; letter-spacing: .04em; font-family: 'Inter', -apple-system, sans-serif; }
+    #lang-seg button { background: none; border: none; font: inherit; color: #5a6b80; padding: 2px 4px; cursor: pointer; transition: color .2s; }
+    #lang-seg button:hover { color: #33618f; }
+    #lang-seg button.on { color: #152238; pointer-events: none; }
+    #lang-seg button + button::before { content: '/'; color: #dde5ec; margin: 0 4px 0 0; }
+    @media (max-width: 480px) { #lang-seg { top: 10px; right: 10px; } #lang-seg button { min-height: 34px; } }
 
   </style>
 </head>
 <body>
-  <a id="retour-accueil" href="./">&#8592; Accueil</a>
-  <div id="root"><!-- C3 : squelette statique, remplace par createRoot().render au montage React -->
-    <div style="max-width:1080px;margin:0 auto;padding:110px 24px 40px;text-align:center;color:#152238;font-family:'Inter',-apple-system,sans-serif;">
-      <img id="sk-photo" alt="Jérémy Hamon" width="120" height="120" decoding="async"
-        style="display:none;width:120px;height:120px;object-fit:cover;filter:grayscale(1);border:1px solid #e2e7ed;border-radius:2px;margin:0 auto 24px;" />
-      <div style="font-size:11px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:#33618f;margin-bottom:12px;">Jérémy Hamon</div>
-      <h1 style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(28px,4.5vw,44px);line-height:1.15;margin:0 0 14px;">Facilitateur d&#8217;innovation &amp; de transformation stratégique</h1>
-      <p style="color:#64707f;font-size:14px;margin:0 0 34px;">Freelance &#183; Stratégie, Innovation &amp; Transformation</p>
-      <p style="color:#64707f;font-size:11px;letter-spacing:2px;text-transform:uppercase;">Chargement du profil&#8230;</p>
-    </div>
+  <a id="marque" href="./">Jérémy Hamon</a>
+  <div id="root"><!-- C3 : squelette statique calque sur le heros React (meme grille, meme photo a droite) : la transition B capture une page deja conforme, React remplace sans saut -->
+    <header style="max-width:1020px;margin:0 auto;padding:60px 28px 30px;">
+      <div style="display:flex;flex-wrap:wrap-reverse;gap:40px 64px;align-items:center;justify-content:space-between;color:#152238;font-family:'Inter',-apple-system,sans-serif;">
+        <div style="flex:1 1 420px;max-width:580px;">
+          <div style="font-size:11px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:#33618f;">Jérémy Hamon &#183; Freelance</div>
+          <h1 style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(34px,4.6vw,48px);line-height:1.12;letter-spacing:-.5px;margin:16px 0 14px;">Facilitateur d&#8217;innovation &amp; de transformation stratégique</h1>
+          <p style="color:#5a6b80;font-size:15px;line-height:1.7;margin:0;max-width:500px;">Chargement du profil&#8230;</p>
+        </div>
+        <div style="flex:0 0 190px;max-width:190px;">
+          <img id="sk-photo" alt="Jérémy Hamon" decoding="async"
+            style="display:none;width:100%;aspect-ratio:1 / 1;object-fit:cover;filter:grayscale(1);border-radius:50%;" />
+        </div>
+      </div>
+    </header>
   </div>
   <script>/* Analyse IA du matching (optionnelle).
    Laisser vide => seul le score local par mots-clés est proposé.
@@ -384,11 +395,10 @@ window.PHOTO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBARXhpZgAAT
    __majRetour(l) est appele ICI a l'affichage (pref lue dans localStorage) ET par le langSwitch React
    a chaque bascule — meme mecanisme des deux cotes. L'accueil est la galerie 3D (langue selon 'langue'). */
 (function () {
-  var LBL = { fr: { retour: '\u2190 Accueil' }, en: { retour: '\u2190 Home' } };
+  /* wordmark bilingue par l'href seul : le libelle « Jérémy Hamon » ne change pas, mais on revient a la galerie dans la bonne langue */
   window.__majRetour = function (l) {
-    var t = LBL[l] || LBL.fr, accueil = l === 'en' ? 'en.html' : './';
-    var r = document.getElementById('retour-accueil');
-    if (r) { r.href = accueil; r.textContent = t.retour; }
+    var m = document.getElementById('marque');
+    if (m) m.href = l === 'en' ? 'en.html' : './';
   };
   var l0 = 'fr';
   try { if (localStorage.getItem('langue') === 'en') l0 = 'en'; } catch (e) { /* repli fr */ }
@@ -401,10 +411,7 @@ const { useState, useEffect, useMemo, useRef } = React;
 /* ---------- i18n ---------- */
 const TXT = {
   fr: {
-    kicker: 'Jérémy Hamon · Freelance',
     heroPitch: 'Curieux de nature, je pose un nombre déraisonnable de questions — jusqu’à en faire un métier. J’aide les décideurs et leurs équipes à clarifier, relier et faire avancer ce qui compte.',
-    ctaMatch: 'Tester le match',
-    ctaContact: 'Me contacter',
     statLabels: ['ans d’expérience', 'missions menées', 'secteurs', 'postures-clés'],
     postKicker: 'Au quotidien',
     postTitle: 'Sept casquettes, une seule tête',
@@ -418,9 +425,6 @@ const TXT = {
     dims: [{ key: 'domaine', label: 'Par type de projet' }, { key: 'secteur', label: 'Par industrie' }],
     all: 'Tous',
     seeAll: (n) => `Voir les ${n} références`,
-    matchKicker: 'Et vous ?',
-    matchTitle: 'Votre besoin, mon profil : testez le match',
-    matchIntro: 'Décrivez votre besoin ou collez une offre — une IA la compare à mon profil et répond avec une honnêteté sans fard. Il lui arrive de dire non ; toujours poliment.',
     placeholder: 'Ex. : piloter notre transformation et nos projets d’innovation IA…',
     tryLabel: 'Essayez',
     example: (i) => `Exemple ${i}`,
@@ -483,16 +487,9 @@ EXIGENCES D’HONNÊTETÉ
 
 ÉLÉMENT À ANALYSER :
 """${need}"""`,
-    contactKicker: 'Contact',
-    contactTitle: 'Échangeons ?',
-    contactLine: 'Un projet, une question, une intuition à confronter ? Écrivez-moi : réponse rapide, jargon en option.',
-    footer: 'Freelance',
   },
   en: {
-    kicker: 'Jérémy Hamon · Freelance',
     heroPitch: 'Naturally curious, I ask an unreasonable number of questions — to the point of making it a profession. I help leaders and their teams clarify, connect, and move forward what matters.',
-    ctaMatch: 'Test the match',
-    ctaContact: 'Get in touch',
     statLabels: ['years of experience', 'missions delivered', 'industries', 'key postures'],
     postKicker: 'Day to day',
     postTitle: 'Seven hats, one head',
@@ -506,9 +503,6 @@ EXIGENCES D’HONNÊTETÉ
     dims: [{ key: 'domaine', label: 'By project type' }, { key: 'secteur', label: 'By industry' }],
     all: 'All',
     seeAll: (n) => `See all ${n} references`,
-    matchKicker: 'What about you?',
-    matchTitle: 'Your need, my profile: test the match',
-    matchIntro: 'Describe your need or paste a brief — an AI compares it with my profile and replies with unsentimental honesty. It has been known to say no; always politely.',
     placeholder: 'E.g.: lead our transformation and our AI innovation projects…',
     tryLabel: 'Try',
     example: (i) => `Example ${i}`,
@@ -571,10 +565,6 @@ HONESTY REQUIREMENTS
 
 ELEMENT TO ANALYSE:
 """${need}"""`,
-    contactKicker: 'Contact',
-    contactTitle: 'Shall we talk?',
-    contactLine: 'A project, a question, a hunch to test? Write to me: swift reply, jargon strictly optional.',
-    footer: 'Freelance',
   },
 };
 
@@ -587,42 +577,14 @@ let T = TXT[LANG0] || TXT.fr;
 if (LANG0 !== 'fr') document.documentElement.lang = LANG0;
 
 /* ---------- animation helpers ---------- */
-function Reveal({ children, delay = 0, style }) {
-  const ref = useRef(null);
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    if (document.hidden) { setShow(true); return; }
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver((es) => {
-      es.forEach((e) => { if (e.isIntersecting) { setShow(true); io.disconnect(); } });
-    }, { threshold: 0.08 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return (
-    <div ref={ref} style={{
-      opacity: show ? 1 : 0,
-      transform: show ? 'none' : 'translateY(22px)',
-      filter: show ? 'none' : 'blur(5px)',
-      transition: `opacity .7s ease ${delay}ms, transform .7s cubic-bezier(.2,.7,.2,1) ${delay}ms, filter .7s ease ${delay}ms`,
-      ...style,
-    }}>{children}</div>
-  );
+function Reveal({ children, style }) {
+  /* Plus d'apparition au scroll : toute la page est visible d'un coup (elle arrive avec le fondu de page global). */
+  return <div style={style}>{children}</div>;
 }
 
 function Count({ to, suffix }) {
-  const [n, setN] = useState(0);
-  useEffect(() => {
-    const dur = 1100, t0 = Date.now();
-    const timer = setInterval(() => {
-      const p = Math.min(1, (Date.now() - t0) / dur);
-      setN(Math.round(to * (1 - Math.pow(1 - p, 3))));
-      if (p >= 1) clearInterval(timer);
-    }, 40);
-    return () => clearInterval(timer);
-  }, [to]);
-  return <span>{n}{suffix}</span>;
+  /* Valeur finale directe — plus de comptage progressif. */
+  return <span>{to}{suffix}</span>;
 }
 
 function Progress() {
@@ -640,17 +602,8 @@ function Progress() {
 }
 
 function AccentLine() {
-  const ref = useRef(null);
-  const [on, setOn] = useState(false);
-  useEffect(() => {
-    if (document.hidden) { setOn(true); return; }
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { setOn(true); io.disconnect(); } }), { threshold: 0.6 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return <div ref={ref} className={'accent-line' + (on ? ' in' : '')} style={{ margin: '0 0 16px' }} />;
+  /* Deja trace, sans animation d'apparition. */
+  return <div className="accent-line in" style={{ margin: '0 0 16px' }} />;
 }
 
 /* ---------- atoms ---------- */
@@ -671,7 +624,6 @@ function Section({ id, kicker, title, children, alt }) {
 
 /* ---------- Hero ---------- */
 function Hero() {
-  const scrollMatch = () => { const el = document.getElementById('matching'); if (el) el.scrollIntoView({ behavior: 'smooth' }); };
   const stats = [
     { n: P.identite.experience, s: '+' },
     { n: P.missions.length, s: '' },
@@ -682,19 +634,12 @@ function Hero() {
     <header className="hero-wrap" style={S.hero}>
       <div style={S.heroGrid}>
         <div style={S.heroText}>
-          <div className="rise" style={{ ...S.kicker, animationDelay: '.05s' }}>{T.kicker}</div>
           <h1 className="rise" style={{ ...S.heroTitle, animationDelay: '.14s' }}>{P.identite.titre}</h1>
           <p className="rise" style={{ ...S.heroPitch, animationDelay: '.26s' }}>{T.heroPitch}</p>
-          <div className="rise" style={{ ...S.heroCtas, animationDelay: '.38s' }}>
-            <button className="btn cta-pri" style={S.ctaPrimary} onClick={scrollMatch}>{T.ctaMatch}</button>
-            <a className="btn" href="#contact" style={S.ctaGhost}>{T.ctaContact}</a>
-          </div>
         </div>
         {window.PHOTO && (
           <div className="rise" style={{ ...S.heroPhotoWrap, animationDelay: '.46s' }}>
-            <div className="floaty">
-              <img src={window.PHOTO} alt="Jérémy Hamon" className="photo-anim" style={S.heroPhoto} />
-            </div>
+            <img src={window.PHOTO} alt="Jérémy Hamon" style={S.heroPhoto} />
           </div>
         )}
       </div>
@@ -722,7 +667,7 @@ function Postures() {
   const p = P.postures[i];
   return (
     <Section id="postures" kicker={T.postKicker} title={T.postTitle} alt>
-      <p style={S.matchIntro}>{T.postIntro}</p>
+      <p style={S.sectionIntro}>{T.postIntro}</p>
       <div style={S.postPills}>
         {P.postures.map((x, j) => (
           <button key={j} className="btn pill-anim" onClick={() => { setI(j); setPin(true); }}
@@ -755,7 +700,7 @@ function Timeline() {
             <div style={S.tlRow}>
               <div style={S.tlYear}>{t.annee}</div>
               <div style={S.tlLine}><div style={{ ...S.tlDot, ...(t.type !== 'exp' ? S.tlDotForm : {}) }} /></div>
-              <div className="tlcard-anim" style={S.tlCard}>
+              <div style={S.tlCard}>
                 <div style={S.tlHead}>
                   <span style={S.tlTitre}>{t.titre}</span>
                   {t.lieu && <span style={S.tlLieu}>{t.lieu}</span>}
@@ -820,161 +765,7 @@ function Missions() {
   );
 }
 
-/* ---------- Matching ---------- */
-const API = () => window.MATCH_API || {};
-const apiReady = () => { const a = API(); return !!(a.key || (a.provider === 'custom' && a.url)); };
-
-function buildResume() {
-  return [
-    P.identite.titre + ' — « ' + P.identite.accroche + ' »',
-    'Formation : ' + P.identite.formation,
-    'Langues : ' + P.identite.langues.join(', '),
-    'Compétences : ' + P.competences.map((c) => c.label).join(', '),
-    'Secteurs connus : ' + P.secteursMatch.map((s) => s.label).join(', '),
-    'Parcours : ' + P.timeline.map((t) => `${t.annee} ${t.titre} (${t.role})`).join(' | '),
-    'Missions : ' + P.missions.map((m) => `${m.titre} [${m.domaine} — ${m.client}]`).join(' ; '),
-  ].join('\n');
-}
-
-async function callMatchAPI(need, lang) {
-  const a = API();
-  const custom = lang === 'en' ? a.promptEn : a.promptFr;
-  const prompt = custom
-    ? custom.replace(/\{besoin\}/g, need).replace(/\{profil\}/g, buildResume())
-    : T.aiPrompt(buildResume(), need);
-  if (a.provider === 'custom' && a.url) {
-    const r = await fetch(a.url, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', ...(a.key ? { authorization: 'Bearer ' + a.key } : {}) },
-      body: JSON.stringify({ besoin: need, profil: buildResume(), prompt, lang }),
-    });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const raw = await r.text();
-    try {
-      const j = JSON.parse(raw);
-      return j.analyse || j.text || j.output || (typeof j === 'string' ? j : raw);
-    } catch (e) { return raw; }
-  }
-  const r = await fetch(a.url || 'https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-api-key': a.key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
-    body: JSON.stringify({
-      model: a.model || 'claude-haiku-4-5-20251001',
-      max_tokens: 600,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-  const j = await r.json();
-  return (j.content && j.content[0] && j.content[0].text) || '';
-}
-
-/* Extrait « Score : XX/100 — verdict » de la réponse IA ; body = texte sans cette ligne. */
-function parseAI(t) {
-  if (!t) return null;
-  const m = t.match(/score\s*:?\s*(\d{1,3})\s*\/\s*100\s*(?:[—–-]\s*)?([^\n]*)/i);
-  if (!m) return { score: null, verdict: '', body: t.trim() };
-  return {
-    score: Math.min(100, parseInt(m[1], 10)),
-    verdict: (m[2] || '').replace(/^[«"\s]+|[»"\s]+$/g, '').trim(),
-    body: t.replace(m[0], '').replace(/^[\s«»"]*\n/, '').trim(),
-  };
-}
-
-function Matching({ lang }) {
-  const [text, setText] = useState('');
-  const [ai, setAi] = useState({ loading: false, text: '', error: false });
-  useEffect(() => {
-    setAi({ loading: false, text: '', error: false });
-  }, [text]);
-  const runAI = async () => {
-    if (ai.loading || text.trim().length < 8) return;
-    setAi({ loading: true, text: '', error: false });
-    try {
-      const out = await callMatchAPI(text.trim(), lang);
-      setAi({ loading: false, text: (out || '').trim(), error: !out });
-    } catch (e) {
-      console.error('Analyse IA :', e);
-      setAi({ loading: false, text: '', error: true });
-    }
-  };
-  const parsed = ai.text ? parseAI(ai.text) : null;
-  const band = (sc) => (sc >= 75 ? T.vGreat : sc >= 50 ? T.vGood : T.vPartial);
-  return (
-    <Section id="matching" kicker={T.matchKicker} title={T.matchTitle}>
-      <Reveal>
-        <p style={S.matchIntro}>{T.matchIntro}</p>
-        <textarea style={S.textarea} value={text} onChange={(e) => setText(e.target.value)} rows={4}
-          placeholder={T.placeholder} />
-        <div style={S.exRow}>
-          <span style={S.exLabel}>{T.tryLabel}</span>
-          {T.examples.map((ex, i) => (
-            <button key={i} className="btn" style={S.exBtn} onClick={() => setText(ex)}>{T.example(i + 1)}</button>
-          ))}
-          {apiReady() && (
-            <button className="btn" style={{ ...S.ctaPrimary, marginLeft: 'auto', opacity: ai.loading || text.trim().length < 8 ? 0.5 : 1 }}
-              onClick={runAI} disabled={ai.loading || text.trim().length < 8}>
-              {ai.loading ? T.aiLoading : T.aiBtn}
-            </button>
-          )}
-        </div>
-      </Reveal>
-
-      {ai.error && <div style={S.noMatch}>{T.aiError}</div>}
-
-      {parsed && (
-        <div className="fadeq" style={S.resWrap}>
-          <div style={S.scoreBox}>
-            {parsed.score != null && (
-              <svg width="108" height="108" viewBox="0 0 120 120" style={{ flexShrink: 0 }}>
-                <circle cx="60" cy="60" r="52" fill="none" stroke="#dfe6ee" strokeWidth="8" />
-                <circle cx="60" cy="60" r="52" fill="none" stroke="#33618f" strokeWidth="8" strokeLinecap="round"
-                  strokeDasharray={2 * Math.PI * 52} strokeDashoffset={2 * Math.PI * 52 * (1 - parsed.score / 100)}
-                  transform="rotate(-90 60 60)" style={{ transition: 'stroke-dashoffset .7s cubic-bezier(.2,.7,.2,1)' }} />
-                <text x="60" y="57" textAnchor="middle" fontSize="28" fontWeight="600" fill="#152238">{parsed.score}%</text>
-                <text x="60" y="77" textAnchor="middle" fontSize="10" fill="#8a97a6" letterSpacing="2">{T.matchWord}</text>
-              </svg>
-            )}
-            <div style={S.scoreVerdict}>
-              <div style={S.subLabel}>{T.srcAI}</div>
-              {(parsed.verdict || parsed.score != null) && (
-                <div style={S.scoreVTitle}>{parsed.verdict || band(parsed.score)}</div>
-              )}
-              <p style={{ ...S.scoreVText, whiteSpace: 'pre-wrap' }}>{parsed.body}</p>
-              <div style={S.aiNote}>{T.aiNote}</div>
-            </div>
-          </div>
-          <div style={S.resCta}><a className="btn cta-pri" href="#contact" style={S.ctaPrimary}>{T.ctaContact}</a></div>
-        </div>
-      )}
-    </Section>
-  );
-}
-
 /* ---------- Contact ---------- */
-function Contact() {
-  const c = P.identite.contact;
-  return (
-    <Section id="contact" kicker={T.contactKicker} title={T.contactTitle} alt>
-      <Reveal>
-        <div style={S.contactCard}>
-          <p style={S.contactPitch}>{T.contactLine}</p>
-          <div style={S.contactLinks}>
-            {c.email && <a className="btn cta-pri" style={S.ctaPrimary} href={`mailto:${c.email}`}>{c.email}</a>}
-            {c.telephone && <a className="btn" style={S.ctaGhost} href={`tel:${c.telephone}`}>{c.telephone}</a>}
-            {c.linkedin && <a className="btn" style={S.ctaGhost} href={c.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>}
-          </div>
-        </div>
-      </Reveal>
-    </Section>
-  );
-}
-
 /* ---------- App ---------- */
 function App() {
   const [lang, setLangState] = useState(LANG0);
@@ -990,20 +781,23 @@ function App() {
   return (
     <div style={S.app}>
       <Progress />
-      <div style={S.langSwitch}>
+      <div id="lang-seg">
         {['fr', 'en'].map((l) => (
-          <button key={l} className="btn" onClick={() => setLang(l)}
-            style={{ ...S.langBtn, ...(lang === l ? S.langBtnOn : {}) }}>{l.toUpperCase()}</button>
+          <button key={l} onClick={() => setLang(l)}
+            className={lang === l ? 'on' : undefined}
+            aria-current={lang === l ? 'true' : undefined}>{l.toUpperCase()}</button>
         ))}
+      </div>
+      <a id="retour-tab" href={lang === 'en' ? 'en.html' : './'} aria-label={lang === 'en' ? 'Back' : 'Retour'} title={lang === 'en' ? 'Back' : 'Retour'}>←</a>
+      <div className="contact-coin">
+        <a href={`mailto:${P.identite.contact.email}`} aria-label="E-mail" title={P.identite.contact.email}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z" /></svg></a>
+        <a href={P.identite.contact.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" /></svg></a>
       </div>
       <div key={lang}>
         <Hero />
         <Postures />
         <Timeline />
         <Missions />
-        <Matching lang={lang} />
-        <Contact />
-        <footer style={S.footer}>© {new Date().getFullYear()} Jérémy Hamon — {T.footer}</footer>
       </div>
     </div>
   );
@@ -1015,23 +809,19 @@ const SANS = "'Inter', 'Segoe UI', system-ui, sans-serif";
 const ACC = '#33618f';
 const ACCL = '#6a8fb5';
 const INK = '#152238';
-const MUT = '#64707f';
-const LINE = '#e2e7ed';
+const MUT = '#5a6b80';
+const LINE = '#dde5ec';
 const ALT = '#eef2f6';
 const S = {
   app: { fontFamily: SANS, color: INK },
-  langSwitch: { position: 'fixed', top: 12, right: 22, zIndex: 70, display: 'flex', gap: 14 },
-  langBtn: { background: 'transparent', border: 'none', padding: '4px 2px', fontSize: 11, fontWeight: 600, letterSpacing: 2, color: '#8a97a6', cursor: 'pointer', textTransform: 'uppercase', boxShadow: 'inset 0 -1px 0 transparent', transition: '.25s' },
-  langBtnOn: { color: INK, boxShadow: 'inset 0 -2px 0 ' + ACC },
   /* hero */
   hero: { maxWidth: 1020, margin: '0 auto', padding: '60px 28px 30px' },
   heroGrid: { display: 'flex', flexWrap: 'wrap-reverse', gap: '40px 64px', alignItems: 'center', justifyContent: 'space-between' },
   heroText: { flex: '1 1 420px', maxWidth: 580 },
   heroTitle: { fontFamily: SERIF, fontSize: 'clamp(34px, 4.6vw, 48px)', lineHeight: 1.12, margin: '16px 0 14px', fontWeight: 500, letterSpacing: '-0.5px' },
   heroPitch: { color: MUT, fontSize: 15, lineHeight: 1.7, margin: '0 0 26px', maxWidth: 500 },
-  heroCtas: { display: 'flex', gap: 12, flexWrap: 'wrap' },
   heroPhotoWrap: { flex: '0 0 190px', maxWidth: 190 },
-  heroPhoto: { width: '100%', display: 'block', aspectRatio: '1 / 1', objectFit: 'cover', filter: 'grayscale(1)', border: '1px solid ' + LINE, borderRadius: 2 },
+  heroPhoto: { width: '100%', display: 'block', aspectRatio: '1 / 1', objectFit: 'cover', filter: 'grayscale(1)', borderRadius: '50%' },
   statsRow: { display: 'flex', flexWrap: 'wrap', borderTop: '1px solid ' + LINE, marginTop: 48 },
   statItem: { flex: '1 1 120px', padding: '20px 10px 0 0' },
   statNum: { fontFamily: SERIF, fontSize: 34, fontWeight: 500, color: INK },
@@ -1040,11 +830,11 @@ const S = {
   section: { padding: '46px 28px' },
   sectionAlt: { background: ALT },
   inner: { maxWidth: 1020, margin: '0 auto' },
-  kicker: { color: ACC, fontWeight: 600, letterSpacing: 3.5, textTransform: 'uppercase', fontSize: 11, marginBottom: 10 },
+  kicker: { color: ACC, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', fontSize: 11, marginBottom: 10 }, /* kicker unifie avec la galerie : 11px / interlettrage 2px */
   h2: { fontFamily: SERIF, fontSize: 30, fontWeight: 500, margin: '0 0 22px', letterSpacing: '-0.3px' },
+  sectionIntro: { color: MUT, fontSize: 14.5, lineHeight: 1.6, maxWidth: 640, margin: '-6px 0 16px' }, /* intro de section (ex-matchIntro, utilisé par les postures) */
   /* CTAs */
-  ctaPrimary: { background: INK, color: '#f7f9fb', border: '1px solid ' + INK, padding: '14px 26px', borderRadius: 2, fontSize: 12, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', cursor: 'pointer', textDecoration: 'none', display: 'inline-block', fontFamily: SANS },
-  ctaGhost: { background: 'transparent', border: '1px solid #c3cedb', color: INK, padding: '14px 26px', borderRadius: 2, fontSize: 12, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', cursor: 'pointer', textDecoration: 'none', display: 'inline-block', fontFamily: SANS },
+  ctaGhost: { background: 'transparent', border: '1px solid #c3cedb', color: INK, padding: '14px 30px', borderRadius: 999, fontSize: 12, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', cursor: 'pointer', textDecoration: 'none', display: 'inline-block', fontFamily: SANS },
   /* postures */
   postPills: { display: 'flex', gap: '6px 26px', flexWrap: 'wrap' },
   postPill: { background: 'transparent', border: 'none', padding: '8px 2px', color: MUT, fontSize: 12, fontWeight: 600, letterSpacing: 1.5, textTransform: 'uppercase', cursor: 'pointer', transition: '.25s', boxShadow: 'inset 0 -1px 0 transparent' },
@@ -1055,7 +845,7 @@ const S = {
   tlRow: { display: 'grid', gridTemplateColumns: '96px 26px 1fr', gap: 6, alignItems: 'start' },
   tlYear: { textAlign: 'right', fontWeight: 600, color: MUT, fontSize: 12, paddingTop: 3, letterSpacing: 0.5 },
   tlLine: { display: 'flex', justifyContent: 'center' },
-  tlDot: { width: 9, height: 9, borderRadius: 999, background: ACC, marginTop: 6, boxShadow: '0 0 0 4px #f7f9fb' },
+  tlDot: { width: 9, height: 9, borderRadius: 999, background: ACC, marginTop: 6, boxShadow: '0 0 0 4px #f4f7fb' },
   tlDotForm: { background: '#9fb0c2' },
   tlCard: { padding: '0 0 18px 10px' },
   tlHead: { display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'baseline' },
@@ -1075,13 +865,12 @@ const S = {
   misTitre: { fontWeight: 600, fontSize: 14, lineHeight: 1.4 },
   misMeta: { fontSize: 12, color: '#8a97a6', marginTop: 2 },
   /* matching */
-  matchIntro: { color: MUT, fontSize: 14.5, lineHeight: 1.6, maxWidth: 640, margin: '-6px 0 16px' },
-  textarea: { width: '100%', background: '#fff', border: '1px solid ' + LINE, borderRadius: 2, color: INK, padding: 16, fontSize: 15, fontFamily: SANS, resize: 'vertical', lineHeight: 1.55, boxSizing: 'border-box' },
+  textarea: { width: '100%', background: '#fff', border: '1px solid ' + LINE, borderRadius: 10, color: INK, padding: 16, fontSize: 15, fontFamily: SANS, resize: 'vertical', lineHeight: 1.55, boxSizing: 'border-box' },
   exRow: { display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 12, alignItems: 'center' },
   exLabel: { fontSize: 11, color: '#8a97a6', fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase' },
-  exBtn: { background: 'transparent', border: '1px solid #cfd9e3', color: MUT, padding: '7px 14px', borderRadius: 2, fontSize: 11.5, cursor: 'pointer', fontWeight: 500, letterSpacing: 0.5 },
-  noMatch: { marginTop: 18, border: '1px solid #c9dcec', borderRadius: 2, padding: 15, color: '#3a648f', fontSize: 14, background: '#eef4fa' },
-  resWrap: { marginTop: 22, background: '#f2f5f9', border: '1px solid ' + LINE, borderRadius: 2, padding: 26 },
+  exBtn: { background: 'transparent', border: '1px solid #cfd9e3', color: MUT, padding: '7px 14px', borderRadius: 999, fontSize: 11.5, cursor: 'pointer', fontWeight: 500, letterSpacing: 0.5 },
+  noMatch: { marginTop: 18, border: '1px solid #c9dcec', borderRadius: 10, padding: 15, color: '#3a648f', fontSize: 14, background: '#eef4fa' },
+  resWrap: { marginTop: 22, background: '#ffffff', border: '1px solid ' + LINE, borderRadius: 14, padding: 26, boxShadow: '0 26px 64px -34px rgba(21,34,56,.28)' },
   scoreBox: { display: 'flex', gap: 26, alignItems: 'center', flexWrap: 'wrap' },
   scoreVerdict: { flex: 1, minWidth: 250 },
   scoreVTitle: { fontFamily: SERIF, fontSize: 24, fontWeight: 500 },
@@ -1096,10 +885,6 @@ const S = {
   resMisTitre: { fontWeight: 600, fontSize: 13.5, lineHeight: 1.35 },
   resCta: { marginTop: 22 },
   /* contact */
-  contactCard: { background: '#fff', border: '1px solid ' + LINE, borderRadius: 2, padding: 28 },
-  contactPitch: { color: MUT, fontSize: 15, lineHeight: 1.65, maxWidth: 660, margin: '0 0 20px' },
-  contactLinks: { display: 'flex', gap: 10, flexWrap: 'wrap' },
-  footer: { textAlign: 'center', padding: '28px 24px 42px', color: '#8a97a6', fontSize: 10.5, letterSpacing: 2, textTransform: 'uppercase' },
 };
 
 
@@ -1110,6 +895,26 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     (e && e.stack ? e.stack : e) + '</pre>';
   console.error('Render error:', e);
 }
+  </script>
+  <!-- #transition-page : fondu de page en JS (cross-navigateur, remplace les View Transitions natives) -->
+  <script>
+  (function () {
+    var IN = 550, OUT = 350, b = document.body;               /* durees fondu entrant / sortant (ms) */
+    function fadeIn() { b.style.transition = 'opacity ' + IN + 'ms ease'; b.style.opacity = '1'; }
+    requestAnimationFrame(function () { requestAnimationFrame(fadeIn); });
+    setTimeout(fadeIn, IN + 600);                             /* securite anti page blanche */
+    addEventListener('pageshow', function (e) { if (e.persisted) { b.style.transition = 'none'; b.style.opacity = '1'; } });
+    document.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest ? e.target.closest('a[href]') : null;
+      if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+      var url; try { url = new URL(a.getAttribute('href'), location.href); } catch (_) { return; }
+      if (url.origin !== location.origin || url.pathname === location.pathname) return; /* externe ou meme document : navigation normale */
+      e.preventDefault();
+      b.style.transition = 'opacity ' + OUT + 'ms ease'; b.style.opacity = '0';
+      setTimeout(function () { location.href = a.href; }, OUT);
+    }, true);
+  })();
   </script>
 </body>
 </html>
