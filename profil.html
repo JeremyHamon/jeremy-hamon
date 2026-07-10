@@ -58,21 +58,16 @@
     }
 
     /* ---- C13 : pastille retour accueil (hors racine React, valeurs en dur — pas de var(--…) sur cette page) ---- */
-    /* nav commune : wordmark « Jérémy Hamon » en haut-gauche (identique galerie/profil) → ramène a l'accueil */
-    #marque { position: fixed; top: 16px; left: 18px; z-index: 70; color: #152238; font-size: 14px; font-weight: 600; letter-spacing: .01em;
-      font-family: 'Inter', -apple-system, sans-serif; text-decoration: none; transition: color .2s ease; }
-    #marque:hover { color: #33618f; }
-    @media (max-width: 480px) { #marque { top: 10px; left: 10px; } }
-    /* contact discret : icônes e-mail + LinkedIn, haut-gauche sous le wordmark (IDENTIQUE à la galerie) */
-    .contact-coin { position: fixed; top: 44px; left: 18px; z-index: 40; display: flex; gap: 12px; align-items: center; }
+    /* contact discret : icônes e-mail + LinkedIn, tout en haut à gauche (IDENTIQUE à la galerie) */
+    .contact-coin { position: fixed; top: 16px; left: 18px; z-index: 40; display: flex; gap: 12px; align-items: center; }
     .contact-coin a { display: flex; color: #5a6b80; transition: color .2s ease; }
     .contact-coin a:hover { color: #33618f; }
     .contact-coin svg { width: 20px; height: 20px; display: block; fill: currentColor; }
-    @media (max-width: 480px) { .contact-coin { top: 36px; left: 10px; } }
+    @media (max-width: 480px) { .contact-coin { top: 10px; left: 10px; } }
     /* bouton retour, sous FR/EN — MÊME icône ronde « ← » que la galerie (#nouveau) ; ramène à l'accueil (href bilingue géré par React) */
-    #retour-tab { position: fixed; top: 44px; right: 18px; z-index: 70; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid #dde5ec; background: rgba(255,255,255,.9); color: #152238; border-radius: 999px; font-size: 17px; line-height: 1; text-decoration: none; transition: border-color .2s ease, color .2s ease; }
-    #retour-tab:hover { border-color: #33618f; color: #33618f; }
-    @media (max-width: 480px) { #retour-tab { top: 50px; right: 10px; } }
+    #retour-tab { display: none; } /* masqué (demande) : la nav se fait par ⌃/⌄ et ↑/↓ ; conservé dans le DOM pour le clic programmatique de retour (fondu) */
+    #retour-tab:hover { color: #33618f; }
+    @media (max-width: 480px) { #retour-tab { top: 44px; right: 10px; } }
     /* selecteur FR/EN — aligne A L'IDENTIQUE sur l'accueil (#selecteurs .seg) : plein texte 13px, separateur slash, actif en encre sans soulignement */
     #lang-seg { position: fixed; top: 16px; right: 18px; z-index: 70; display: flex; align-items: center; font-size: 13px; letter-spacing: .04em; font-family: 'Inter', -apple-system, sans-serif; }
     #lang-seg button { background: none; border: none; font: inherit; color: #5a6b80; padding: 2px 4px; cursor: pointer; transition: color .2s; }
@@ -81,10 +76,27 @@
     #lang-seg button + button::before { content: '/'; color: #dde5ec; margin: 0 4px 0 0; }
     @media (max-width: 480px) { #lang-seg { top: 10px; right: 10px; } #lang-seg button { min-height: 34px; } }
 
+    /* rail de sections (repère de position, clic = saut) */
+    .sec-rail { position: fixed; top: 50%; right: 20px; transform: translateY(-50%); z-index: 60; display: flex; flex-direction: column; gap: 12px; }
+    .sec-rail button { width: 9px; height: 9px; padding: 0; border-radius: 50%; border: 1px solid #b9c8d8; background: transparent; cursor: pointer; transition: background .2s ease, border-color .2s ease; }
+    .sec-rail button:hover { border-color: #33618f; }
+    .sec-rail button.on { background: #33618f; border-color: #33618f; }
+    /* chevrons ⌃/⌄ au style galerie : ↑/↓ = section préc./suiv. ; aux extrémités → accueil (+ label « Accueil ») */
+    .prof-chev { position: fixed; left: 50%; transform: translateX(-50%); z-index: 60; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 50%; border: 1px solid #dde5ec; background: rgba(255, 255, 255, .92); color: #33618f; cursor: pointer; transition: background .2s ease, transform .2s ease; }
+    .prof-chev:hover { background: #fff; transform: translateX(-50%) scale(1.08); }
+    .prof-chev .gly { display: inline-block; font-size: 26px; line-height: 1; }
+    .prof-chev-up { top: 66px; }
+    .prof-chev-up .gly { transform: rotate(-90deg); }
+    .prof-chev-down { bottom: 24px; }
+    .prof-chev-down .gly { transform: rotate(90deg); }
+    .prof-chev-lbl { position: fixed; left: 50%; transform: translateX(-50%); z-index: 60; font-size: 11px; letter-spacing: .04em; color: #5a6b80; pointer-events: none; }
+    .prof-chev-lbl-up { top: 116px; }
+    .prof-chev-lbl-down { bottom: 74px; }
+    @media (max-width: 640px) { .sec-rail, .prof-chev, .prof-chev-lbl { display: none; } } /* pas de clavier physique sur mobile */
+
   </style>
 </head>
 <body>
-  <a id="marque" href="./">Jérémy Hamon</a>
   <div id="root"><!-- C3 : squelette statique calque sur le heros React (meme grille, meme photo a droite) : la transition B capture une page deja conforme, React remplace sans saut -->
     <header style="max-width:1020px;margin:0 auto;padding:60px 28px 30px;">
       <div style="display:flex;flex-wrap:wrap-reverse;gap:40px 64px;align-items:center;justify-content:space-between;color:#152238;font-family:'Inter',-apple-system,sans-serif;">
@@ -413,6 +425,11 @@ const TXT = {
   fr: {
     heroPitch: 'Curieux de nature, je pose un nombre déraisonnable de questions — jusqu’à en faire un métier. J’aide les décideurs et leurs équipes à clarifier, relier et faire avancer ce qui compte.',
     statLabels: ['ans d’expérience', 'missions menées', 'secteurs', 'postures-clés'],
+    navHome: 'Accueil',
+    navUp: 'Section précédente',
+    navDown: 'Section suivante',
+    navAria: 'Navigation par sections',
+    navHero: 'Profil',
     postKicker: 'Au quotidien',
     postTitle: 'Sept casquettes, une seule tête',
     postIntro: 'Selon le moment de la mission, j’endosse la casquette la plus utile. Une à la fois — il faut savoir rester digne.',
@@ -491,6 +508,11 @@ EXIGENCES D’HONNÊTETÉ
   en: {
     heroPitch: 'Naturally curious, I ask an unreasonable number of questions — to the point of making it a profession. I help leaders and their teams clarify, connect, and move forward what matters.',
     statLabels: ['years of experience', 'missions delivered', 'industries', 'key postures'],
+    navHome: 'Home',
+    navUp: 'Previous section',
+    navDown: 'Next section',
+    navAria: 'Section navigation',
+    navHero: 'Profile',
     postKicker: 'Day to day',
     postTitle: 'Seven hats, one head',
     postIntro: 'Depending on the moment of a mission, I wear whichever hat is most useful. One at a time — one must remain dignified.',
@@ -606,6 +628,70 @@ function AccentLine() {
   return <div className="accent-line in" style={{ margin: '0 0 16px' }} />;
 }
 
+/* ---------- navigation clavier verticale (même système que la galerie en horizontal) :
+   ↑/↓ et les chevrons ⌃/⌄ sautent de section en section ; aux extrémités → accueil ---------- */
+const NAV_IDS = ['hero', 'postures', 'parcours', 'missions'];
+function navReduce() {
+  try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+}
+function navCurrent() {
+  const y = window.scrollY + window.innerHeight * 0.35; /* section occupant le tiers haut du viewport */
+  let idx = 0;
+  for (let k = 0; k < NAV_IDS.length; k++) {
+    const el = document.getElementById(NAV_IDS[k]);
+    if (el && el.offsetTop <= y) idx = k;
+  }
+  return idx;
+}
+function navGoTo(i) {
+  i = Math.max(0, Math.min(NAV_IDS.length - 1, i));
+  const el = document.getElementById(NAV_IDS[i]);
+  if (el) el.scrollIntoView({ behavior: navReduce() ? 'auto' : 'smooth', block: 'start' });
+}
+function navRetour() { const r = document.getElementById('retour-tab'); if (r) r.click(); } /* fondu de page vers l'accueil */
+function navStep(dir) { /* dir -1 = ↑ (section préc.) ; +1 = ↓ (section suiv.) ; aux bords → accueil */
+  const c = navCurrent();
+  if (dir === -1 && c === 0) { navRetour(); return; }
+  if (dir === 1 && c === NAV_IDS.length - 1) { navRetour(); return; }
+  navGoTo(c + dir);
+}
+function KeyNav() {
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const onScroll = () => setActive(navCurrent());
+    const onKey = (e) => {
+      const t = e.target, tag = (t && t.tagName || '').toUpperCase();
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || (t && t.isContentEditable)) return; /* champ focalisé : flèches = édition */
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); navStep(-1); }
+      else if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); navStep(1); }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('keydown', onKey);
+    onScroll();
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('keydown', onKey); };
+  }, []);
+  const labels = [T.navHero, T.postTitle, T.tlTitle, T.misTitle];
+  const last = NAV_IDS.length - 1;
+  return (
+    <>
+      <button className="prof-chev prof-chev-up" type="button"
+        aria-label={active === 0 ? T.navHome : T.navUp} onClick={() => navStep(-1)}><span className="gly">›</span></button>
+      {active === 0 && <span className="prof-chev-lbl prof-chev-lbl-up">{T.navHome}</span>}
+      <button className="prof-chev prof-chev-down" type="button"
+        aria-label={active === last ? T.navHome : T.navDown} onClick={() => navStep(1)}><span className="gly">›</span></button>
+      {active === last && <span className="prof-chev-lbl prof-chev-lbl-down">{T.navHome}</span>}
+      <nav className="sec-rail" aria-label={T.navAria}>
+        {NAV_IDS.map((id, i) => (
+          <button key={id} type="button" className={i === active ? 'on' : undefined}
+            aria-label={labels[i]} aria-current={i === active ? 'true' : undefined}
+            onClick={() => navGoTo(i)} />
+        ))}
+      </nav>
+    </>
+  );
+}
+
 /* ---------- atoms ---------- */
 function Section({ id, kicker, title, children, alt }) {
   return (
@@ -631,7 +717,7 @@ function Hero() {
     { n: P.postures.length, s: '' },
   ];
   return (
-    <header className="hero-wrap" style={S.hero}>
+    <header id="hero" className="hero-wrap" style={S.hero}>
       <div style={S.heroGrid}>
         <div style={S.heroText}>
           <h1 className="rise" style={{ ...S.heroTitle, animationDelay: '.14s' }}>{P.identite.titre}</h1>
@@ -781,6 +867,7 @@ function App() {
   return (
     <div style={S.app}>
       <Progress />
+      <KeyNav />
       <div id="lang-seg">
         {['fr', 'en'].map((l) => (
           <button key={l} onClick={() => setLang(l)}
@@ -788,7 +875,7 @@ function App() {
             aria-current={lang === l ? 'true' : undefined}>{l.toUpperCase()}</button>
         ))}
       </div>
-      <a id="retour-tab" href={lang === 'en' ? 'en.html' : './'} aria-label={lang === 'en' ? 'Back' : 'Retour'} title={lang === 'en' ? 'Back' : 'Retour'}>←</a>
+      <a id="retour-tab" href={lang === 'en' ? 'en.html' : './'}>{lang === 'en' ? '← Home' : '← Accueil'}</a>
       <div className="contact-coin">
         <a href={`mailto:${P.identite.contact.email}`} aria-label="E-mail" title={P.identite.contact.email}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z" /></svg></a>
         <a href={P.identite.contact.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" /></svg></a>
