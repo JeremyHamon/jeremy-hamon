@@ -65,7 +65,8 @@
     .contact-coin svg { width: 20px; height: 20px; display: block; fill: currentColor; }
     @media (max-width: 480px) { .contact-coin { top: 10px; left: 10px; } }
     /* bouton retour, sous FR/EN — MÊME icône ronde « ← » que la galerie (#nouveau) ; ramène à l'accueil (href bilingue géré par React) */
-    #retour-tab { display: none; } /* masqué (demande) : la nav se fait par ⌃/⌄ et ↑/↓ ; conservé dans le DOM pour le clic programmatique de retour (fondu) */
+    #retour-tab { display: none; } /* desktop : la nav se fait par ⌃/⌄ et ↑/↓ ; conservé pour le clic programmatique de retour (fondu) */
+    @media (max-width: 640px) { #retour-tab { display: inline-block; position: fixed; top: 40px; right: 10px; z-index: 70; font-size: 13px; letter-spacing: .04em; color: #5a6b80; text-decoration: none; font-family: 'Inter', -apple-system, sans-serif; } } /* mobile : pas de chevrons → on rend le « ← Accueil » tappable, sous le FR/EN */
     #retour-tab:hover { color: #33618f; }
     @media (max-width: 480px) { #retour-tab { top: 44px; right: 10px; } }
     /* selecteur FR/EN — aligne A L'IDENTIQUE sur l'accueil (#selecteurs .seg) : plein texte 13px, separateur slash, actif en encre sans soulignement */
@@ -430,6 +431,11 @@ const TXT = {
     navDown: 'Section suivante',
     navAria: 'Navigation par sections',
     navHero: 'Profil',
+    contactKicker: 'Et maintenant ?',
+    contactTitle: 'Parlons de votre besoin',
+    contactPitch: 'Un échange de 30 minutes pour voir si je peux aider — ou simplement faire connaissance.',
+    contactRdv: 'Prendre rendez-vous',
+    contactEmail: 'M’écrire',
     postKicker: 'Au quotidien',
     postTitle: 'Sept casquettes, une seule tête',
     postIntro: 'Selon le moment de la mission, j’endosse la casquette la plus utile. Une à la fois — il faut savoir rester digne.',
@@ -513,6 +519,11 @@ EXIGENCES D’HONNÊTETÉ
     navDown: 'Next section',
     navAria: 'Section navigation',
     navHero: 'Profile',
+    contactKicker: 'What’s next?',
+    contactTitle: 'Let’s talk about your need',
+    contactPitch: 'A 30-minute chat to see if I can help — or simply to get acquainted.',
+    contactRdv: 'Book a call',
+    contactEmail: 'Email me',
     postKicker: 'Day to day',
     postTitle: 'Seven hats, one head',
     postIntro: 'Depending on the moment of a mission, I wear whichever hat is most useful. One at a time — one must remain dignified.',
@@ -630,7 +641,7 @@ function AccentLine() {
 
 /* ---------- navigation clavier verticale (même système que la galerie en horizontal) :
    ↑/↓ et les chevrons ⌃/⌄ sautent de section en section ; aux extrémités → accueil ---------- */
-const NAV_IDS = ['hero', 'postures', 'parcours', 'missions'];
+const NAV_IDS = ['hero', 'postures', 'parcours', 'missions', 'contact'];
 function navReduce() {
   try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
 }
@@ -671,7 +682,7 @@ function KeyNav() {
     onScroll();
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('keydown', onKey); };
   }, []);
-  const labels = [T.navHero, T.postTitle, T.tlTitle, T.misTitle];
+  const labels = [T.navHero, T.postTitle, T.tlTitle, T.misTitle, T.contactTitle];
   const last = NAV_IDS.length - 1;
   return (
     <>
@@ -852,6 +863,20 @@ function Missions() {
 }
 
 /* ---------- Contact ---------- */
+const CALENDLY = 'https://calendly.com/hamon-jeremy/30min';
+function Contact() {
+  return (
+    <Section id="contact" kicker={T.contactKicker} title={T.contactTitle} alt>
+      <p style={S.contactPitch}>{T.contactPitch}</p>
+      <div style={S.contactLinks}>
+        <a href={CALENDLY} target="_blank" rel="noreferrer" style={S.contactCta}>{T.contactRdv}</a>
+        <a href={`mailto:${P.identite.contact.email}`} style={S.contactLink}>{T.contactEmail}</a>
+        <a href={P.identite.contact.linkedin} target="_blank" rel="noreferrer" style={S.contactLink}>LinkedIn</a>
+      </div>
+    </Section>
+  );
+}
+
 /* ---------- App ---------- */
 function App() {
   const [lang, setLangState] = useState(LANG0);
@@ -885,6 +910,7 @@ function App() {
         <Postures />
         <Timeline />
         <Missions />
+        <Contact />
       </div>
     </div>
   );
@@ -919,6 +945,10 @@ const S = {
   inner: { maxWidth: 1020, margin: '0 auto' },
   kicker: { color: ACC, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', fontSize: 11, marginBottom: 10 }, /* kicker unifie avec la galerie : 11px / interlettrage 2px */
   h2: { fontFamily: SERIF, fontSize: 30, fontWeight: 500, margin: '0 0 22px', letterSpacing: '-0.3px' },
+  contactPitch: { color: MUT, fontSize: 15, lineHeight: 1.7, margin: '0 0 24px', maxWidth: 520 },
+  contactLinks: { display: 'flex', flexWrap: 'wrap', gap: '14px 22px', alignItems: 'center' },
+  contactCta: { display: 'inline-block', background: INK, color: '#fff', textDecoration: 'none', padding: '11px 24px', borderRadius: 999, fontSize: 14, letterSpacing: '.3px' },
+  contactLink: { color: ACC, textDecoration: 'none', fontSize: 14, borderBottom: '1px solid #b9c8d8', paddingBottom: 1 },
   sectionIntro: { color: MUT, fontSize: 14.5, lineHeight: 1.6, maxWidth: 640, margin: '-6px 0 16px' }, /* intro de section (ex-matchIntro, utilisé par les postures) */
   /* CTAs */
   ctaGhost: { background: 'transparent', border: '1px solid #c3cedb', color: INK, padding: '14px 30px', borderRadius: 999, fontSize: 12, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', cursor: 'pointer', textDecoration: 'none', display: 'inline-block', fontFamily: SANS },
