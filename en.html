@@ -93,7 +93,8 @@
     /* ---- galerie / voyage ---- */
     #galerie { position:relative; z-index:5; }
     #voyage-track { height:0; }
-    #nouveau { display:none; } /* « ← Accueil » retiré du carrousel (demande) ; conservé dans le DOM : le ← clavier sur la 1ʳᵉ salle le clique pour revenir au vestibule */
+    #nouveau { display:none; } /* desktop : « ← Accueil » retiré du carrousel (demande) ; conservé pour le ← clavier sur la 1ʳᵉ salle */
+    @media (max-width:640px) { #nouveau { display:inline-block; position:fixed; top:40px; right:10px; z-index:20; background:none; border:none; padding:0; font-size:13px; letter-spacing:.04em; color:var(--mut); cursor:pointer; font-family:inherit; } } /* mobile : pas de clavier → « ← Accueil » tappable, sous le FR/EN */
     .banner { position:fixed; top:16px; left:50%; transform:translateX(-50%); z-index:20; background:#fdf6e8; border:1px solid #ecd9a8; border-radius:10px; padding:10px 16px; font-size:13px; max-width:min(90vw,520px); }
     .fiche-status { color:var(--mut); font-size:12px; min-height:16px; }
     #fiche-status:empty { display:none; } /* au repos (vide) : hors flux → supprime l'espace mort sous le champ ; réapparaît dès qu'un statut d'upload s'affiche */
@@ -212,6 +213,13 @@
     #chat-q { flex:1; border:1px solid var(--line); border-radius:999px; padding:11px 18px; font:16px 'Inter',sans-serif; color:var(--ink); } /* C24 : 16px = pas de zoom auto iOS */
     #chat-q:focus { outline:2px solid var(--acc); border-color:transparent; }
     .ai-note { color:var(--mut); font-size:12px; margin-top:10px; }
+    /* bloc contact en fin de galerie (salle-chat) : prise de RDV + email + LinkedIn */
+    .salle-contact { margin-top:22px; padding-top:18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; }
+    .salle-contact .sc-label { width:100%; font-size:12px; color:var(--mut); letter-spacing:.04em; }
+    .salle-contact a { font-size:14px; color:var(--acc); text-decoration:none; border-bottom:1px solid #b9c8d8; padding-bottom:1px; }
+    .salle-contact a:hover { border-color:var(--acc); }
+    .salle-contact .sc-cta { background:var(--ink); color:#fff; border:0; border-radius:999px; padding:9px 20px; letter-spacing:.3px; }
+    .salle-contact .sc-cta:hover { opacity:.9; }
 
     /* ---- refus ---- */
     /* C21 : même traitement défilable que le vestibule (marges auto sur .refus-papier) */
@@ -344,6 +352,12 @@
           <button id="chat-send" class="btn-pri">Send</button>
         </div>
         <p class="ai-note">AI-generated answers from my profile — indicative.</p>
+        <div class="salle-contact">
+          <span class="sc-label">Want to talk?</span>
+          <a class="sc-cta" href="https://calendly.com/hamon-jeremy/30min" target="_blank" rel="noopener">Book a call</a>
+          <a href="mailto:hamon.jeremy@live.fr">Email me</a>
+          <a href="https://www.linkedin.com/in/jeremyhamon/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
       </div>
     </section>
   </section>
