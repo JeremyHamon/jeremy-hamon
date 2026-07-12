@@ -646,6 +646,10 @@ function navReduce() {
   try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
 }
 function navCurrent() {
+  /* Tout en bas de page = dernière section active, même si elle est courte (la règle
+     « au tiers haut du viewport » ne l'atteindrait jamais) : rail + label « Accueil » justes. */
+  const de = document.documentElement;
+  if (window.scrollY + window.innerHeight >= de.scrollHeight - 2) return NAV_IDS.length - 1;
   const y = window.scrollY + window.innerHeight * 0.35; /* section occupant le tiers haut du viewport */
   let idx = 0;
   for (let k = 0; k < NAV_IDS.length; k++) {
@@ -661,9 +665,12 @@ function navGoTo(i) {
 }
 function navRetour() { const r = document.getElementById('retour-tab'); if (r) r.click(); } /* fondu de page vers l'accueil */
 function navStep(dir) { /* dir -1 = ↑ (section préc.) ; +1 = ↓ (section suiv.) ; aux bords → accueil */
+  const de = document.documentElement;
+  const atTop = window.scrollY <= 2;
+  const atBottom = window.scrollY + window.innerHeight >= de.scrollHeight - 2; /* test direct du bas : ne dépend pas de la hauteur des sections */
   const c = navCurrent();
-  if (dir === -1 && c === 0) { navRetour(); return; }
-  if (dir === 1 && c === NAV_IDS.length - 1) { navRetour(); return; }
+  if (dir === -1 && (c === 0 || atTop)) { navRetour(); return; }
+  if (dir === 1 && (c === NAV_IDS.length - 1 || atBottom)) { navRetour(); return; }
   navGoTo(c + dir);
 }
 function KeyNav() {
